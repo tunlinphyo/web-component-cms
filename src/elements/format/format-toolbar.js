@@ -94,6 +94,11 @@ export class FormatToolbar extends LitElement {
           (format.collapsed !== false && !format[property] && !appliesToBlock),
       );
     }
+
+    this.#setDisabled(
+      "format-text-color-palette",
+      !format || imageSelected || format.collapsed !== false,
+    );
   };
 
   #setApplied(selector, applied) {

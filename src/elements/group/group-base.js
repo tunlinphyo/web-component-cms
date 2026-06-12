@@ -19,7 +19,24 @@ export class GroupBase extends LitElement {
       display: flex;
       gap: 0.25rem;
       margin-bottom: 0.5rem;
+      /* opacity: 0;
+      pointer-events: none; */
     }
+
+    button {
+      width: 2.5rem;
+      height: 2.5rem;
+      display: grid;
+      place-content: center;
+      border-radius: 50%;
+      border: none;
+    }
+
+    /* :host(:hover) .sort-controls,
+    :host(:focus-within) .sort-controls {
+      opacity: 1;
+      pointer-events: auto;
+    } */
   `;
 
   get blocks() {
@@ -31,14 +48,55 @@ export class GroupBase extends LitElement {
 
     return html`
       <div class="sort-controls" part="sort-controls">
-        <button type="button" ?disabled=${groups[0] === this} @click=${() => this.#move(-1)}>
-          Move group up
+        <button
+          type="button"
+          aria-label="Move group up"
+          title="Move group up"
+          ?disabled=${groups[0] === this}
+          @click=${() => this.#move(-1)}
+        >
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+            <path d="m18 15-6-6-6 6" fill="none" stroke="currentColor" stroke-width="2" />
+          </svg>
         </button>
-        <button type="button" ?disabled=${groups.at(-1) === this} @click=${() => this.#move(1)}>
-          Move group down
+        <button
+          type="button"
+          aria-label="Move group down"
+          title="Move group down"
+          ?disabled=${groups.at(-1) === this}
+          @click=${() => this.#move(1)}
+        >
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+            <path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" />
+          </svg>
         </button>
-        <button type="button" @click=${this.#requestGroupBelow}>Add group below</button>
-        <button type="button" @click=${this.#requestDelete}>Delete group</button>
+        <button
+          type="button"
+          aria-label="Add group below"
+          title="Add group below"
+          @click=${this.#requestGroupBelow}
+        >
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+            <path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          aria-label="Delete group"
+          title="Delete group"
+          @click=${this.#requestDelete}
+        >
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+            <path
+              d="M4 7h16M10 11v6m4-6v6M9 7l1-3h4l1 3m3 0-1 13H7L6 7"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
       </div>
     `;
   }

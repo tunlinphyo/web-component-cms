@@ -3,17 +3,15 @@ import { LitElement, css, html } from "lit";
 export class FormatLink extends LitElement {
   static properties = {
     applied: { type: Boolean, reflect: true },
-    disabled: { type: Boolean, reflect: true },
+    disabled: { type: Boolean },
     open: { type: Boolean, reflect: true },
     value: { type: String },
   };
 
   static styles = css`
     :host {
-      display: grid;
-      gap: 4px;
+      display: inline-flex;
     }
-
     button,
     input {
       box-sizing: border-box;
@@ -22,9 +20,25 @@ export class FormatLink extends LitElement {
 
     button {
       background: white;
-      border: 1px solid #aaa;
+      border: none;
       border-radius: 4px;
       cursor: pointer;
+      min-width: 32px;
+
+    }
+
+    svg {
+      display: block;
+      fill: none;
+      margin: auto;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 2;
+    }
+
+    :host > button {
+      anchor-name: --link-trigger;
     }
 
     :host([applied]) > button {
@@ -32,9 +46,19 @@ export class FormatLink extends LitElement {
       color: white;
     }
 
+    [popover] {
+      position-anchor: --link-trigger;
+      position-area: bottom;
+      border: none;
+      border-radius: 4px;
+      margin: 4px;
+      padding: 4px;
+      box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    }
+
     form {
       display: grid;
-      grid-template-columns: 1fr auto;
+      grid-template-columns: 1fr auto auto;
       gap: 4px;
     }
   `;
@@ -47,31 +71,22 @@ export class FormatLink extends LitElement {
     this.value = "";
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    this.addEventListener("focusout", this.#focusout);
-    document.addEventListener("pointerdown", this.#pointerdown, true);
-  }
-
-  disconnectedCallback() {
-    this.removeEventListener("focusout", this.#focusout);
-    document.removeEventListener("pointerdown", this.#pointerdown, true);
-    super.disconnectedCallback();
-  }
-
   updated(changedProperties) {
-    if (changedProperties.has("applied") && this.applied) this.open = true;
+    if (!changedProperties.has("open")) return;
+
+    const popover = this.renderRoot.querySelector("[popover]");
+    if (this.open && !popover.matches(":popover-open")) popover.showPopover();
+    if (!this.open && popover.matches(":popover-open")) popover.hidePopover();
   }
 
   #toggle() {
-    if (this.applied) {
-      this.#dispatchLink();
+    if (this.open) {
       this.open = false;
-      return;
+      this.#dispatchLinkCancel();
+    } else {
+      this.open = true;
+      this.#dispatchLinkEdit();
     }
-
-    this.open = !this.open;
-    this.open ? this.#dispatchLinkEdit() : this.#dispatchLinkCancel();
   }
 
   #save(event) {
@@ -81,25 +96,24 @@ export class FormatLink extends LitElement {
 
     this.value = value;
     this.#dispatchLink(value);
+    this.#close();
   }
 
-  #focusout = () => {
-    queueMicrotask(() => {
-      if (!this.open || this.matches(":focus-within")) return;
+  #remove() {
+    this.#dispatchLink();
+    this.#close();
+  }
 
-      this.#cancel();
-    });
-  };
+  #close() {
+    this.open = false;
+  }
 
-  #pointerdown = (event) => {
-    if (!this.open || event.composedPath().includes(this)) return;
-    this.#cancel();
-  };
+  #togglePopover = (event) => {
+    if (event.newState !== "closed" || !this.open) return;
 
-  #cancel() {
     this.open = false;
     this.#dispatchLinkCancel();
-  }
+  };
 
   #dispatchLink(value = null) {
     this.dispatchEvent(
@@ -135,19 +149,26 @@ export class FormatLink extends LitElement {
     return html`
       <button
         type="button"
-        title=${this.applied ? "Remove link" : "Add link"}
+        title=${this.applied ? "Edit link" : "Add link"}
         ?disabled=${this.disabled}
         @mousedown=${(event) => event.preventDefault()}
         @click=${this.#toggle}
+        aria-label=${this.applied ? "Edit link" : "Add link"}
       >
-        Link
+        <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16">
+          <path d="M10 13a5 5 0 0 0 7.1 0l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1" />
+          <path d="M14 11a5 5 0 0 0-7.1 0l-2 2a5 5 0 0 0 7.1 7.1l1.1-1.1" />
+        </svg>
       </button>
-      ${this.open
-        ? html`<form @mousedown=${(event) => event.stopPropagation()} @submit=${this.#save}>
-            <input type="url" placeholder="https://example.com" .value=${this.value} required />
-            <button type="submit" title="Save" aria-label="Save">&#10003;</button>
-          </form>`
-        : null}
+      <div popover @toggle=${this.#togglePopover}>
+        <form @mousedown=${(event) => event.stopPropagation()} @submit=${this.#save}>
+          <input type="url" placeholder="https://example.com" .value=${this.value} required />
+          <button type="submit" title="Save" aria-label="Save">&#10003;</button>
+          <button type="button" title="Remove link" aria-label="Remove link" @click=${this.#remove}>
+            &#10005;
+          </button>
+        </form>
+      </div>
     `;
   }
 }

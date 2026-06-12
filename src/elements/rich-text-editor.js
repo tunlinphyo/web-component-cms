@@ -20,6 +20,7 @@ export class RichTextEditor extends LitElement {
     this.addEventListener("selection-format-change", this.#selectionFormatChange);
     this.addEventListener("format-command", this.#formatCommand);
     this.addEventListener("element-type-change", this.#elementTypeChange);
+    this.addEventListener("restore-selection", this.#restoreSelection);
     this.addEventListener("mousedown", this.#mousedown);
   }
 
@@ -27,6 +28,7 @@ export class RichTextEditor extends LitElement {
     this.removeEventListener("selection-format-change", this.#selectionFormatChange);
     this.removeEventListener("format-command", this.#formatCommand);
     this.removeEventListener("element-type-change", this.#elementTypeChange);
+    this.removeEventListener("restore-selection", this.#restoreSelection);
     this.removeEventListener("mousedown", this.#mousedown);
     super.disconnectedCallback();
   }
@@ -98,6 +100,10 @@ export class RichTextEditor extends LitElement {
 
   #elementTypeChange = (event) => {
     this.activeBlock?.setType?.(event.detail.type);
+  };
+
+  #restoreSelection = () => {
+    requestAnimationFrame(() => this.activeBlock?.restoreSelection?.());
   };
 
   #mousedown = (event) => {

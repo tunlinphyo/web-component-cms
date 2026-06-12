@@ -18,18 +18,23 @@ const COLORS = [
 
 export class FormatTextColorPalette extends LitElement {
   static properties = {
-    disabled: { type: Boolean, reflect: true },
+    disabled: { type: Boolean },
     value: { type: String, reflect: true },
   };
 
   static styles = css`
     button {
       background: white;
-      border: 1px solid #aaa;
+      border: none;
       border-radius: 4px;
       cursor: pointer;
       height: 32px;
       min-width: 32px;
+
+    }
+
+    button:disabled {
+      opacity: 0.3;
     }
 
     .trigger {
@@ -44,12 +49,13 @@ export class FormatTextColorPalette extends LitElement {
     [popover] {
       position-anchor: --color-trigger;
       position-area: bottom;
-      border: 1px solid #aaa;
+      border: none;
       border-radius: 4px;
       grid-template-columns: repeat(4, 32px);
       gap: 4px;
       margin: 4px 0 0;
       padding: 4px;
+      box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     }
 
     [popover]:popover-open {
@@ -81,7 +87,7 @@ export class FormatTextColorPalette extends LitElement {
       </button>
       <div id="colors" popover>
         ${COLORS.map(
-          (color) => html`
+      (color) => html`
             <button
               class="color"
               type="button"
@@ -92,7 +98,7 @@ export class FormatTextColorPalette extends LitElement {
               @click=${() => this.#apply(color)}
             ></button>
           `,
-        )}
+    )}
       </div>
     `;
   }

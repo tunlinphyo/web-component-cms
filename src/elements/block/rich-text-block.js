@@ -26,6 +26,18 @@ export class RichTextBlock extends LitElement {
     this.selectedRange = null;
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    document.addEventListener("mouseup", this.#mouseup);
+    document.addEventListener("selectionchange", this.#selectionchange);
+  }
+
+  disconnectedCallback() {
+    document.removeEventListener("mouseup", this.#mouseup);
+    document.removeEventListener("selectionchange", this.#selectionchange);
+    super.disconnectedCallback();
+  }
+
   init({ id = "", value = "", textAlign = "left", fontWeight = "", type = "p" } = {}) {
     this.blockId = id;
     this.type = this.#normalizeType(type);
@@ -107,7 +119,9 @@ export class RichTextBlock extends LitElement {
     }
 
     mark {
-      background-color: var(--yellow);
+      background-color: var(--highlight);
+      padding-inline: 0.25rem;
+      border-radius: 2px;
     }
 
     [data-link-selection] {
@@ -138,7 +152,6 @@ export class RichTextBlock extends LitElement {
         data-placeholder=${this.placeholder}
         @focus=${() => document.execCommand("defaultParagraphSeparator", false, "p")}
         @paste=${this.#paste}
-        @mouseup=${() => this.#notifySelection()}
         @keyup=${() => this.#notifySelection()}
       ></${tag}>
     `;
@@ -190,8 +203,26 @@ export class RichTextBlock extends LitElement {
   }
 
   clearSelection() {
+    this.#removeLinkSelectionPreview();
     this.selectedRange = null;
     this.removeAttribute("has-format-selection");
+  }
+
+  restoreSelection() {
+    const selection = this.#getSelection();
+    const editor = this.renderRoot.querySelector(".editor");
+
+    if (
+      !selection ||
+      !this.selectedRange ||
+      !editor?.contains(this.selectedRange.commonAncestorContainer)
+    ) {
+      return false;
+    }
+
+    selection.removeAllRanges();
+    selection.addRange(this.selectedRange);
+    return true;
   }
 
   formatSelection(command, value = null) {
@@ -228,13 +259,13 @@ export class RichTextBlock extends LitElement {
         document.execCommand(command, false, value);
       }
     } else if (command === "linkEdit") {
-      if (this.selectedRange.collapsed) return true;
-
       const link = this.#getSelectedAncestor("a");
 
       if (link) {
         link.toggleAttribute("data-link-selection", true);
         this.selectedRange.selectNodeContents(link);
+      } else if (this.selectedRange.collapsed) {
+        return true;
       } else if (!this.#getSelectedAncestor("[data-link-selection]")) {
         const preview = document.createElement("span");
         preview.toggleAttribute("data-link-selection", true);
@@ -249,7 +280,8 @@ export class RichTextBlock extends LitElement {
       const selector = command === "highlight" ? "mark" : "a";
       const tagName = command === "highlight" ? "mark" : "a";
       const formatElement = this.#getSelectedAncestor(selector);
-      const preview = command === "link" ? this.#getSelectedAncestor("[data-link-selection]") : null;
+      const preview =
+        command === "link" ? this.#getSelectedAncestor("[data-link-selection]") : null;
 
       if (command === "link" && value && formatElement) {
         formatElement.setAttribute("href", value);
@@ -339,7 +371,7 @@ export class RichTextBlock extends LitElement {
   #removeLinkSelectionPreview() {
     const editor = this.renderRoot.querySelector(".editor");
     const preview =
-      this.selectedRange && this.#getSelectedAncestor("[data-link-selection]") ||
+      (this.selectedRange && this.#getSelectedAncestor("[data-link-selection]")) ||
       editor?.querySelector("[data-link-selection]");
     if (!preview) return;
 
@@ -373,8 +405,17 @@ export class RichTextBlock extends LitElement {
     const selection = this.#getSelection();
     if (!selection) return { align, type: this.type };
 
-    selection.removeAllRanges();
-    selection.addRange(this.selectedRange);
+    const range = selection.rangeCount ? selection.getRangeAt(0) : null;
+    if (
+      !range ||
+      range.startContainer !== this.selectedRange.startContainer ||
+      range.startOffset !== this.selectedRange.startOffset ||
+      range.endContainer !== this.selectedRange.endContainer ||
+      range.endOffset !== this.selectedRange.endOffset
+    ) {
+      selection.removeAllRanges();
+      selection.addRange(this.selectedRange);
+    }
 
     return {
       bold: editor?.style.fontWeight !== "normal" && document.queryCommandState("bold"),
@@ -408,6 +449,10 @@ export class RichTextBlock extends LitElement {
 
   #notifySelection() {
     this.captureSelection();
+    this.#dispatchSelection();
+  }
+
+  #dispatchSelection() {
     this.dispatchEvent(
       new CustomEvent("selection-format-change", {
         detail: this.getSelectionFormat(),
@@ -416,6 +461,30 @@ export class RichTextBlock extends LitElement {
       }),
     );
   }
+
+  #mouseup = (event) => {
+    if (!event.composedPath().includes(this)) return;
+
+    queueMicrotask(() => {
+      this.#removeLinkSelectionPreview();
+      if (this.captureSelection()) this.#dispatchSelection();
+    });
+  };
+
+  #selectionchange = () => {
+    const selection = this.#getSelection();
+    const editor = this.renderRoot.querySelector(".editor");
+
+    if (
+      !selection?.rangeCount ||
+      !editor?.contains(selection.anchorNode) ||
+      !editor.contains(selection.focusNode)
+    ) {
+      return;
+    }
+
+    if (this.captureSelection()) this.#dispatchSelection();
+  };
 
   #paste = (event) => {
     event.preventDefault();

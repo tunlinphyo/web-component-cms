@@ -34,7 +34,7 @@ const pageData = [
         "value": "UI Editor",
         "textAlign": "center",
         "fontWeight": "",
-        "type": "h2"
+        "type": "h1"
       }
     ]
   },
@@ -56,7 +56,7 @@ const pageData = [
         "value": "Rich Text Editor",
         "textAlign": "left",
         "fontWeight": "",
-        "type": "h1"
+        "type": "h2"
       },
       {
         "id": "description",

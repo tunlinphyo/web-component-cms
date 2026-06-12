@@ -53,6 +53,7 @@ export class ImageBlock extends LitElement {
   static styles = css`
     :host {
       display: block;
+      position: relative;
     }
 
     :host([align="center"]) {
@@ -61,14 +62,6 @@ export class ImageBlock extends LitElement {
 
     :host([align="right"]) {
       text-align: right;
-    }
-
-    :host([align="center"]) .controls {
-      justify-content: center;
-    }
-
-    :host([align="right"]) .controls {
-      justify-content: flex-end;
     }
 
     .image {
@@ -110,11 +103,23 @@ export class ImageBlock extends LitElement {
       gap: 0.25rem;
       justify-content: flex-start;
       margin-top: 0.25rem;
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
     }
 
     :host([disabled]) .picker {
       cursor: not-allowed;
       opacity: 0.6;
+    }
+
+    button {
+      width: 2.5rem;
+      height: 2.5rem;
+      display: grid;
+      place-content: center;
+      border-radius: 50%;
+      border: none;
     }
   `;
 
@@ -139,8 +144,23 @@ export class ImageBlock extends LitElement {
       ${this.src
         ? html`
             <div class="controls" part="controls">
-              <button type="button" ?disabled=${this.disabled} @click=${this.#deleteImage}>
-                Delete image
+              <button
+                type="button"
+                aria-label="Delete image"
+                title="Delete image"
+                ?disabled=${this.disabled}
+                @click=${this.#deleteImage}
+              >
+                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                  <path
+                    d="M4 7h16M10 11v6m4-6v6M9 7l1-3h4l1 3m3 0-1 13H7L6 7"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
               </button>
             </div>
           `

@@ -3,7 +3,7 @@ import { LitElement, css } from "lit";
 export class FormatToggle extends LitElement {
   static properties = {
     applied: { type: Boolean, reflect: true },
-    disabled: { type: Boolean, reflect: true },
+    disabled: { type: Boolean },
   };
 
   static styles = css`
@@ -14,12 +14,22 @@ export class FormatToggle extends LitElement {
       cursor: pointer;
       height: 32px;
       min-width: 32px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+
+    }
+
+    button:disabled {
+      opacity: 0.5;
     }
 
     :host([applied]) button {
       background: var(--highlight);
       color: white;
+    }
+
+    mark {
+      background-color: var(--highlight);
+      padding-inline: 0.25rem;
+      border-radius: 2px;
     }
   `;
 

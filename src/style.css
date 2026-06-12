@@ -1,6 +1,7 @@
 @import url(./styles/reset.css);
 @import url(./styles/color.css);
 @import url(./styles/layout.css);
+@import url(./styles/group.css);
 
 .editor-page {
   display: flex;

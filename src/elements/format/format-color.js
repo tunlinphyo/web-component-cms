@@ -3,7 +3,7 @@ import { LitElement, html, css } from "lit";
 export class FormatColor extends LitElement {
   static properties = {
     value: { type: String, reflect: true },
-    disabled: { type: Boolean, reflect: true },
+    disabled: { type: Boolean },
   };
 
   static styles = css`
