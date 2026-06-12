@@ -1,0 +1,12 @@
+@import url(./styles/reset.css);
+@import url(./styles/color.css);
+@import url(./styles/layout.css);
+
+.editor-page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 64rem;
+  margin: 1rem auto;
+  border-block: 2px solid #999;
+}

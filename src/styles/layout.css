@@ -1,0 +1,56 @@
+rich-text-editor {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  place-items: start;
+
+  & section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    border-inline-end: 1px solid oklch(from CanvasText l c h / 0.25);
+
+    & group-order {
+      display: grid;
+      width: 100%;
+      max-width: 60rem;
+      padding: 1rem;
+      gap: 1rem;
+    }
+
+    & footer {
+      width: 100%;
+      padding: 1rem;
+      display: flex;
+      justify-content: flex-end;
+      background-color: Canvas;
+      position: sticky;
+      z-index: 5;
+      bottom: 0;
+      border-block-start: 1px solid oklch(from CanvasText l c h / 0.25);
+    }
+  }
+
+  & nav {
+    position: sticky;
+    top: 0;
+    padding: 1rem;
+  }
+}
+
+format-toolbar {
+  display: grid;
+  gap: 1rem;
+}
+
+header-group,
+hero-group,
+about-group,
+image-group,
+paragraph-group,
+footer-group {
+  border: 1px solid oklch(from CanvasText l c h / 0.25);
+  display: block;
+  padding: 1rem;
+}

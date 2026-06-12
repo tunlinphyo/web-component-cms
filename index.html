@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ui-editor</title>
+</head>
+
+<body>
+  <rich-text-editor>
+    <section>
+      <group-order></group-order>
+      <footer>
+        <editor-output-button></editor-output-button>
+      </footer>
+    </section>
+    <nav>
+      <format-toolbar>
+        <div class="format-group">
+          <element-type-selector></element-type-selector>
+        </div>
+        <div class="format-group">
+          <format-bold></format-bold>
+          <format-italic></format-italic>
+          <format-underline></format-underline>
+        </div>
+        <div class="format-group">
+          <format-ordered-list></format-ordered-list>
+          <format-unordered-list></format-unordered-list>
+        </div>
+        <div class="format-group">
+          <format-align-left applied></format-align-left>
+          <format-align-center></format-align-center>
+          <format-align-right></format-align-right>
+          <format-align-justify></format-align-justify>
+        </div>
+        <div class="format-group">
+          <format-highlight></format-highlight>
+          <!-- <format-text-color></format-text-color> -->
+          <format-text-color-palette></format-text-color-palette>
+        </div>
+        <div class="format-group">
+          <format-link></format-link>
+        </div>
+      </format-toolbar>
+    </nav>
+  </rich-text-editor>
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>

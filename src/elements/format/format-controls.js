@@ -1,0 +1,15 @@
+import "./format-bold";
+import "./format-italic";
+import "./format-underline";
+import "./format-ordered-list";
+import "./format-unordered-list";
+import "./format-align-left";
+import "./format-align-center";
+import "./format-align-right";
+import "./format-align-justify";
+import "./format-highlight";
+import "./format-link";
+import "./format-text-color";
+import "./format-text-color-palette";
+import "./element-type-selector";
+import "./format-toolbar";
