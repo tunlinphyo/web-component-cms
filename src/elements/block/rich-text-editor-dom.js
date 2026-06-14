@@ -1,4 +1,4 @@
-import { isEmptyHtml, normalizeParagraphs, selectRange } from "./utils.js";
+import { isEmptyHtml, normalizeBlockContent, normalizeParagraphs, selectRange } from "./utils.js";
 
 export function getEditorElement(renderRoot) {
   return renderRoot.querySelector(".editor");
@@ -34,12 +34,12 @@ export function captureEditorState(editor) {
 }
 
 export function restoreEditorState(editor, { value, type, textAlign, fontWeight }) {
-  editor.innerHTML = normalizeParagraphs(value, type);
+  editor.innerHTML = normalizeBlockContent(value, type);
   applyEditorPresentation(editor, { textAlign, fontWeight });
 }
 
 export function syncEditorFromProperties(editor, { value, type, textAlign, fontWeight }) {
-  let normalizedValue = normalizeParagraphs(value, type);
+  let normalizedValue = normalizeBlockContent(value, type);
   if (isEmptyHtml(normalizedValue)) normalizedValue = "";
 
   if (editor.innerHTML !== normalizedValue) editor.innerHTML = normalizedValue;

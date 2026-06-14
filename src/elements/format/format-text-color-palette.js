@@ -30,7 +30,6 @@ export class FormatTextColorPalette extends LitElement {
       cursor: pointer;
       height: 32px;
       min-width: 32px;
-
     }
 
     button:disabled {
@@ -82,12 +81,13 @@ export class FormatTextColorPalette extends LitElement {
         popovertarget="colors"
         ?disabled=${this.disabled}
         style=${`--text-color: ${this.value}`}
+        @mousedown=${(event) => event.preventDefault()}
       >
         A
       </button>
       <div id="colors" popover>
         ${COLORS.map(
-      (color) => html`
+          (color) => html`
             <button
               class="color"
               type="button"
@@ -98,7 +98,7 @@ export class FormatTextColorPalette extends LitElement {
               @click=${() => this.#apply(color)}
             ></button>
           `,
-    )}
+        )}
       </div>
     `;
   }

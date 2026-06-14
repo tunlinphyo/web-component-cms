@@ -1,10 +1,11 @@
 import { LitElement } from "lit";
 import { html, unsafeStatic } from "lit/static-html.js";
 import {
+  convertBlockTypeContent,
   insertPlainText,
   isSelectionInside,
+  normalizeBlockContent,
   normalizeBlockType,
-  normalizeParagraphs,
   removeLinkSelectionPreview,
   selectRange,
   serializeHtml,
@@ -63,7 +64,7 @@ export class RichTextBlock extends LitElement {
   init({ id = "", value = "", textAlign = "left", fontWeight = "", type = "p" } = {}) {
     this.blockId = id;
     this.type = normalizeBlockType(type);
-    this.value = normalizeParagraphs(value, this.type);
+    this.value = normalizeBlockContent(value, this.type);
     this.textAlign = textAlign;
     this.fontWeight = fontWeight;
 
@@ -83,7 +84,10 @@ export class RichTextBlock extends LitElement {
 
     if (!editor || nextType === this.type) return false;
 
-    const editorState = captureEditorState(editor);
+    const editorState = {
+      ...captureEditorState(editor),
+      value: convertBlockTypeContent(editor.innerHTML, this.type, nextType),
+    };
     this.type = nextType;
 
     void this.updateComplete.then(() => {
@@ -181,11 +185,13 @@ export class RichTextBlock extends LitElement {
     syncEditorFromProperties(editor, this);
   }
 
-  captureSelection() {
+  captureSelection({ preserve = false } = {}) {
     const selection = getEditorSelection(this.renderRoot);
     const editor = getEditorElement(this.renderRoot);
 
     if (!isSelectionInside(editor, selection)) {
+      if (preserve) return Boolean(this.selectedRange);
+
       this.selectedRange = null;
       this.toggleAttribute("has-format-selection", false);
       return false;

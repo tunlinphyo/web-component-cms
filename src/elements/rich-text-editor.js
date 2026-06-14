@@ -115,7 +115,7 @@ export class RichTextEditor extends LitElement {
 
     if (!event.composedPath().some((element) => element.localName === "format-toolbar")) return;
 
-    this.activeBlock?.captureSelection?.();
+    this.activeBlock?.captureSelection?.({ preserve: true });
     if (
       event
         .composedPath()

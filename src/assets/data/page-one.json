@@ -57,7 +57,7 @@
       },
       {
         "id": "title",
-        "value": "Rich Text Editor",
+        "value": "Rich Text <br>Editor",
         "textAlign": "left",
         "fontWeight": "",
         "type": "h2"

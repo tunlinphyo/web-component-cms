@@ -5,6 +5,21 @@ export function normalizeBlockType(type) {
   return BLOCK_TYPES.includes(type) ? type : "p";
 }
 
+export function convertBlockTypeContent(value, previousType, nextType) {
+  if (previousType === "p" && nextType !== "p") {
+    return normalizeHeadingLines(paragraphsToBreaks(value));
+  }
+  if (previousType !== "p" && nextType === "p") {
+    return breaksToParagraphs(value?.replace(/\r\n?|\n/g, "<br>"));
+  }
+
+  return normalizeBlockContent(value, nextType);
+}
+
+export function normalizeBlockContent(value, type) {
+  return type === "p" ? normalizeParagraphs(value, type) : normalizeHeadingLines(value);
+}
+
 export function normalizeParagraphs(value, type) {
   if (type !== "p" || !value) return value;
 
@@ -28,12 +43,77 @@ export function normalizeParagraphs(value, type) {
   return output.innerHTML;
 }
 
+function normalizeHeadingLines(value) {
+  if (!value) return value;
+
+  const template = document.createElement("template");
+  template.innerHTML = value.replace(/\r\n?|\n/g, "\n");
+
+  for (const lineBreak of template.content.querySelectorAll("br")) {
+    lineBreak.replaceWith(document.createTextNode("\n"));
+  }
+
+  return template.innerHTML;
+}
+
+function paragraphsToBreaks(value) {
+  if (!value) return value;
+
+  const template = document.createElement("template");
+  const output = document.createElement("div");
+  let trailingParagraphBreak = null;
+  template.innerHTML = value;
+
+  for (const node of Array.from(template.content.childNodes)) {
+    if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "P") {
+      if (node.lastChild?.nodeName === "BR") node.lastChild.remove();
+      output.append(...node.childNodes);
+      trailingParagraphBreak = output.appendChild(document.createElement("br"));
+    } else {
+      trailingParagraphBreak = null;
+      output.append(node);
+    }
+  }
+
+  trailingParagraphBreak?.remove();
+  return output.innerHTML;
+}
+
+function breaksToParagraphs(value) {
+  if (!value) return value;
+
+  const template = document.createElement("template");
+  const output = document.createElement("div");
+  let paragraph = null;
+  let endedWithBreak = false;
+  template.innerHTML = value;
+
+  for (const node of Array.from(template.content.childNodes)) {
+    if (node.nodeType === Node.ELEMENT_NODE && PARAGRAPH_CONTENT_TAGS.includes(node.tagName)) {
+      paragraph = null;
+      endedWithBreak = false;
+      output.append(node);
+    } else if (node.nodeName === "BR") {
+      paragraph ??= output.appendChild(document.createElement("p"));
+      paragraph = null;
+      endedWithBreak = true;
+    } else {
+      paragraph ??= output.appendChild(document.createElement("p"));
+      paragraph.append(node);
+      endedWithBreak = false;
+    }
+  }
+
+  if (endedWithBreak) output.appendChild(document.createElement("p"));
+  return output.innerHTML;
+}
+
 export function isEmptyHtml(html) {
   return html === "" || /^\s*(?:<br\s*\/?>)+\s*$/i.test(html);
 }
 
 export function serializeHtml(html, trimTrailingBreaks = true) {
-  const serialized = html.replace(/\r?\n/g, "<br>");
+  const serialized = html.replace(/\r\n?|\n/g, "<br>");
   return trimTrailingBreaks ? serialized.replace(/(?:<br>)+$/, "") : serialized;
 }
 
