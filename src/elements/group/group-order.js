@@ -66,7 +66,7 @@ export class GroupOrder extends HTMLElement {
 
     const defaultData = group.constructor.defaultJson ?? {};
     group.init(defaultData);
-    group.focusFirstBlock?.();
+    void group.focusFirstBlock?.();
   };
 
   #deleteGroup = (event) => {

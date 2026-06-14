@@ -37,7 +37,7 @@ export class GroupBase extends LitElement {
       cursor: pointer;
     }
 
-    button:not(:disabled):is(:hover,:focus-visible) {
+    button:not(:disabled):is(:hover, :focus-visible) {
       outline: 2px solid var(--highlight);
       outline-offset: 0;
     }
@@ -122,33 +122,19 @@ export class GroupBase extends LitElement {
     return this;
   }
 
-  focusFirstBlock() {
-    void this.updateComplete.then(() => {
-      const firstBlock = this.blocks[0];
-      if (!firstBlock) return;
+  async focusFirstBlock() {
+    await this.updateComplete;
 
-      // For rich-text-block, focus the editor and position cursor
-      const editor = firstBlock.renderRoot?.querySelector(".editor");
-      if (editor) {
-        editor.focus();
-        // Position cursor at the end of the first <p> tag if it exists
-        const p = editor.querySelector("p");
-        if (p) {
-          const range = document.createRange();
-          range.setStart(p, 0);
-          const selection = window.getSelection();
-          selection.removeAllRanges();
-          selection.addRange(range);
-        }
-        return;
-      }
+    const firstBlock = this.blocks[0];
+    if (!firstBlock) return false;
 
-      // For image-block, focus the file input
-      const fileInput = firstBlock.renderRoot?.querySelector(".input");
-      if (fileInput && !fileInput.disabled) {
-        fileInput.focus();
-      }
-    });
+    await firstBlock.updateComplete;
+
+    const focusTarget = firstBlock.renderRoot.querySelector(".editor, .input:not(:disabled)");
+    if (!focusTarget) return false;
+
+    focusTarget.focus();
+    return true;
   }
 
   toJSON() {
