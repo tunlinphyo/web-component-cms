@@ -8,6 +8,7 @@ export class HeaderGroup extends GroupBase {
       <header part="header">
         <image-block block-id="logo" placeholder="Choose header logo"></image-block>
         <rich-text-block block-id="title" placeholder="Site title"></rich-text-block>
+        <div></div>
       </header>
     `;
   }

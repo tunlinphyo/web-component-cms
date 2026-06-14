@@ -49,9 +49,21 @@ export class RichTextBlock extends LitElement {
       const editor = this.renderRoot.querySelector(".editor");
       if (!editor) return;
 
-      editor.innerHTML = this.value;
+      if (this.type === "p") {
+        editor.innerHTML = this.value || "<p></p>";
+        // set CSS var for placeholder so it does not end up in innerHTML
+        const escaped = (this.placeholder || "").replace(/"/g, '\\"');
+        editor.style.setProperty("--placeholder", `"${escaped}"`);
+      } else {
+        editor.innerHTML = this.value || "";
+        // clear paragraph placeholder variable for non-p types
+        editor.style.removeProperty("--placeholder");
+      }
+
       editor.style.textAlign = this.textAlign;
       editor.style.fontWeight = this.fontWeight;
+
+      document.execCommand("defaultParagraphSeparator", false, "p");
     });
 
     return this;
@@ -118,6 +130,15 @@ export class RichTextBlock extends LitElement {
       pointer-events: none;
     }
 
+    /* show placeholder when the editor contains a single empty <p>
+       placeholder is provided via CSS variable set on the editor so it
+       does not end up in the serialized innerHTML */
+    .editor > p:only-child:empty::before {
+      content: var(--placeholder);
+      color: #888;
+      pointer-events: none;
+    }
+
     mark {
       background-color: var(--highlight);
       padding-inline: 0.25rem;
@@ -150,9 +171,10 @@ export class RichTextBlock extends LitElement {
         part="editor"
         contenteditable=${this.disabled ? "false" : "true"}
         data-placeholder=${this.placeholder}
-        @focus=${() => document.execCommand("defaultParagraphSeparator", false, "p")}
+        @focus=${this.#onFocus}
+        @keydown=${this.#onKeyDown}
         @paste=${this.#paste}
-        @keyup=${() => this.#notifySelection()}
+        @input=${this.#onInput}
       ></${tag}>
     `;
   }
@@ -160,6 +182,59 @@ export class RichTextBlock extends LitElement {
   firstUpdated() {
     this.#syncEditor();
   }
+
+  #onFocus = (event) => {
+    document.execCommand("defaultParagraphSeparator", false, "p");
+    const editor = event.currentTarget;
+    if (editor && editor.textContent.trim() === "") {
+      const range = document.createRange();
+      range.selectNodeContents(editor);
+      range.collapse(false);
+      const selection = this.renderRoot.getSelection?.() ?? document.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
+  };
+
+  #onKeyDown = (event) => {
+    if (event.key !== "Enter" || this.type !== "p" || event.shiftKey) return;
+    event.preventDefault();
+    document.execCommand("insertParagraph");
+    this.updateComplete.then(() => {
+      const editor = this.renderRoot.querySelector(".editor");
+      if (!editor) return;
+      const normalized = this.#normalizeParagraphs(editor.innerHTML);
+      if (normalized !== editor.innerHTML) {
+        editor.innerHTML = normalized;
+      }
+      this.#notifySelection();
+    });
+  };
+
+  #onInput = () => {
+    if (this.type !== "p") return;
+    const editor = this.renderRoot.querySelector(".editor");
+    if (!editor) return;
+
+    const html = editor.innerHTML;
+    if (this.#isEmptyHtml(html)) {
+      editor.innerHTML = "";
+      this.#notifySelection();
+      return;
+    }
+
+    const normalized = this.#normalizeParagraphs(html);
+    if (normalized !== html) {
+      const selection = document.getSelection();
+      editor.innerHTML = normalized;
+      if (selection && selection.rangeCount) {
+        const range = selection.getRangeAt(0).cloneRange();
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
+    }
+    this.#notifySelection();
+  };
 
   updated(changedProperties) {
     if (
@@ -169,6 +244,13 @@ export class RichTextBlock extends LitElement {
     ) {
       this.#syncEditor();
     }
+    if (changedProperties.has("placeholder")) {
+      const editor = this.renderRoot.querySelector(".editor");
+      if (editor) {
+        const escaped = (this.placeholder || "").replace(/"/g, '\\"');
+        editor.style.setProperty("--placeholder", `"${escaped}"`);
+      }
+    }
   }
 
   #syncEditor() {
@@ -176,10 +258,15 @@ export class RichTextBlock extends LitElement {
 
     if (!editor || this.renderRoot.activeElement === editor) return;
 
-    const value = this.#normalizeParagraphs(this.value);
+    let value = this.#normalizeParagraphs(this.value);
+    if (this.#isEmptyHtml(value)) value = "";
     if (editor.innerHTML !== value) editor.innerHTML = value;
     editor.style.textAlign = this.textAlign;
     editor.style.fontWeight = this.fontWeight;
+  }
+
+  #isEmptyHtml(html) {
+    return html === "" || /^\s*(?:<br\s*\/?>)+\s*$/i.test(html);
   }
 
   captureSelection() {

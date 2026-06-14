@@ -104,8 +104,8 @@ export class ImageBlock extends LitElement {
       justify-content: flex-start;
       margin-top: 0.25rem;
       position: absolute;
-      top: 1rem;
-      right: 1rem;
+      top: 0.5rem;
+      right: 0.5rem;
     }
 
     :host([disabled]) .picker {
@@ -120,6 +120,11 @@ export class ImageBlock extends LitElement {
       place-content: center;
       border-radius: 50%;
       border: none;
+    }
+
+    button:not(:disabled):is(:hover,:focus-visible) {
+      outline: 2px solid var(--highlight);
+      outline-offset: 0;
     }
   `;
 

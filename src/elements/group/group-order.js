@@ -63,6 +63,10 @@ export class GroupOrder extends HTMLElement {
     this.insertBefore(group, this.querySelector(":scope > group-picker-dialog"));
 
     this.#updateOrder(groups);
+
+    const defaultData = group.constructor.defaultJson ?? {};
+    group.init(defaultData);
+    group.focusFirstBlock?.();
   };
 
   #deleteGroup = (event) => {

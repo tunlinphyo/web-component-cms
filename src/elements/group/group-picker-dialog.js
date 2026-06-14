@@ -23,8 +23,8 @@ export class GroupPickerDialog extends LitElement {
       <dialog @click=${this.#closeFromBackdrop}>
         <menu>
           ${GROUP_TYPES.map(
-            (type) =>
-              html`<button type="button" @click=${() => this.#select(type)}>Add ${type}</button>`,
+            (type, index) =>
+              html`<button type="button" ?autofocus=${index === 0} @click=${() => this.#select(type)}>Add ${type}</button>`,
           )}
           <button type="button" @click=${this.close}>Cancel</button>
         </menu>

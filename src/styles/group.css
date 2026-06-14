@@ -1,5 +1,6 @@
 header-group::part(header) {
-  display: flex;
+  display: grid;
+  grid-template-columns: 80px 1fr 80px;
   justify-content: flex-start;
   align-items: center;
   gap: 1rem;
