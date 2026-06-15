@@ -1,4 +1,5 @@
-import { LitElement, html, css } from "lit";
+import { LitElement, html } from "lit";
+import { formatColorStyles } from "./format-color.styles.js";
 
 export class FormatColor extends LitElement {
   static properties = {
@@ -6,20 +7,7 @@ export class FormatColor extends LitElement {
     disabled: { type: Boolean },
   };
 
-  static styles = css`
-    label {
-      align-items: center;
-      display: flex;
-      gap: 4px;
-    }
-
-    input {
-      cursor: pointer;
-      height: 28px;
-      padding: 0;
-      width: 32px;
-    }
-  `;
+  static styles = formatColorStyles;
 
   apply(event) {
     this.value = event.currentTarget.value;

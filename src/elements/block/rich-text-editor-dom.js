@@ -12,7 +12,10 @@ export function setDefaultParagraphSeparator() {
   document.execCommand("defaultParagraphSeparator", false, "p");
 }
 
-export function initializeEditor(editor, { value, type, placeholder, textAlign, fontWeight }) {
+export function initializeEditor(
+  editor,
+  { value, type, placeholder, textAlign, fontWeight, fontSize, fontFamily },
+) {
   if (type === "p") {
     editor.innerHTML = value || "<p></p>";
     updateEditorPlaceholder(editor, placeholder);
@@ -21,7 +24,7 @@ export function initializeEditor(editor, { value, type, placeholder, textAlign, 
     editor.style.removeProperty("--placeholder");
   }
 
-  applyEditorPresentation(editor, { textAlign, fontWeight });
+  applyEditorPresentation(editor, { type, textAlign, fontWeight, fontSize, fontFamily });
   setDefaultParagraphSeparator();
 }
 
@@ -30,20 +33,28 @@ export function captureEditorState(editor) {
     value: editor.innerHTML,
     textAlign: editor.style.textAlign,
     fontWeight: editor.style.fontWeight,
+    fontSize: editor.style.fontSize,
+    fontFamily: editor.style.fontFamily,
   };
 }
 
-export function restoreEditorState(editor, { value, type, textAlign, fontWeight }) {
+export function restoreEditorState(
+  editor,
+  { value, type, textAlign, fontWeight, fontSize, fontFamily },
+) {
   editor.innerHTML = normalizeBlockContent(value, type);
-  applyEditorPresentation(editor, { textAlign, fontWeight });
+  applyEditorPresentation(editor, { type, textAlign, fontWeight, fontSize, fontFamily });
 }
 
-export function syncEditorFromProperties(editor, { value, type, textAlign, fontWeight }) {
+export function syncEditorFromProperties(
+  editor,
+  { value, type, textAlign, fontWeight, fontSize, fontFamily },
+) {
   let normalizedValue = normalizeBlockContent(value, type);
   if (isEmptyHtml(normalizedValue)) normalizedValue = "";
 
   if (editor.innerHTML !== normalizedValue) editor.innerHTML = normalizedValue;
-  applyEditorPresentation(editor, { textAlign, fontWeight });
+  applyEditorPresentation(editor, { type, textAlign, fontWeight, fontSize, fontFamily });
 }
 
 export function updateEditorPlaceholder(editor, placeholder) {
@@ -84,7 +95,10 @@ export function placeCaretInEmptyEditor(editor, selection) {
   return true;
 }
 
-function applyEditorPresentation(editor, { textAlign, fontWeight }) {
+function applyEditorPresentation(editor, { type, textAlign, fontWeight, fontSize, fontFamily }) {
   editor.style.textAlign = textAlign;
   editor.style.fontWeight = fontWeight;
+  editor.style.fontSize = type === "p" ? "" : fontSize;
+  editor.style.fontFamily =
+    fontFamily || (type === "p" ? "var(--font-zen)" : "var(--font-heading)");
 }

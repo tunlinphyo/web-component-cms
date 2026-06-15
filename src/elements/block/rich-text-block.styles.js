@@ -5,6 +5,16 @@ export const richTextBlockStyles = css`
     display: block;
   }
 
+  h1,
+  h2,
+  h3 {
+    margin-block: var(--predefined-margin, 0.5rem);
+  }
+
+  b {
+    font-weight: 700;
+  }
+
   .editor {
     box-sizing: border-box;
     outline: none;
@@ -32,9 +42,14 @@ export const richTextBlockStyles = css`
   }
 
   mark {
-    background-color: var(--highlight);
-    padding-inline: 0.25rem;
-    border-radius: 2px;
+    background-color: transparent;
+    background-image: linear-gradient(
+      var(--mark-highlight-color, var(--yellow-200)),
+      var(--mark-highlight-color, var(--yellow-200))
+    );
+    background-position: bottom;
+    background-repeat: no-repeat;
+    background-size: 100% 40%;
   }
 
   [data-link-selection] {
@@ -47,7 +62,7 @@ export const richTextBlockStyles = css`
     user-select: none;
   }
 
-  p {
-    margin-block: 0.5rem;
+  :host([type="p"]) p {
+    margin-block: var(--predefined-margin, 0.5rem);
   }
 `;

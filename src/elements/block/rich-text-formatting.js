@@ -21,6 +21,7 @@ export function applySelectionCommand({
   range,
   selection,
   onFontWeightChange,
+  onFontSizeChange,
 }) {
   selectRange(selection, range);
 
@@ -30,6 +31,14 @@ export function applySelectionCommand({
     toggleInlineCommand(command, value, editor, range, selection);
   } else if (command === "linkEdit") {
     if (!prepareLinkSelection(editor, range, selection)) return { range, shouldNotify: false };
+  } else if (command === "fontSize") {
+    if (type === "p") {
+      applyFontSize(value, editor, range, selection);
+    } else {
+      applyBlockFontSize(value, editor, onFontSizeChange);
+    }
+  } else if (command === "backgroundColor") {
+    applyHighlightBackgroundColor(value, editor, range, selection);
   } else if (command === "highlight" || command === "link") {
     applyWrappedSelection(command, value, editor, range, selection);
   } else {
@@ -50,6 +59,9 @@ export function describeSelectionFormat({ editor, type, textAlign, range, select
   if (!rangesMatch(currentRange, range)) selectRange(selection, range);
 
   const findSelectedAncestor = (selector) => getSelectedAncestor(editor, range, selector);
+  const fontSizeElement = type === "p" ? findSelectedAncestor("[style*='font-size']") : editor;
+  const highlightElement = findSelectedAncestor("mark");
+  const highlightStyles = highlightElement ? getComputedStyle(highlightElement) : null;
 
   return {
     bold: editor?.style.fontWeight !== "normal" && document.queryCommandState("bold"),
@@ -58,13 +70,124 @@ export function describeSelectionFormat({ editor, type, textAlign, range, select
     orderedList: document.queryCommandState("insertOrderedList"),
     unorderedList: document.queryCommandState("insertUnorderedList"),
     align,
+    fontSize: fontSizeElement?.style.fontSize ?? "",
+    fontSizeApplied: Boolean(fontSizeElement),
+    fontFamily: editor?.style.fontFamily ?? "",
     type,
     collapsed: range.collapsed,
-    highlight: Boolean(findSelectedAncestor("mark")),
+    highlight: Boolean(highlightElement),
+    backgroundColor:
+      highlightStyles?.getPropertyValue("--mark-highlight-color").trim() ||
+      highlightStyles?.getPropertyValue("--yellow-200").trim() ||
+      "",
     link: findSelectedAncestor("a")?.getAttribute("href") ?? "",
     color: document.queryCommandValue("foreColor"),
     colorApplied: Boolean(findSelectedAncestor("font[color], [style*='color']")),
   };
+}
+
+function applyHighlightBackgroundColor(value, editor, range, selection) {
+  const highlightElement = getSelectedAncestor(editor, range, "mark");
+  if (!highlightElement) return;
+
+  highlightElement.style.setProperty("--mark-highlight-color", value);
+  range.selectNodeContents(highlightElement);
+  selectRange(selection, range);
+}
+
+function applyBlockFontSize(value, editor, onFontSizeChange) {
+  editor.style.fontSize = value;
+  onFontSizeChange(value);
+}
+
+function applyFontSize(value, editor, range, selection) {
+  if (range.collapsed) return;
+
+  const fontSizeElement = getSelectedAncestor(editor, range, "[style*='font-size']");
+  const selectionWithinFontSize = fontSizeElement?.contains(range.endContainer);
+  const fragment = range.extractContents();
+  removeFontSize(fragment);
+
+  if (value) {
+    const element = document.createElement("span");
+    element.style.fontSize = value;
+    element.append(fragment);
+    range.insertNode(element);
+    range.selectNodeContents(element);
+  } else if (selectionWithinFontSize) {
+    insertWithoutAncestorFontSize(fontSizeElement, fragment, range);
+  } else {
+    insertAndSelectFragment(fragment, range);
+  }
+
+  selectRange(selection, range);
+}
+
+function removeFontSize(fragment) {
+  for (const element of fragment.querySelectorAll("[style*='font-size']")) {
+    element.style.removeProperty("font-size");
+    if (!element.getAttribute("style")) element.removeAttribute("style");
+  }
+}
+
+function insertWithoutAncestorFontSize(fontSizeElement, fragment, range) {
+  const afterRange = document.createRange();
+  afterRange.setStart(range.startContainer, range.startOffset);
+  afterRange.setEnd(fontSizeElement, fontSizeElement.childNodes.length);
+
+  const afterElement = fontSizeElement.cloneNode(false);
+  afterElement.append(afterRange.extractContents());
+
+  const selectedElement = fontSizeElement.cloneNode(false);
+  selectedElement.style.removeProperty("font-size");
+  if (!selectedElement.getAttribute("style")) selectedElement.removeAttribute("style");
+  selectedElement.append(fragment);
+
+  const selectedFragment = document.createDocumentFragment();
+  if (selectedElement.attributes.length || selectedElement.tagName !== "SPAN") {
+    selectedFragment.append(selectedElement);
+  } else {
+    selectedFragment.append(...selectedElement.childNodes);
+  }
+
+  addSelectionMarkers(selectedFragment);
+  fontSizeElement.after(selectedFragment, afterElement);
+  selectBetweenMarkers(range);
+
+  if (!fontSizeElement.hasChildNodes()) fontSizeElement.remove();
+  if (!afterElement.hasChildNodes()) afterElement.remove();
+}
+
+function insertAndSelectFragment(fragment, range) {
+  addSelectionMarkers(fragment);
+  range.insertNode(fragment);
+  selectBetweenMarkers(range);
+}
+
+function addSelectionMarkers(fragment) {
+  fragment.prepend(document.createComment("selection-start"));
+  fragment.append(document.createComment("selection-end"));
+}
+
+function selectBetweenMarkers(range) {
+  const root = range.commonAncestorContainer.getRootNode();
+  const iterator = document.createNodeIterator(root, NodeFilter.SHOW_COMMENT);
+  let startMarker = null;
+  let endMarker = null;
+  let node;
+
+  while ((node = iterator.nextNode())) {
+    if (node.data === "selection-start") startMarker = node;
+    if (node.data === "selection-end") endMarker = node;
+    if (startMarker && endMarker) break;
+  }
+
+  if (!startMarker || !endMarker) return;
+
+  range.setStartAfter(startMarker);
+  range.setEndBefore(endMarker);
+  startMarker.remove();
+  endMarker.remove();
 }
 
 function toggleBlockBold(editor, onFontWeightChange) {

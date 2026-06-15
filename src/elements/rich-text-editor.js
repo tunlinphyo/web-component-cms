@@ -1,14 +1,15 @@
 import { LitElement, html } from "lit";
 
 const BLOCK_SELECTOR = "rich-text-block";
-const CONTENT_BLOCK_SELECTOR = "image-block, rich-text-block";
+const CONTENT_BLOCK_SELECTOR = "button-block, icon-block, image-block, rich-text-block";
 const GROUP_SELECTOR =
-  "header-group, hero-group, about-group, image-group, paragraph-group, footer-group";
+  "header-group, coming-soon-group, about-hokupay-group, hero-group, about-group, image-group, paragraph-group, footer-group";
 
 export class RichTextEditor extends LitElement {
   constructor() {
     super();
     this.activeBlock = null;
+    this.activeGroup = null;
   }
 
   render() {
@@ -20,6 +21,7 @@ export class RichTextEditor extends LitElement {
     this.addEventListener("selection-format-change", this.#selectionFormatChange);
     this.addEventListener("format-command", this.#formatCommand);
     this.addEventListener("element-type-change", this.#elementTypeChange);
+    this.addEventListener("group-style-change", this.#groupStyleChange);
     this.addEventListener("restore-selection", this.#restoreSelection);
     this.addEventListener("mousedown", this.#mousedown);
   }
@@ -28,6 +30,7 @@ export class RichTextEditor extends LitElement {
     this.removeEventListener("selection-format-change", this.#selectionFormatChange);
     this.removeEventListener("format-command", this.#formatCommand);
     this.removeEventListener("element-type-change", this.#elementTypeChange);
+    this.removeEventListener("group-style-change", this.#groupStyleChange);
     this.removeEventListener("restore-selection", this.#restoreSelection);
     this.removeEventListener("mousedown", this.#mousedown);
     super.disconnectedCallback();
@@ -74,9 +77,11 @@ export class RichTextEditor extends LitElement {
   }
 
   #selectionFormatChange = (event) => {
+    const group = event.composedPath().find((element) => element.matches?.(GROUP_SELECTOR));
     const block = event.composedPath().find((element) => element.matches?.(BLOCK_SELECTOR));
     if (!block) return;
 
+    if (group) this.#setActiveGroup(group);
     this.#setActiveBlock(block);
     this.#notifyToolbar(event.detail);
   };
@@ -87,12 +92,29 @@ export class RichTextEditor extends LitElement {
       .toLowerCase();
 
     if (alignment) {
-      if (this.activeBlock?.matches("image-block")) {
+      if (this.activeBlock?.matches("button-block, icon-block, image-block")) {
         this.activeBlock.align = alignment;
         this.#notifyToolbar(this.activeBlock.getSelectionFormat());
       } else {
         this.activeBlock?.align?.(alignment);
       }
+    } else if (event.detail.command === "fontFamily") {
+      this.activeBlock?.setFontFamily?.(event.detail.value);
+    } else if (event.detail.command === "borderRadius") {
+      if (!this.activeBlock?.setBorderRadius?.(event.detail.value)) return;
+      this.#notifyToolbar(this.activeBlock.getSelectionFormat());
+    } else if (event.detail.command === "buttonDesign") {
+      if (!this.activeBlock?.setButtonDesign?.(event.detail.value)) return;
+      this.#notifyToolbar(this.activeBlock.getSelectionFormat());
+    } else if (event.detail.command === "buttonIconPlacement") {
+      if (!this.activeBlock?.setButtonIconPlacement?.(event.detail.value)) return;
+      this.#notifyToolbar(this.activeBlock.getSelectionFormat());
+    } else if (event.detail.command === "buttonLink") {
+      if (!this.activeBlock?.setButtonLink?.(event.detail.value)) return;
+      this.#notifyToolbar(this.activeBlock.getSelectionFormat());
+    } else if (this.activeBlock?.matches("icon-block")) {
+      if (!this.activeBlock.formatSelection?.(event.detail.command, event.detail.value)) return;
+      this.#notifyToolbar(this.activeBlock.getSelectionFormat());
     } else {
       this.activeBlock?.formatSelection?.(event.detail.command, event.detail.value);
     }
@@ -102,15 +124,24 @@ export class RichTextEditor extends LitElement {
     this.activeBlock?.setType?.(event.detail.type);
   };
 
+  #groupStyleChange = (event) => {
+    if (!this.activeGroup?.setGroupStyle?.(event.detail.property, event.detail.value)) return;
+    this.#notifyGroupToolbar(this.activeGroup.getGroupFormat());
+  };
+
   #restoreSelection = () => {
     requestAnimationFrame(() => this.activeBlock?.restoreSelection?.());
   };
 
   #mousedown = (event) => {
+    const group = event.composedPath().find((element) => element.matches?.(GROUP_SELECTOR));
     const block = event.composedPath().find((element) => element.matches?.(CONTENT_BLOCK_SELECTOR));
+    if (group) this.#setActiveGroup(group);
     if (block) {
       this.#setActiveBlock(block);
-      if (block.matches("image-block")) this.#notifyToolbar(block.getSelectionFormat());
+      if (block.matches("button-block, icon-block, image-block")) {
+        this.#notifyToolbar(block.getSelectionFormat());
+      }
     }
 
     if (!event.composedPath().some((element) => element.localName === "format-toolbar")) return;
@@ -150,12 +181,29 @@ export class RichTextEditor extends LitElement {
     if (block === this.activeBlock) return;
 
     this.activeBlock?.clearSelection?.();
-    if (block?.matches("image-block")) {
+    if (block?.matches("button-block, icon-block, image-block")) {
       document.getSelection()?.removeAllRanges();
     }
     this.activeBlock?.removeAttribute("active");
     this.activeBlock = block;
     this.activeBlock?.setAttribute("active", "");
+  }
+
+  #setActiveGroup(group) {
+    if (group === this.activeGroup) return;
+
+    this.activeGroup?.removeAttribute("active");
+    this.activeGroup = group;
+    this.activeGroup?.setAttribute("active", "");
+    this.#notifyGroupToolbar(group.getGroupFormat());
+  }
+
+  #notifyGroupToolbar(format) {
+    this.querySelector("group-format-toolbar")?.dispatchEvent(
+      new CustomEvent("group-format-change", {
+        detail: format,
+      }),
+    );
   }
 }
 

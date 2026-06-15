@@ -1,31 +1,25 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, html } from "lit";
+import { groupPickerDialogStyles } from "./group-picker-dialog.styles.js";
 
-const GROUP_TYPES = ["header", "hero", "about", "image", "paragraph", "footer"];
+const GROUP_TYPES = ["header", "coming-soon", "about-hokupay", "about", "image", "paragraph", "footer"];
 
 export class GroupPickerDialog extends LitElement {
-  static styles = css`
-    dialog {
-      border: 1px solid #999;
-      border-radius: 0.5rem;
-      padding: 1rem;
-    }
-
-    menu {
-      display: grid;
-      gap: 0.5rem;
-      margin: 0;
-      padding: 0;
-    }
-  `;
+  static styles = groupPickerDialogStyles;
 
   render() {
     return html`
       <dialog @click=${this.#closeFromBackdrop}>
         <menu>
           ${GROUP_TYPES.map(
-            (type, index) =>
-              html`<button type="button" ?autofocus=${index === 0} @click=${() => this.#select(type)}>Add ${type}</button>`,
-          )}
+      (type, index) =>
+        html`<button
+                type="button"
+                ?autofocus=${index === 0}
+                @click=${() => this.#select(type)}
+              >
+                Add ${type}
+              </button>`,
+    )}
           <button type="button" @click=${this.close}>Cancel</button>
         </menu>
       </dialog>

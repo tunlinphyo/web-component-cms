@@ -1,0 +1,10 @@
+import "./header-group";
+import "./coming-soon-group";
+import "./about-hokupay-group"
+import "./hero-group";
+import "./about-group";
+import "./image-group";
+import "./paragraph-group";
+import "./footer-group";
+import "./group-picker-dialog";
+import "./group-order";

@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700;900&display=swap');
+
+@font-face {
+  font-family: "FOT-Chiaro Std";
+  src: url("/fonts/FOT-Chiaro%20Std/chiarostd_b.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-heading: "FOT-Chiaro Std", sans-serif;
+  --font-zen: "Zen Kaku Gothic New", sans-serif;
+}

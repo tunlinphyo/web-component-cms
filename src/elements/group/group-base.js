@@ -1,10 +1,16 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, html } from "lit";
+import { groupBaseStyles } from "./group-base.styles.js";
 
 export class GroupBase extends LitElement {
   static properties = {
     groupId: { type: String, attribute: "group-id", reflect: true },
     groupType: { type: String, attribute: "group-type", reflect: true },
     order: { type: Number, reflect: true },
+    backgroundColor: { type: String, attribute: "background-color", reflect: true },
+    borderWidth: { type: String, attribute: "border-width", reflect: true },
+    borderColor: { type: String, attribute: "border-color", reflect: true },
+    borderStyle: { type: String, attribute: "border-style", reflect: true },
+    borderRadius: { type: String, attribute: "border-radius", reflect: true },
   };
 
   static defaultJson = {
@@ -16,41 +22,19 @@ export class GroupBase extends LitElement {
     this.groupId = "";
     this.groupType = "";
     this.order = 0;
+    this.backgroundColor = "";
+    this.borderWidth = "";
+    this.borderColor = "";
+    this.borderStyle = "";
+    this.borderRadius = "";
   }
 
-  static styles = css`
-    .sort-controls {
-      display: flex;
-      gap: 0.25rem;
-      margin-bottom: 0.5rem;
-      /* opacity: 0;
-      pointer-events: none; */
-    }
-
-    button {
-      width: 2.5rem;
-      height: 2.5rem;
-      display: grid;
-      place-content: center;
-      border-radius: 50%;
-      border: none;
-      cursor: pointer;
-    }
-
-    button:not(:disabled):is(:hover, :focus-visible) {
-      outline: 2px solid var(--highlight);
-      outline-offset: 0;
-    }
-
-    /* :host(:hover) .sort-controls,
-    :host(:focus-within) .sort-controls {
-      opacity: 1;
-      pointer-events: auto;
-    } */
-  `;
+  static styles = groupBaseStyles;
 
   get blocks() {
-    return [...this.renderRoot.querySelectorAll("image-block, rich-text-block")];
+    return [
+      ...this.renderRoot.querySelectorAll("button-block, icon-block, image-block, rich-text-block"),
+    ];
   }
 
   renderSortControls() {
@@ -111,7 +95,20 @@ export class GroupBase extends LitElement {
     `;
   }
 
-  init({ blocks = [] } = {}) {
+  init({
+    blocks = [],
+    backgroundColor = "",
+    borderWidth = "",
+    borderColor = "",
+    borderStyle = "",
+    borderRadius = "",
+  } = {}) {
+    this.backgroundColor = backgroundColor;
+    this.borderWidth = borderWidth;
+    this.borderColor = borderColor;
+    this.borderStyle = borderStyle;
+    this.borderRadius = borderRadius;
+
     void this.updateComplete.then(() => {
       const blocksById = new Map(this.blocks.map((block) => [block.blockId, block]));
 
@@ -142,7 +139,40 @@ export class GroupBase extends LitElement {
       id: this.groupId,
       type: this.groupType || this.localName.replace(/-group$/, ""),
       order: this.order,
+      backgroundColor: this.backgroundColor,
+      borderWidth: this.borderWidth,
+      borderColor: this.borderColor,
+      borderStyle: this.borderStyle,
+      borderRadius: this.borderRadius,
       blocks: this.blocks.map((block) => block.toJSON()),
+    };
+  }
+
+  setGroupStyle(property, value) {
+    if (
+      !["backgroundColor", "borderWidth", "borderColor", "borderStyle", "borderRadius"].includes(
+        property,
+      )
+    ) {
+      return false;
+    }
+
+    this[property] = value;
+    if (property === "borderWidth" && value && !this.borderStyle) this.borderStyle = "solid";
+    if (property === "borderStyle" && value && value !== "none" && !this.borderWidth) {
+      this.borderWidth = "1px";
+    }
+    this.#dispatchFormat();
+    return true;
+  }
+
+  getGroupFormat() {
+    return {
+      backgroundColor: this.backgroundColor,
+      borderWidth: this.borderWidth,
+      borderColor: this.borderColor,
+      borderStyle: this.borderStyle,
+      borderRadius: this.borderRadius,
     };
   }
 
@@ -187,5 +217,33 @@ export class GroupBase extends LitElement {
     if (changedProperties.has("order")) {
       this.style.order = this.order;
     }
+    const groupBox = this.renderRoot.querySelector("[data-group-box]");
+    if (!groupBox) return;
+
+    if (changedProperties.has("backgroundColor")) {
+      groupBox.style.backgroundColor = this.backgroundColor;
+    }
+    if (changedProperties.has("borderWidth")) {
+      groupBox.style.borderWidth = this.borderWidth;
+    }
+    if (changedProperties.has("borderColor")) {
+      groupBox.style.borderColor = this.borderColor;
+    }
+    if (changedProperties.has("borderStyle")) {
+      groupBox.style.borderStyle = this.borderStyle;
+    }
+    if (changedProperties.has("borderRadius")) {
+      groupBox.style.borderRadius = this.borderRadius;
+    }
+  }
+
+  #dispatchFormat() {
+    this.dispatchEvent(
+      new CustomEvent("group-format-change", {
+        detail: this.getGroupFormat(),
+        bubbles: true,
+        composed: true,
+      }),
+    );
   }
 }

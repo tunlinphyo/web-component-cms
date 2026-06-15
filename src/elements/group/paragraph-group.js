@@ -5,7 +5,9 @@ export class ParagraphGroup extends GroupBase {
   render() {
     return html`
       ${this.renderSortControls()}
-      <rich-text-block block-id="paragraph" type="p" placeholder="Paragraph"></rich-text-block>
+      <div data-group-box>
+        <rich-text-block block-id="paragraph" type="p" placeholder="Paragraph"></rich-text-block>
+      </div>
     `;
   }
 }

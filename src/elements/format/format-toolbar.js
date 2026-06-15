@@ -2,6 +2,8 @@ import { LitElement, html } from "lit";
 
 const FORMATTERS = [
   "element-type-selector",
+  "format-font-family",
+  "format-font-size",
   "format-bold",
   "format-italic",
   "format-underline",
@@ -15,10 +17,17 @@ const FORMATTERS = [
   "format-link",
   "format-text-color",
   "format-text-color-palette",
+  "format-icon-background-color",
+  "image-border-radius",
+  "format-button-design",
+  "format-button-icon-placement",
+  "format-button-link",
 ];
 
 const TEXT_FORMATTERS = [
   "element-type-selector",
+  "format-font-family",
+  "format-font-size",
   "format-bold",
   "format-italic",
   "format-underline",
@@ -31,6 +40,7 @@ const TEXT_FORMATTERS = [
 ];
 
 const INLINE_FORMATTERS = [
+  ["format-font-size", "fontSizeApplied"],
   ["format-bold", "bold"],
   ["format-italic", "italic"],
   ["format-underline", "underline"],
@@ -62,8 +72,20 @@ export class FormatToolbar extends LitElement {
   #selectionFormatChange = (event) => {
     const format = event.detail;
     const imageSelected = format?.type === "image";
+    const buttonSelected = format?.type === "button";
+    const iconSelected = format?.type === "icon";
+    const backgroundColorSelected = iconSelected || format?.highlight;
+    const nonTextSelected = imageSelected || buttonSelected || iconSelected;
 
-    this.#setValue("element-type-selector", imageSelected ? "p" : (format?.type ?? "p"));
+    this.querySelector("#text")?.toggleAttribute("hidden", buttonSelected);
+    this.querySelector("#button")?.toggleAttribute("hidden", !buttonSelected);
+
+    this.#setValue("element-type-selector", nonTextSelected ? "p" : (format?.type ?? "p"));
+    this.#setValue(
+      "format-font-family",
+      format?.fontFamily || (format?.type === "p" ? "var(--font-zen)" : "var(--font-heading)"),
+    );
+    this.#setValue("format-font-size", format?.fontSize ?? "");
     this.#setApplied("format-bold", format?.bold ?? false);
     this.#setApplied("format-italic", format?.italic ?? false);
     this.#setApplied("format-underline", format?.underline ?? false);
@@ -76,29 +98,54 @@ export class FormatToolbar extends LitElement {
     this.#setApplied("format-highlight", format?.highlight ?? false);
     this.#setApplied("format-link", Boolean(format?.link));
     this.#setValue("format-link", format?.link ?? "");
+    this.#setApplied("format-button-link", buttonSelected && Boolean(format?.link));
+    this.#setValue("format-button-link", buttonSelected ? (format?.link ?? "") : "");
     this.#setValue("format-text-color", toHex(format?.color, "#000000"));
     this.#setValue("format-text-color-palette", toHex(format?.color, "#000000"));
+    this.#setValue("format-icon-background-color", toHex(format?.backgroundColor, "#ffffff"));
+    this.#setValue("image-border-radius", format?.borderRadius ?? "");
+    this.#setValue("format-button-design", format?.buttonDesign ?? "primary");
+    this.#setValue("format-button-icon-placement", format?.buttonIconPlacement ?? "none");
 
     for (const selector of FORMATTERS) this.#setDisabled(selector, !format);
 
     for (const selector of TEXT_FORMATTERS) {
-      this.#setDisabled(selector, !format || imageSelected);
+      this.#setDisabled(selector, !format || nonTextSelected);
     }
 
     for (const [selector, property] of INLINE_FORMATTERS) {
-      const appliesToBlock = selector === "format-bold" && format?.type !== "p";
+      const appliesToBlock =
+        (selector === "format-bold" || selector === "format-font-size") && format?.type !== "p";
       this.#setDisabled(
         selector,
         !format ||
-          imageSelected ||
+          nonTextSelected ||
           (format.collapsed !== false && !format[property] && !appliesToBlock),
       );
     }
 
     this.#setDisabled(
       "format-text-color-palette",
-      !format || imageSelected || format.collapsed !== false,
+      !format || nonTextSelected || format.collapsed !== false,
     );
+    this.#setDisabled("format-icon-background-color", !backgroundColorSelected);
+    this.#setDisabled("image-border-radius", !imageSelected);
+    this.#setDisabled("format-button-design", !buttonSelected);
+    this.#setDisabled("format-button-icon-placement", !buttonSelected);
+    this.#setDisabled("format-button-link", !buttonSelected);
+
+    if (iconSelected) {
+      for (const selector of FORMATTERS) this.#setDisabled(selector, true);
+      for (const selector of [
+        "format-font-size",
+        "format-link",
+        "format-text-color",
+        "format-text-color-palette",
+        "format-icon-background-color",
+      ]) {
+        this.#setDisabled(selector, false);
+      }
+    }
   };
 
   #setApplied(selector, applied) {

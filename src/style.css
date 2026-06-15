@@ -1,7 +1,12 @@
 @import url(./styles/reset.css);
 @import url(./styles/color.css);
+@import url(./styles/fonts.css);
 @import url(./styles/layout.css);
 @import url(./styles/group.css);
+
+:where(html, body) {
+  color: var(--brand-900);
+}
 
 .editor-page {
   display: flex;

@@ -1,4 +1,5 @@
-import { LitElement, css } from "lit";
+import { LitElement } from "lit";
+import { formatToggleStyles } from "./format-toggle.styles.js";
 
 export class FormatToggle extends LitElement {
   static properties = {
@@ -6,32 +7,7 @@ export class FormatToggle extends LitElement {
     disabled: { type: Boolean },
   };
 
-  static styles = css`
-    button {
-      background: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      height: 32px;
-      min-width: 32px;
-
-    }
-
-    button:disabled {
-      opacity: 0.5;
-    }
-
-    :host([applied]) button {
-      background: var(--highlight);
-      color: white;
-    }
-
-    mark {
-      background-color: var(--highlight);
-      padding-inline: 0.25rem;
-      border-radius: 2px;
-    }
-  `;
+  static styles = formatToggleStyles;
 
   constructor() {
     super();

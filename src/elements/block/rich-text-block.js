@@ -32,9 +32,12 @@ export class RichTextBlock extends LitElement {
     value: { type: String, reflect: true },
     placeholder: { type: String },
     disabled: { type: Boolean, reflect: true },
+    predefinedMargin: { type: String, attribute: "predefined-margin", reflect: true },
     type: { type: String, reflect: true },
     textAlign: { type: String, attribute: "text-align", reflect: true },
     fontWeight: { type: String, attribute: "font-weight", reflect: true },
+    fontSize: { type: String, attribute: "font-size", reflect: true },
+    fontFamily: { type: String, attribute: "font-family", reflect: true },
   };
 
   constructor() {
@@ -43,9 +46,12 @@ export class RichTextBlock extends LitElement {
     this.value = "";
     this.placeholder = "";
     this.disabled = false;
+    this.predefinedMargin = "0.5rem";
     this.type = "p";
     this.textAlign = "left";
     this.fontWeight = "";
+    this.fontSize = "";
+    this.fontFamily = "";
     this.selectedRange = null;
   }
 
@@ -61,12 +67,22 @@ export class RichTextBlock extends LitElement {
     super.disconnectedCallback();
   }
 
-  init({ id = "", value = "", textAlign = "left", fontWeight = "", type = "p" } = {}) {
+  init({
+    id = "",
+    value = "",
+    textAlign = "left",
+    fontWeight = "",
+    fontSize = "",
+    fontFamily = "",
+    type = "p",
+  } = {}) {
     this.blockId = id;
     this.type = normalizeBlockType(type);
     this.value = normalizeBlockContent(value, this.type);
     this.textAlign = textAlign;
     this.fontWeight = fontWeight;
+    this.fontSize = this.type === "p" ? "" : fontSize;
+    this.fontFamily = fontFamily;
 
     void this.updateComplete.then(() => {
       const editor = getEditorElement(this.renderRoot);
@@ -89,6 +105,7 @@ export class RichTextBlock extends LitElement {
       value: convertBlockTypeContent(editor.innerHTML, this.type, nextType),
     };
     this.type = nextType;
+    if (nextType === "p") this.fontSize = "";
 
     void this.updateComplete.then(() => {
       const nextEditor = getEditorElement(this.renderRoot);
@@ -107,6 +124,9 @@ export class RichTextBlock extends LitElement {
     const data = {
       textAlign: editor?.style.textAlign || this.textAlign || "left",
       fontWeight: editor?.style.fontWeight || this.fontWeight || "",
+      fontSize: this.type === "p" ? "" : editor?.style.fontSize || this.fontSize || "",
+      fontFamily: editor?.style.fontFamily || this.fontFamily || "",
+      predefinedMargin: this.predefinedMargin,
       type: this.type,
     };
 
@@ -142,9 +162,9 @@ export class RichTextBlock extends LitElement {
   };
 
   #onKeyDown = (event) => {
-    if (event.key !== "Enter" || this.type !== "p" || event.shiftKey) return;
+    if (event.key !== "Enter" || this.type !== "p" || event.isComposing) return;
     event.preventDefault();
-    document.execCommand("insertParagraph");
+    document.execCommand(event.shiftKey ? "insertParagraph" : "insertLineBreak");
     void this.updateComplete.then(() => {
       const editor = getEditorElement(this.renderRoot);
       if (!editor) return;
@@ -164,10 +184,15 @@ export class RichTextBlock extends LitElement {
   };
 
   updated(changedProperties) {
+    if (changedProperties.has("predefinedMargin")) {
+      this.style.setProperty("--predefined-margin", this.predefinedMargin || "0.5rem");
+    }
     if (
       changedProperties.has("value") ||
       changedProperties.has("textAlign") ||
-      changedProperties.has("fontWeight")
+      changedProperties.has("fontWeight") ||
+      changedProperties.has("fontSize") ||
+      changedProperties.has("fontFamily")
     ) {
       this.#syncEditor();
     }
@@ -246,6 +271,9 @@ export class RichTextBlock extends LitElement {
       onFontWeightChange: (fontWeight) => {
         this.fontWeight = fontWeight;
       },
+      onFontSizeChange: (fontSize) => {
+        this.fontSize = fontSize;
+      },
     });
     this.selectedRange = result.range;
     if (!result.shouldNotify) return true;
@@ -264,6 +292,16 @@ export class RichTextBlock extends LitElement {
     if (!editor) return false;
 
     editor.style.textAlign = alignment;
+    this.#notifySelection();
+    return true;
+  }
+
+  setFontFamily(fontFamily) {
+    const editor = getEditorElement(this.renderRoot);
+    if (!editor) return false;
+
+    editor.style.fontFamily = fontFamily;
+    this.fontFamily = fontFamily;
     this.#notifySelection();
     return true;
   }

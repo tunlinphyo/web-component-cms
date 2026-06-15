@@ -1,4 +1,5 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, html } from "lit";
+import { imageBlockStyles } from "./image-block.styles.js";
 
 export class ImageBlock extends LitElement {
   static properties = {
@@ -10,6 +11,7 @@ export class ImageBlock extends LitElement {
     maxSize: { type: Number, attribute: "max-size", reflect: true },
     maxWidth: { type: String, attribute: "max-width", reflect: true },
     align: { type: String, reflect: true },
+    borderRadius: { type: String, attribute: "border-radius", reflect: true },
     disabled: { type: Boolean, reflect: true },
   };
 
@@ -23,15 +25,17 @@ export class ImageBlock extends LitElement {
     this.maxSize = 0;
     this.maxWidth = "100%";
     this.align = "left";
+    this.borderRadius = "";
     this.disabled = false;
   }
 
-  init({ id = "", src = "", alt = "", maxWidth = "100%", align = "left" } = {}) {
+  init({ id = "", src = "", alt = "", maxWidth = "100%", align = "left", borderRadius = "" } = {}) {
     this.blockId = id;
     this.src = src;
     this.alt = alt;
     this.maxWidth = maxWidth;
     this.align = align;
+    this.borderRadius = borderRadius;
     return this;
   }
 
@@ -42,102 +46,27 @@ export class ImageBlock extends LitElement {
       alt: this.alt,
       maxWidth: this.maxWidth,
       align: this.align,
+      borderRadius: this.borderRadius,
       type: "image",
     };
   }
 
   getSelectionFormat() {
-    return { align: this.align, type: "image" };
+    return { align: this.align, borderRadius: this.borderRadius, type: "image" };
   }
 
-  static styles = css`
-    :host {
-      display: block;
-      position: relative;
-    }
-
-    :host([align="center"]) {
-      text-align: center;
-    }
-
-    :host([align="right"]) {
-      text-align: right;
-    }
-
-    .image {
-      display: block;
-      max-width: 100%;
-    }
-
-    .picker {
-      align-items: center;
-      border: 1px dashed transparent;
-      cursor: pointer;
-      display: inline-flex;
-      justify-content: center;
-      max-width: 100%;
-      min-height: 8rem;
-      min-width: min(12rem, 100%);
-      overflow: hidden;
-    }
-
-    .picker:not(.selected) {
-      border-color: #888;
-    }
-
-    .picker:focus-within,
-    :host(:not([disabled])[active]) .picker {
-      outline: 2px solid var(--highlight);
-      outline-offset: 2px;
-    }
-
-    .input {
-      height: 1px;
-      opacity: 0;
-      position: absolute;
-      width: 1px;
-    }
-
-    .controls {
-      display: flex;
-      gap: 0.25rem;
-      justify-content: flex-start;
-      margin-top: 0.25rem;
-      position: absolute;
-      top: 0.5rem;
-      right: 0.5rem;
-    }
-
-    :host([disabled]) .picker {
-      cursor: not-allowed;
-      opacity: 0.6;
-    }
-
-    button {
-      width: 2.5rem;
-      height: 2.5rem;
-      display: grid;
-      place-content: center;
-      border-radius: 50%;
-      border: none;
-    }
-
-    button:not(:disabled):is(:hover,:focus-visible) {
-      outline: 2px solid var(--highlight);
-      outline-offset: 0;
-    }
-  `;
+  static styles = imageBlockStyles;
 
   render() {
     return html`
       <label
         class=${`picker${this.src ? " selected" : ""}`}
         part="picker"
-        style=${`max-width: ${this.maxWidth}; vertical-align: top;`}
+        style=${`max-width: ${this.maxWidth}; vertical-align: top; border-radius: ${this.borderRadius};`}
       >
         ${this.src
-        ? html`<img class="image" part="image" src=${this.src} alt=${this.alt} />`
-        : html`<span part="placeholder">${this.placeholder}</span>`}
+          ? html`<img class="image" part="image" src=${this.src} alt=${this.alt} />`
+          : html`<span part="placeholder">${this.placeholder}</span>`}
         <input
           class="input"
           type="file"
@@ -178,6 +107,11 @@ export class ImageBlock extends LitElement {
     this.renderRoot.querySelector(".input").value = "";
     this.#dispatchImageChange();
   };
+
+  setBorderRadius(borderRadius) {
+    this.borderRadius = borderRadius;
+    return true;
+  }
 
   #imageChange = async (event) => {
     const [file] = event.currentTarget.files;

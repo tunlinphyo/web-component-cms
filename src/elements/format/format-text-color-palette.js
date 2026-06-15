@@ -1,19 +1,20 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, html } from "lit";
+import { formatTextColorPaletteStyles } from "./format-text-color-palette.styles.js";
 
 const COLORS = [
-  "black",
-  "red",
-  "orange",
-  "yellow",
-  "green",
-  "mint",
-  "teal",
-  "cyan",
-  "blue",
-  "indigo",
-  "purple",
-  "pink",
-  "brown",
+  "text-white",
+  "text-ink",
+  "text-muted",
+  "text-brand",
+  "text-brand-dark",
+  "text-coral",
+  "text-gold",
+  "text-leaf",
+  "text-teal",
+  "text-blue",
+  "text-indigo",
+  "text-purple",
+  "text-brown",
 ];
 
 export class FormatTextColorPalette extends LitElement {
@@ -22,49 +23,7 @@ export class FormatTextColorPalette extends LitElement {
     value: { type: String, reflect: true },
   };
 
-  static styles = css`
-    button {
-      background: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      height: 32px;
-      min-width: 32px;
-    }
-
-    button:disabled {
-      opacity: 0.3;
-    }
-
-    .trigger {
-      anchor-name: --color-trigger;
-      color: var(--text-color, currentColor);
-      font-weight: bold;
-      text-decoration: underline;
-      text-decoration-color: currentColor;
-      text-decoration-thickness: 3px;
-    }
-
-    [popover] {
-      position-anchor: --color-trigger;
-      position-area: bottom;
-      border: none;
-      border-radius: 4px;
-      grid-template-columns: repeat(4, 32px);
-      gap: 4px;
-      margin: 4px 0 0;
-      padding: 4px;
-      box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-    }
-
-    [popover]:popover-open {
-      display: grid;
-    }
-
-    .color {
-      background: var(--color);
-    }
-  `;
+  static styles = formatTextColorPaletteStyles;
 
   constructor() {
     super();

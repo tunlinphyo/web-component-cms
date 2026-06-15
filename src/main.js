@@ -2,14 +2,8 @@ import "./style.css";
 
 import "./elements/format/format-controls";
 import "./elements/block/blocks";
-import "./elements/group/header-group";
-import "./elements/group/hero-group";
-import "./elements/group/about-group";
-import "./elements/group/image-group";
-import "./elements/group/paragraph-group";
-import "./elements/group/footer-group";
-import "./elements/group/group-picker-dialog";
-import "./elements/group/group-order";
+import "./elements/group/index.js";
+import "./elements/utils/confirm-dialog";
 import "./elements/rich-text-editor";
 import "./elements/editor-output-button";
 

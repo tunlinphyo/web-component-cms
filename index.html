@@ -6,6 +6,9 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ui-editor</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 </head>
 
 <body>
@@ -20,31 +23,68 @@
       </footer>
     </section>
     <nav>
+      <group-format-toolbar>
+        <h2>Group</h2>
+        <div class="format-group">
+          <group-background-color></group-background-color>
+          <group-border-color></group-border-color>
+        </div>
+        <div class="format-group">
+          <group-border-width></group-border-width>
+          <group-border-style></group-border-style>
+        </div>
+        <div class="format-group">
+          <group-border-radius></group-border-radius>
+        </div>
+      </group-format-toolbar>
+      <hr>
       <format-toolbar>
-        <h2>Text</h2>
-        <div class="format-group">
-          <element-type-selector></element-type-selector>
+        <div id="text" class="tools">
+          <h2>Text</h2>
+          <div class="format-group">
+            <element-type-selector></element-type-selector>
+          </div>
+          <div class="format-group">
+            <format-font-family></format-font-family>
+          </div>
+          <div class="format-group">
+            <format-font-size></format-font-size>
+          </div>
+          <div class="format-group">
+            <format-bold></format-bold>
+            <format-italic></format-italic>
+            <format-underline></format-underline>
+          </div>
+          <div class="format-group">
+            <format-ordered-list></format-ordered-list>
+            <format-unordered-list></format-unordered-list>
+          </div>
+          <div class="format-group">
+            <format-align-left applied></format-align-left>
+            <format-align-center></format-align-center>
+            <format-align-right></format-align-right>
+            <format-align-justify></format-align-justify>
+          </div>
+          <div class="format-group">
+            <format-highlight></format-highlight>
+            <format-icon-background-color></format-icon-background-color>
+            <format-text-color-palette></format-text-color-palette>
+            <format-link></format-link>
+          </div>
+          <div class="format-group">
+            <image-border-radius></image-border-radius>
+          </div>
         </div>
-        <div class="format-group">
-          <format-bold></format-bold>
-          <format-italic></format-italic>
-          <format-underline></format-underline>
-        </div>
-        <div class="format-group">
-          <format-ordered-list></format-ordered-list>
-          <format-unordered-list></format-unordered-list>
-        </div>
-        <div class="format-group">
-          <format-align-left applied></format-align-left>
-          <format-align-center></format-align-center>
-          <format-align-right></format-align-right>
-          <format-align-justify></format-align-justify>
-        </div>
-        <div class="format-group">
-          <format-highlight></format-highlight>
-          <!-- <format-text-color></format-text-color> -->
-          <format-text-color-palette></format-text-color-palette>
-          <format-link></format-link>
+
+        <div id="button" hidden class="tools">
+          <h2>Button</h2>
+          <div class="format-group">
+            <format-button-design></format-button-design>
+          </div>
+          <div class="format-group">
+            <format-button-icon-placement></format-button-icon-placement>
+            <format-button-link></format-button-link>
+          </div>
         </div>
       </format-toolbar>
     </nav>

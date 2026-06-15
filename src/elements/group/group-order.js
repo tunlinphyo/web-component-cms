@@ -7,6 +7,9 @@ export class GroupOrder extends HTMLElement {
     if (!this.querySelector(":scope > group-picker-dialog")) {
       this.append(document.createElement("group-picker-dialog"));
     }
+    if (!this.querySelector(":scope > confirm-dialog")) {
+      this.append(document.createElement("confirm-dialog"));
+    }
   }
 
   disconnectedCallback() {
@@ -69,7 +72,14 @@ export class GroupOrder extends HTMLElement {
     void group.focusFirstBlock?.();
   };
 
-  #deleteGroup = (event) => {
+  #deleteGroup = async (event) => {
+    const confirmed = await this.querySelector(":scope > confirm-dialog")?.open({
+      title: "Delete group?",
+      message: "This group and all of its content will be permanently deleted.",
+      confirmLabel: "Delete group",
+    });
+    if (!confirmed) return;
+
     event.detail.group.remove();
     this.#updateOrder(this.#getGroups());
   };

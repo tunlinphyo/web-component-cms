@@ -1,20 +1,73 @@
 :root {
   color-scheme: light;
 
-  --black: rgb(0, 0, 0);
-  --red: rgb(255, 56, 60);
-  --orange: rgb(255, 141, 40);
-  --yellow: rgb(255, 204, 0);
-  --green: rgb(52, 199, 89);
-  --mint: rgb(0, 200, 179);
-  --teal: rgb(0, 195, 208);
-  --cyan: rgb(0, 192, 232);
-  --blue: rgb(0, 136, 255);
-  --indigo: rgb(97, 85, 245);
-  --purple: rgb(203, 48, 224);
-  --pink: rgb(255, 45, 85);
-  --brown: rgb(172, 127, 94);
+  --black: rgb(48, 29, 36);
+  --red: rgb(178, 31, 80);
+  --orange: rgb(244, 130, 99);
+  --yellow: rgb(242, 207, 112);
+  --green: rgb(139, 199, 105);
+  --mint: rgb(185, 223, 178);
+  --teal: rgb(104, 194, 172);
+  --cyan: rgb(190, 228, 225);
+  --blue: rgb(86, 127, 174);
+  --indigo: rgb(100, 100, 151);
+  --purple: rgb(157, 83, 137);
+  --pink: rgb(232, 61, 123);
+  --brown: rgb(154, 107, 91);
 
-  --priamry: var(--blue);
-  --highlight: var(--orange);
+  --brand: var(--pink);
+  --brand-dark: var(--red);
+  --brand-soft: rgb(246, 190, 211);
+  --brand-pale: rgb(253, 235, 242);
+  --surface: rgb(255, 255, 255);
+  --surface-soft: rgb(255, 247, 250);
+
+  --text-white: rgb(255, 255, 255);
+  --text-ink: rgb(48, 29, 36);
+  --text-muted: rgb(112, 82, 92);
+  --text-brand: rgb(232, 61, 123);
+  --text-brand-dark: rgb(178, 31, 80);
+  --text-coral: rgb(207, 84, 72);
+  --text-gold: rgb(158, 121, 38);
+  --text-leaf: rgb(70, 125, 62);
+  --text-teal: rgb(44, 125, 111);
+  --text-blue: rgb(67, 101, 145);
+  --text-indigo: rgb(83, 78, 130);
+  --text-purple: rgb(130, 65, 113);
+  --text-brown: rgb(116, 76, 64);
+
+  --background-white: rgb(255, 255, 255);
+  --background-blush: rgb(255, 247, 250);
+  --background-pink: rgb(253, 235, 242);
+  --background-rose: rgb(249, 216, 229);
+  --background-peach: rgb(253, 231, 220);
+  --background-cream: rgb(255, 247, 220);
+  --background-leaf: rgb(234, 246, 226);
+  --background-mint: rgb(229, 246, 239);
+  --background-cyan: rgb(231, 246, 246);
+  --background-blue: rgb(234, 240, 248);
+  --background-lilac: rgb(242, 235, 247);
+  --background-gray: rgb(244, 240, 241);
+
+  --border-brand: rgb(232, 61, 123);
+  --border-brand-dark: rgb(178, 31, 80);
+  --border-pink: rgb(239, 139, 177);
+  --border-coral: rgb(244, 130, 99);
+  --border-gold: rgb(218, 179, 80);
+  --border-leaf: rgb(139, 199, 105);
+  --border-mint: rgb(104, 194, 172);
+  --border-blue: rgb(86, 127, 174);
+  --border-purple: rgb(157, 83, 137);
+  --border-brown: rgb(154, 107, 91);
+  --border-muted: rgb(199, 177, 184);
+
+  --gray-25: #F7F7F7;
+
+  --brand-900: #3E1024;
+
+  --yellow-200: #FFECB2;
+
+  --primary: var(--brand);
+  --priamry: var(--primary);
+  --highlight: deepskyblue;
 }
