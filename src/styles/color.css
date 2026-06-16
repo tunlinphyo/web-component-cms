@@ -65,7 +65,7 @@
 
   --brand-900: #3E1024;
 
-  --yellow-200: #FFECB2;
+  --yellow-200: rgb(255, 247, 220);
 
   --primary: var(--brand);
   --priamry: var(--primary);

@@ -42,10 +42,12 @@ export const richTextBlockStyles = css`
   }
 
   mark {
+    --mark-highlight-color: var(--yellow-200);
+
     background-color: transparent;
     background-image: linear-gradient(
-      var(--mark-highlight-color, var(--yellow-200)),
-      var(--mark-highlight-color, var(--yellow-200))
+      var(--mark-highlight-color),
+      var(--mark-highlight-color)
     );
     background-position: bottom;
     background-repeat: no-repeat;

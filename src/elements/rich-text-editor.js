@@ -103,6 +103,9 @@ export class RichTextEditor extends LitElement {
     } else if (event.detail.command === "borderRadius") {
       if (!this.activeBlock?.setBorderRadius?.(event.detail.value)) return;
       this.#notifyToolbar(this.activeBlock.getSelectionFormat());
+    } else if (event.detail.command === "blockStyle") {
+      if (!this.activeBlock?.setBlockStyle?.(event.detail.property, event.detail.value)) return;
+      this.#notifyToolbar(this.activeBlock.getSelectionFormat());
     } else if (event.detail.command === "buttonDesign") {
       if (!this.activeBlock?.setButtonDesign?.(event.detail.value)) return;
       this.#notifyToolbar(this.activeBlock.getSelectionFormat());
@@ -111,6 +114,15 @@ export class RichTextEditor extends LitElement {
       this.#notifyToolbar(this.activeBlock.getSelectionFormat());
     } else if (event.detail.command === "buttonLink") {
       if (!this.activeBlock?.setButtonLink?.(event.detail.value)) return;
+      this.#notifyToolbar(this.activeBlock.getSelectionFormat());
+    } else if (event.detail.command === "buttonLinkTarget") {
+      if (!this.activeBlock?.setButtonLinkTarget?.(event.detail.value)) return;
+      this.#notifyToolbar(this.activeBlock.getSelectionFormat());
+    } else if (event.detail.command === "imageLink") {
+      if (!this.activeBlock?.setImageLink?.(event.detail.value)) return;
+      this.#notifyToolbar(this.activeBlock.getSelectionFormat());
+    } else if (event.detail.command === "imageLinkTarget") {
+      if (!this.activeBlock?.setImageLinkTarget?.(event.detail.value)) return;
       this.#notifyToolbar(this.activeBlock.getSelectionFormat());
     } else if (this.activeBlock?.matches("icon-block")) {
       if (!this.activeBlock.formatSelection?.(event.detail.command, event.detail.value)) return;

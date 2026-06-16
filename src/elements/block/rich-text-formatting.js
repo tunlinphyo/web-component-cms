@@ -247,7 +247,7 @@ function applyWrappedSelection(command, value, editor, range, selection) {
   } else if (formatElement) {
     unwrapFormatElement(formatElement, range);
   } else if (command === "highlight" || value) {
-    wrapSelection(command, value, range);
+    wrapSelection(command, value, editor, range);
   }
 
   selectRange(selection, range);
@@ -275,9 +275,13 @@ function unwrapFormatElement(formatElement, range) {
   range.setEndAfter(lastChild);
 }
 
-function wrapSelection(command, value, range) {
+function wrapSelection(command, value, editor, range) {
   const element = document.createElement(command === "highlight" ? "mark" : "a");
   if (command === "link") element.setAttribute("href", value);
+  if (command === "highlight") {
+    const color = getComputedStyle(editor).getPropertyValue("--yellow-200").trim();
+    element.style.setProperty("--mark-highlight-color", color || "rgb(255, 247, 220)");
+  }
   element.append(range.extractContents());
   range.insertNode(element);
   range.selectNodeContents(element);

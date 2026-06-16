@@ -11,6 +11,12 @@ export class ImageBlock extends LitElement {
     maxSize: { type: Number, attribute: "max-size", reflect: true },
     maxWidth: { type: String, attribute: "max-width", reflect: true },
     align: { type: String, reflect: true },
+    link: { type: String },
+    target: { type: String, reflect: true },
+    backgroundColor: { type: String, attribute: "background-color", reflect: true },
+    borderWidth: { type: String, attribute: "border-width", reflect: true },
+    borderColor: { type: String, attribute: "border-color", reflect: true },
+    borderStyle: { type: String, attribute: "border-style", reflect: true },
     borderRadius: { type: String, attribute: "border-radius", reflect: true },
     disabled: { type: Boolean, reflect: true },
   };
@@ -25,16 +31,41 @@ export class ImageBlock extends LitElement {
     this.maxSize = 0;
     this.maxWidth = "100%";
     this.align = "left";
+    this.link = "";
+    this.target = "_self";
+    this.backgroundColor = "";
+    this.borderWidth = "";
+    this.borderColor = "";
+    this.borderStyle = "";
     this.borderRadius = "";
     this.disabled = false;
   }
 
-  init({ id = "", src = "", alt = "", maxWidth = "100%", align = "left", borderRadius = "" } = {}) {
+  init({
+    id = "",
+    src = "",
+    alt = "",
+    maxWidth = "100%",
+    align = "left",
+    link = "",
+    target = "_self",
+    backgroundColor = "",
+    borderWidth = "",
+    borderColor = "",
+    borderStyle = "",
+    borderRadius = "",
+  } = {}) {
     this.blockId = id;
     this.src = src;
     this.alt = alt;
     this.maxWidth = maxWidth;
     this.align = align;
+    this.link = link;
+    this.target = target || "_self";
+    this.backgroundColor = backgroundColor;
+    this.borderWidth = borderWidth;
+    this.borderColor = borderColor;
+    this.borderStyle = borderStyle;
     this.borderRadius = borderRadius;
     return this;
   }
@@ -46,13 +77,29 @@ export class ImageBlock extends LitElement {
       alt: this.alt,
       maxWidth: this.maxWidth,
       align: this.align,
+      link: this.link,
+      target: this.link ? this.target : "_self",
+      backgroundColor: this.backgroundColor,
+      borderWidth: this.borderWidth,
+      borderColor: this.borderColor,
+      borderStyle: this.borderStyle,
       borderRadius: this.borderRadius,
       type: "image",
     };
   }
 
   getSelectionFormat() {
-    return { align: this.align, borderRadius: this.borderRadius, type: "image" };
+    return {
+      align: this.align,
+      link: this.link,
+      target: this.target,
+      backgroundColor: this.backgroundColor,
+      borderWidth: this.borderWidth,
+      borderColor: this.borderColor,
+      borderStyle: this.borderStyle,
+      borderRadius: this.borderRadius,
+      type: "image",
+    };
   }
 
   static styles = imageBlockStyles;
@@ -62,7 +109,7 @@ export class ImageBlock extends LitElement {
       <label
         class=${`picker${this.src ? " selected" : ""}`}
         part="picker"
-        style=${`max-width: ${this.maxWidth}; vertical-align: top; border-radius: ${this.borderRadius};`}
+        style=${`max-width: ${this.maxWidth}; vertical-align: top; background-color: ${this.backgroundColor}; border-width: ${this.borderWidth}; border-color: ${this.borderColor}; border-style: ${this.borderStyle}; border-radius: ${this.borderRadius};`}
       >
         ${this.src
           ? html`<img class="image" part="image" src=${this.src} alt=${this.alt} />`
@@ -110,6 +157,27 @@ export class ImageBlock extends LitElement {
 
   setBorderRadius(borderRadius) {
     this.borderRadius = borderRadius;
+    return true;
+  }
+
+  setBlockStyle(property, value) {
+    if (!["backgroundColor", "borderWidth", "borderColor", "borderStyle"].includes(property)) {
+      return false;
+    }
+
+    this[property] = value;
+    return true;
+  }
+
+  setImageLink(link) {
+    this.link = link ?? "";
+    if (!this.link) this.target = "_self";
+    return true;
+  }
+
+  setImageLinkTarget(target) {
+    if (!["_self", "_blank"].includes(target)) return false;
+    this.target = target;
     return true;
   }
 

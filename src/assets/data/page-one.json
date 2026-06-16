@@ -25,6 +25,12 @@
         "alt": "Site logo",
         "maxWidth": "",
         "align": "center",
+        "link": "",
+        "target": "_self",
+        "backgroundColor": "",
+        "borderWidth": "",
+        "borderColor": "",
+        "borderStyle": "",
         "borderRadius": "",
         "type": "image"
       },
@@ -34,8 +40,9 @@
         "design": "nav",
         "icon": "book",
         "iconPosition": "start",
-        "link": "",
-        "tag": "button",
+        "link": "/#new",
+        "target": "_self",
+        "tag": "a",
         "align": "left",
         "type": "button"
       },
@@ -45,8 +52,9 @@
         "design": "nav",
         "icon": "store",
         "iconPosition": "start",
-        "link": "",
-        "tag": "button",
+        "link": "/#test",
+        "target": "_self",
+        "tag": "a",
         "align": "left",
         "type": "button"
       },
@@ -56,8 +64,9 @@
         "design": "nav",
         "icon": "heart",
         "iconPosition": "start",
-        "link": "",
-        "tag": "button",
+        "link": "/#google",
+        "target": "_self",
+        "tag": "a",
         "align": "left",
         "type": "button"
       },
@@ -67,8 +76,9 @@
         "design": "nav",
         "icon": "help",
         "iconPosition": "start",
-        "link": "",
-        "tag": "button",
+        "link": "/#apple",
+        "target": "_self",
+        "tag": "a",
         "align": "left",
         "type": "button"
       },
@@ -77,8 +87,9 @@
         "text": "店舗の方",
         "design": "dark",
         "icon": "",
-        "iconPosition": "start",
+        "iconPosition": "none",
         "link": "https://apple.com",
+        "target": "_blank",
         "tag": "a",
         "align": "left",
         "type": "button"
@@ -125,7 +136,7 @@
     "borderWidth": "",
     "borderColor": "",
     "borderStyle": "",
-    "borderRadius": "",
+    "borderRadius": "0px",
     "blocks": [
       {
         "id": "title",
@@ -139,7 +150,7 @@
       },
       {
         "id": "description",
-        "value": "<p><b><span style=\"font-size: 18px;\">ほくペイは、<font color=\"#e83d7b\">北区内のお店で使える</font><br><mark><span style=\"font-size: 24px;\"><font color=\"#e83d7b\">キャッシュレス決済サービス</font></span></mark>です。<br></span></b><b style=\"font-family: var(--font-zen);\"><span style=\"font-size: 18px;\"><br>北区にお住まいの方はもちろん、<br></span></b><b style=\"font-family: var(--font-zen);\"><span style=\"font-size: 18px;\">北区を訪れる方にもご利用いただけます。<br><br></span></b><b style=\"font-family: var(--font-zen);\"><span style=\"font-size: 18px;\">利用者の方はスマートフォンアプリで支払い、<br></span></b><b style=\"font-family: var(--font-zen);\"><span style=\"font-size: 18px;\">お店は決済用QRコードを設置することで、<br></span></b><b style=\"font-family: var(--font-zen);\"><span style=\"font-size: 18px;\">ほくペイでの支払いに対応できます。</span></b></p>",
+        "value": "<p><b><span style=\"font-size: 18px;\">ほくペイは、<font color=\"#e83d7b\">北区内のお店で使える</font><br><span style=\"font-size: 24px;\"><font color=\"#e83d7b\"><mark style=\"--mark-highlight-color: rgb(255, 247, 220);\"><font color=\"#e83d7b\">キャッシュレス決済サービス</font></mark></font></span>です。<br></span></b><b style=\"font-family: var(--font-zen);\"><span style=\"font-size: 18px;\"><br>北区にお住まいの方はもちろん、<br></span></b><b style=\"font-family: var(--font-zen);\"><span style=\"font-size: 18px;\">北区を訪れる方にもご利用いただけます。<br><br></span></b><b style=\"font-family: var(--font-zen);\"><span style=\"font-size: 18px;\">利用者の方はスマートフォンアプリで支払い、<br></span></b><b style=\"font-family: var(--font-zen);\"><span style=\"font-size: 18px;\">お店は決済用QRコードを設置することで、<br></span></b><b style=\"font-family: var(--font-zen);\"><span style=\"font-size: 18px;\">ほくペイでの支払いに対応できます。</span></b></p>",
         "textAlign": "left",
         "fontWeight": "",
         "fontSize": "",
@@ -153,6 +164,12 @@
         "alt": "Hero Image",
         "maxWidth": "",
         "align": "end",
+        "link": "",
+        "target": "_self",
+        "backgroundColor": "",
+        "borderWidth": "",
+        "borderColor": "",
+        "borderStyle": "",
         "borderRadius": "32px 0px 32px 0px",
         "type": "image"
       }
@@ -180,7 +197,7 @@
       },
       {
         "id": "description",
-        "value": "<p><span style=\"font-size: 18px;\"><b></b></span></p><p><b>ほくペイは、<br>単なるキャッシュレス決済ではなく、<br><mark><font color=\"#e83d7b\"><span style=\"font-size: 24px;\">北区のお店と区民の日常をつなぐ</span></font></mark><br>地域サービスです。<br></b><b style=\"font-family: var(--font-zen);\"><br>日々のお買い物やお食事、<br></b><b style=\"font-family: var(--font-zen);\">イベントでの利用を通じて、<br></b><b style=\"font-family: var(--font-zen);\">お店を知ってもらう機会を増やし、<br></b><b style=\"font-family: var(--font-zen);\">地域の回遊や利用促進につなげます。</b></p>",
+        "value": "<p><span style=\"font-size: 18px;\"><b></b></span></p><p><b>ほくペイは、<br>単なるキャッシュレス決済ではなく、<br><font color=\"#e83d7b\"><span style=\"font-size: 24px;\"><mark style=\"--mark-highlight-color: rgb(255, 247, 220);\"><font color=\"#e83d7b\">北区のお店と区民の日常をつなぐ</font></mark></span></font><br>地域サービスです。<br></b><b style=\"font-family: var(--font-zen);\"><br>日々のお買い物やお食事、<br></b><b style=\"font-family: var(--font-zen);\">イベントでの利用を通じて、<br></b><b style=\"font-family: var(--font-zen);\">お店を知ってもらう機会を増やし、<br></b><b style=\"font-family: var(--font-zen);\">地域の回遊や利用促進につなげます。</b></p>",
         "textAlign": "left",
         "fontWeight": "",
         "fontSize": "",
@@ -194,6 +211,12 @@
         "alt": "Hero Image",
         "maxWidth": "",
         "align": "end",
+        "link": "",
+        "target": "_self",
+        "backgroundColor": "",
+        "borderWidth": "",
+        "borderColor": "",
+        "borderStyle": "",
         "borderRadius": "",
         "type": "image"
       }
@@ -215,6 +238,12 @@
         "alt": "Hero Image",
         "maxWidth": "",
         "align": "start",
+        "link": "",
+        "target": "_self",
+        "backgroundColor": "",
+        "borderWidth": "",
+        "borderColor": "",
+        "borderStyle": "",
         "borderRadius": "",
         "type": "image"
       },

@@ -10,6 +10,10 @@ export const formatLinkStyles = css`
     height: 32px;
   }
 
+  input {
+    min-width: 15rem;
+  }
+
   button {
     background: white;
     border: none;

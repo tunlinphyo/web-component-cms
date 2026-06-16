@@ -18,10 +18,17 @@ const FORMATTERS = [
   "format-text-color",
   "format-text-color-palette",
   "format-icon-background-color",
+  "image-background-color",
+  "image-border-width",
+  "image-border-color",
+  "image-border-style",
   "image-border-radius",
+  "format-image-link",
+  "format-image-link-target",
   "format-button-design",
   "format-button-icon-placement",
   "format-button-link",
+  "format-button-link-target",
 ];
 
 const TEXT_FORMATTERS = [
@@ -74,11 +81,12 @@ export class FormatToolbar extends LitElement {
     const imageSelected = format?.type === "image";
     const buttonSelected = format?.type === "button";
     const iconSelected = format?.type === "icon";
-    const backgroundColorSelected = iconSelected || format?.highlight;
     const nonTextSelected = imageSelected || buttonSelected || iconSelected;
+    const backgroundColorSelected = iconSelected || format?.highlight;
 
-    this.querySelector("#text")?.toggleAttribute("hidden", buttonSelected);
+    this.querySelector("#text")?.toggleAttribute("hidden", buttonSelected || imageSelected);
     this.querySelector("#button")?.toggleAttribute("hidden", !buttonSelected);
+    this.querySelector("#image")?.toggleAttribute("hidden", !imageSelected);
 
     this.#setValue("element-type-selector", nonTextSelected ? "p" : (format?.type ?? "p"));
     this.#setValue(
@@ -100,9 +108,17 @@ export class FormatToolbar extends LitElement {
     this.#setValue("format-link", format?.link ?? "");
     this.#setApplied("format-button-link", buttonSelected && Boolean(format?.link));
     this.#setValue("format-button-link", buttonSelected ? (format?.link ?? "") : "");
+    this.#setValue("format-button-link-target", buttonSelected ? (format?.target ?? "_self") : "_self");
+    this.#setApplied("format-image-link", imageSelected && Boolean(format?.link));
+    this.#setValue("format-image-link", imageSelected ? (format?.link ?? "") : "");
+    this.#setValue("format-image-link-target", format?.target ?? "_self");
     this.#setValue("format-text-color", toHex(format?.color, "#000000"));
     this.#setValue("format-text-color-palette", toHex(format?.color, "#000000"));
     this.#setValue("format-icon-background-color", toHex(format?.backgroundColor, "#ffffff"));
+    this.#setValue("image-background-color", format?.backgroundColor ?? "");
+    this.#setValue("image-border-width", format?.borderWidth ?? "");
+    this.#setValue("image-border-color", format?.borderColor ?? "");
+    this.#setValue("image-border-style", format?.borderStyle ?? "");
     this.#setValue("image-border-radius", format?.borderRadius ?? "");
     this.#setValue("format-button-design", format?.buttonDesign ?? "primary");
     this.#setValue("format-button-icon-placement", format?.buttonIconPlacement ?? "none");
@@ -129,10 +145,17 @@ export class FormatToolbar extends LitElement {
       !format || nonTextSelected || format.collapsed !== false,
     );
     this.#setDisabled("format-icon-background-color", !backgroundColorSelected);
+    this.#setDisabled("image-background-color", !imageSelected);
+    this.#setDisabled("image-border-width", !imageSelected);
+    this.#setDisabled("image-border-color", !imageSelected);
+    this.#setDisabled("image-border-style", !imageSelected);
     this.#setDisabled("image-border-radius", !imageSelected);
     this.#setDisabled("format-button-design", !buttonSelected);
     this.#setDisabled("format-button-icon-placement", !buttonSelected);
     this.#setDisabled("format-button-link", !buttonSelected);
+    this.#setDisabled("format-button-link-target", !buttonSelected || !format?.link);
+    this.#setDisabled("format-image-link", !imageSelected);
+    this.#setDisabled("format-image-link-target", !imageSelected || !format?.link);
 
     if (iconSelected) {
       for (const selector of FORMATTERS) this.#setDisabled(selector, true);
@@ -149,18 +172,15 @@ export class FormatToolbar extends LitElement {
   };
 
   #setApplied(selector, applied) {
-    const formatter = this.querySelector(selector);
-    if (formatter) formatter.applied = applied;
+    for (const formatter of this.querySelectorAll(selector)) formatter.applied = applied;
   }
 
   #setValue(selector, value) {
-    const formatter = this.querySelector(selector);
-    if (formatter) formatter.value = value;
+    for (const formatter of this.querySelectorAll(selector)) formatter.value = value;
   }
 
   #setDisabled(selector, disabled) {
-    const formatter = this.querySelector(selector);
-    if (formatter) formatter.disabled = disabled;
+    for (const formatter of this.querySelectorAll(selector)) formatter.disabled = disabled;
   }
 }
 

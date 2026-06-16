@@ -118,17 +118,6 @@ footer-group {
   padding: 0;
 }
 
-header-group[active],
-coming-soon-group[active],
-hero-group[active],
-about-group[active],
-image-group[active],
-paragraph-group[active],
-footer-group[active] {
-  outline: 2px solid var(--highlight);
-  outline-offset: 2px;
-}
-
 .format-group {
   width: 100%;
   display: flex;

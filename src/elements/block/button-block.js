@@ -11,6 +11,7 @@ export class ButtonBlock extends LitElement {
     icon: { type: String, reflect: true },
     iconPosition: { type: String, attribute: "icon-position", reflect: true },
     link: { type: String },
+    target: { type: String, reflect: true },
     align: { type: String, reflect: true },
     disabled: { type: Boolean, reflect: true },
   };
@@ -26,6 +27,7 @@ export class ButtonBlock extends LitElement {
     this.icon = "";
     this.iconPosition = "none";
     this.link = "";
+    this.target = "_self";
     this.align = "left";
     this.disabled = false;
   }
@@ -37,6 +39,7 @@ export class ButtonBlock extends LitElement {
     icon = "",
     iconPosition = icon ? "start" : "none",
     link = "",
+    target = "_self",
     align = "left",
   } = {}) {
     this.blockId = id;
@@ -45,6 +48,7 @@ export class ButtonBlock extends LitElement {
     this.icon = icon;
     this.iconPosition = icon ? iconPosition : "none";
     this.link = link;
+    this.target = target || "_self";
     this.align = align;
     return this;
   }
@@ -57,6 +61,7 @@ export class ButtonBlock extends LitElement {
       icon: this.icon,
       iconPosition: this.iconPosition,
       link: this.link,
+      target: this.link ? this.target : "_self",
       tag: this.link ? "a" : "button",
       align: this.align,
       type: "button",
@@ -69,6 +74,7 @@ export class ButtonBlock extends LitElement {
       buttonDesign: this.design,
       buttonIconPlacement: this.icon ? this.iconPosition : "none",
       link: this.link,
+      target: this.target,
       type: "button",
     };
   }
@@ -93,6 +99,13 @@ export class ButtonBlock extends LitElement {
 
   setButtonLink(link) {
     this.link = link ?? "";
+    if (!this.link) this.target = "_self";
+    return true;
+  }
+
+  setButtonLinkTarget(target) {
+    if (!["_self", "_blank"].includes(target)) return false;
+    this.target = target;
     return true;
   }
 
