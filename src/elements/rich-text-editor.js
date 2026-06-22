@@ -2,14 +2,16 @@ import { LitElement, html } from "lit";
 
 const BLOCK_SELECTOR = "rich-text-block";
 const CONTENT_BLOCK_SELECTOR = "button-block, icon-block, image-block, rich-text-block";
+const BLOCK_GROUP_SELECTOR = "header-button-block-group";
 const GROUP_SELECTOR =
-  "header-group, coming-soon-group, about-hokupay-group, hero-group, about-group, image-group, paragraph-group, footer-group";
+  "header-group, home-banner-group, coming-soon-group, about-hokupay-group, hero-group, about-group, image-group, paragraph-group, footer-group";
 
 export class RichTextEditor extends LitElement {
   constructor() {
     super();
     this.activeBlock = null;
     this.activeGroup = null;
+    this.activeBlockGroup = null;
   }
 
   render() {
@@ -22,6 +24,8 @@ export class RichTextEditor extends LitElement {
     this.addEventListener("format-command", this.#formatCommand);
     this.addEventListener("element-type-change", this.#elementTypeChange);
     this.addEventListener("group-style-change", this.#groupStyleChange);
+    this.addEventListener("block-group-command", this.#blockGroupCommand);
+    this.addEventListener("block-group-change", this.#blockGroupChange);
     this.addEventListener("restore-selection", this.#restoreSelection);
     this.addEventListener("mousedown", this.#mousedown);
   }
@@ -31,6 +35,8 @@ export class RichTextEditor extends LitElement {
     this.removeEventListener("format-command", this.#formatCommand);
     this.removeEventListener("element-type-change", this.#elementTypeChange);
     this.removeEventListener("group-style-change", this.#groupStyleChange);
+    this.removeEventListener("block-group-command", this.#blockGroupCommand);
+    this.removeEventListener("block-group-change", this.#blockGroupChange);
     this.removeEventListener("restore-selection", this.#restoreSelection);
     this.removeEventListener("mousedown", this.#mousedown);
     super.disconnectedCallback();
@@ -78,10 +84,13 @@ export class RichTextEditor extends LitElement {
 
   #selectionFormatChange = (event) => {
     const group = event.composedPath().find((element) => element.matches?.(GROUP_SELECTOR));
+    const blockGroup = event
+      .composedPath()
+      .find((element) => element.matches?.(BLOCK_GROUP_SELECTOR));
     const block = event.composedPath().find((element) => element.matches?.(BLOCK_SELECTOR));
     if (!block) return;
 
-    if (group) this.#setActiveGroup(group);
+    if (group) this.#setActiveGroup(group, blockGroup, block);
     this.#setActiveBlock(block);
     this.#notifyToolbar(event.detail);
   };
@@ -124,6 +133,10 @@ export class RichTextEditor extends LitElement {
     } else if (event.detail.command === "imageLinkTarget") {
       if (!this.activeBlock?.setImageLinkTarget?.(event.detail.value)) return;
       this.#notifyToolbar(this.activeBlock.getSelectionFormat());
+    } else if (event.detail.command === "disabled") {
+      const disabled = !this.activeBlock?.getSelectionFormat?.().disabled;
+      if (!this.activeBlock?.setDisabled?.(disabled)) return;
+      this.#notifyToolbar(this.activeBlock.getSelectionFormat());
     } else if (this.activeBlock?.matches("icon-block")) {
       if (!this.activeBlock.formatSelection?.(event.detail.command, event.detail.value)) return;
       this.#notifyToolbar(this.activeBlock.getSelectionFormat());
@@ -138,7 +151,47 @@ export class RichTextEditor extends LitElement {
 
   #groupStyleChange = (event) => {
     if (!this.activeGroup?.setGroupStyle?.(event.detail.property, event.detail.value)) return;
-    this.#notifyGroupToolbar(this.activeGroup.getGroupFormat());
+    this.#notifyGroupToolbar(
+      this.activeGroup.getGroupFormat(),
+      this.activeBlockGroup,
+      this.activeBlock,
+    );
+  };
+
+  #blockGroupCommand = (event) => {
+    if (!this.activeBlockGroup) return;
+    if (event.detail.action === "sort") {
+      if (!this.activeBlockGroup.reorderBlocks?.(event.detail.ids, this.activeBlock)) return;
+      this.#notifyGroupToolbar(
+        this.activeGroup?.getGroupFormat(),
+        this.activeBlockGroup,
+        this.activeBlock,
+      );
+      return;
+    }
+
+    const adding = event.detail.action === "add";
+    const nextBlock = adding
+      ? this.activeBlockGroup.addBlock(this.activeBlock)
+      : this.activeBlockGroup.deleteBlock(this.activeBlock);
+
+    if (!nextBlock && adding) return;
+    this.#setActiveBlock(nextBlock);
+    this.#notifyToolbar(nextBlock?.getSelectionFormat?.() ?? null);
+    this.#notifyGroupToolbar(this.activeGroup?.getGroupFormat(), this.activeBlockGroup, nextBlock);
+    requestAnimationFrame(() => {
+      nextBlock?.renderRoot.querySelector(".text")?.focus({ preventScroll: true });
+    });
+  };
+
+  #blockGroupChange = (event) => {
+    this.activeBlockGroup = event.detail.group;
+    if (event.detail.activeBlock) this.#setActiveBlock(event.detail.activeBlock);
+    this.#notifyGroupToolbar(
+      this.activeGroup?.getGroupFormat(),
+      this.activeBlockGroup,
+      this.activeBlock,
+    );
   };
 
   #restoreSelection = () => {
@@ -147,8 +200,11 @@ export class RichTextEditor extends LitElement {
 
   #mousedown = (event) => {
     const group = event.composedPath().find((element) => element.matches?.(GROUP_SELECTOR));
+    const blockGroup = event
+      .composedPath()
+      .find((element) => element.matches?.(BLOCK_GROUP_SELECTOR));
     const block = event.composedPath().find((element) => element.matches?.(CONTENT_BLOCK_SELECTOR));
-    if (group) this.#setActiveGroup(group);
+    if (group) this.#setActiveGroup(group, blockGroup, block);
     if (block) {
       this.#setActiveBlock(block);
       if (block.matches("button-block, icon-block, image-block")) {
@@ -201,19 +257,24 @@ export class RichTextEditor extends LitElement {
     this.activeBlock?.setAttribute("active", "");
   }
 
-  #setActiveGroup(group) {
-    if (group === this.activeGroup) return;
+  #setActiveGroup(group, blockGroup = null, block = null) {
+    if (group === this.activeGroup) {
+      this.activeBlockGroup = blockGroup;
+      this.#notifyGroupToolbar(group.getGroupFormat(), blockGroup, block);
+      return;
+    }
 
     this.activeGroup?.removeAttribute("active");
     this.activeGroup = group;
+    this.activeBlockGroup = blockGroup;
     this.activeGroup?.setAttribute("active", "");
-    this.#notifyGroupToolbar(group.getGroupFormat());
+    this.#notifyGroupToolbar(group.getGroupFormat(), blockGroup, block);
   }
 
-  #notifyGroupToolbar(format) {
+  #notifyGroupToolbar(format, blockGroup = null, block = null) {
     this.querySelector("group-format-toolbar")?.dispatchEvent(
       new CustomEvent("group-format-change", {
-        detail: format,
+        detail: format ? { ...format, blockGroup: blockGroup?.getFormat?.(block) ?? null } : null,
       }),
     );
   }

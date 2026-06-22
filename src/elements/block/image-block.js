@@ -54,6 +54,7 @@ export class ImageBlock extends LitElement {
     borderColor = "",
     borderStyle = "",
     borderRadius = "",
+    disabled = false,
   } = {}) {
     this.blockId = id;
     this.src = src;
@@ -67,6 +68,7 @@ export class ImageBlock extends LitElement {
     this.borderColor = borderColor;
     this.borderStyle = borderStyle;
     this.borderRadius = borderRadius;
+    this.disabled = disabled;
     return this;
   }
 
@@ -84,6 +86,7 @@ export class ImageBlock extends LitElement {
       borderColor: this.borderColor,
       borderStyle: this.borderStyle,
       borderRadius: this.borderRadius,
+      disabled: this.disabled,
       type: "image",
     };
   }
@@ -98,6 +101,7 @@ export class ImageBlock extends LitElement {
       borderColor: this.borderColor,
       borderStyle: this.borderStyle,
       borderRadius: this.borderRadius,
+      disabled: this.disabled,
       type: "image",
     };
   }
@@ -178,6 +182,11 @@ export class ImageBlock extends LitElement {
   setImageLinkTarget(target) {
     if (!["_self", "_blank"].includes(target)) return false;
     this.target = target;
+    return true;
+  }
+
+  setDisabled(disabled) {
+    this.disabled = Boolean(disabled);
     return true;
   }
 

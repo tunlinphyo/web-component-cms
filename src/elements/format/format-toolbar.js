@@ -25,6 +25,7 @@ const FORMATTERS = [
   "image-border-radius",
   "format-image-link",
   "format-image-link-target",
+  "format-disabled",
   "format-button-design",
   "format-button-icon-placement",
   "format-button-link",
@@ -122,6 +123,7 @@ export class FormatToolbar extends LitElement {
     this.#setValue("image-border-radius", format?.borderRadius ?? "");
     this.#setValue("format-button-design", format?.buttonDesign ?? "primary");
     this.#setValue("format-button-icon-placement", format?.buttonIconPlacement ?? "none");
+    this.#setApplied("format-disabled", Boolean(format?.disabled));
 
     for (const selector of FORMATTERS) this.#setDisabled(selector, !format);
 
@@ -156,6 +158,7 @@ export class FormatToolbar extends LitElement {
     this.#setDisabled("format-button-link-target", !buttonSelected || !format?.link);
     this.#setDisabled("format-image-link", !imageSelected);
     this.#setDisabled("format-image-link-target", !imageSelected || !format?.link);
+    this.#setDisabled("format-disabled", !buttonSelected && !imageSelected);
 
     if (iconSelected) {
       for (const selector of FORMATTERS) this.#setDisabled(selector, true);

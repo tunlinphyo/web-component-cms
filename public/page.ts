@@ -5,12 +5,7 @@ export type RichTextType = "p" | "h1" | "h2" | "h3";
 export type ButtonTag = "button" | "a";
 export type LinkTarget = "_self" | "_blank";
 
-export type PageGroupType =
-  | "header"
-  | "coming-soon"
-  | "about-hokupay"
-  | "footer"
-  | string;
+export type PageGroupType = "header" | "coming-soon" | "about-hokupay" | "footer" | string;
 
 export type PageGroup = {
   id: string;
@@ -24,11 +19,7 @@ export type PageGroup = {
   blocks: PageBlock[];
 };
 
-export type PageBlock =
-  | RichTextBlock
-  | ImageBlock
-  | ButtonBlock
-  | IconBlock;
+export type PageBlock = RichTextBlock | ImageBlock | ButtonBlock | NavsBlock | IconBlock;
 
 export type RichTextBlock = {
   id: string;
@@ -68,6 +59,13 @@ export type ButtonBlock = {
   target: LinkTarget;
   tag: ButtonTag;
   align: Align;
+  sort?: number;
+};
+
+export type NavsBlock = {
+  id: string;
+  type: "navs";
+  children: ButtonBlock[];
 };
 
 export type IconBlock = {

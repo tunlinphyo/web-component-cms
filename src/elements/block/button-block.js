@@ -41,6 +41,7 @@ export class ButtonBlock extends LitElement {
     link = "",
     target = "_self",
     align = "left",
+    disabled = false,
   } = {}) {
     this.blockId = id;
     this.text = text;
@@ -50,6 +51,7 @@ export class ButtonBlock extends LitElement {
     this.link = link;
     this.target = target || "_self";
     this.align = align;
+    this.disabled = disabled;
     return this;
   }
 
@@ -64,6 +66,7 @@ export class ButtonBlock extends LitElement {
       target: this.link ? this.target : "_self",
       tag: this.link ? "a" : "button",
       align: this.align,
+      disabled: this.disabled,
       type: "button",
     };
   }
@@ -75,6 +78,7 @@ export class ButtonBlock extends LitElement {
       buttonIconPlacement: this.icon ? this.iconPosition : "none",
       link: this.link,
       target: this.target,
+      disabled: this.disabled,
       type: "button",
     };
   }
@@ -106,6 +110,11 @@ export class ButtonBlock extends LitElement {
   setButtonLinkTarget(target) {
     if (!["_self", "_blank"].includes(target)) return false;
     this.target = target;
+    return true;
+  }
+
+  setDisabled(disabled) {
+    this.disabled = Boolean(disabled);
     return true;
   }
 

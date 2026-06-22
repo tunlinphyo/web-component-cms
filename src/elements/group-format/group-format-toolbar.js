@@ -8,6 +8,8 @@ const CONTROLS = [
   ["group-border-radius", "borderRadius"],
 ];
 
+const BLOCK_GROUP_CONTROLS = ["block-group-filter", "block-group-sort"];
+
 export class GroupFormatToolbar extends LitElement {
   render() {
     return html`<slot></slot>`;
@@ -15,6 +17,7 @@ export class GroupFormatToolbar extends LitElement {
 
   firstUpdated() {
     for (const [selector] of CONTROLS) this.#setDisabled(selector, true);
+    for (const selector of BLOCK_GROUP_CONTROLS) this.#setBlockGroupFormat(selector, null);
   }
 
   connectedCallback() {
@@ -32,6 +35,9 @@ export class GroupFormatToolbar extends LitElement {
       this.#setValue(selector, event.detail?.[property] ?? "");
       this.#setDisabled(selector, !event.detail);
     }
+    for (const selector of BLOCK_GROUP_CONTROLS) {
+      this.#setBlockGroupFormat(selector, event.detail?.blockGroup ?? null);
+    }
   };
 
   #setValue(selector, value) {
@@ -42,6 +48,11 @@ export class GroupFormatToolbar extends LitElement {
   #setDisabled(selector, disabled) {
     const control = this.querySelector(selector);
     if (control) control.disabled = disabled;
+  }
+
+  #setBlockGroupFormat(selector, format) {
+    const control = this.querySelector(selector);
+    if (control) control.setFormat?.(format);
   }
 }
 

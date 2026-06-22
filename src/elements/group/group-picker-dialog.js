@@ -1,7 +1,16 @@
 import { LitElement, html } from "lit";
 import { groupPickerDialogStyles } from "./group-picker-dialog.styles.js";
 
-const GROUP_TYPES = ["header", "coming-soon", "about-hokupay", "about", "image", "paragraph", "footer"];
+const GROUP_TYPES = [
+  "header",
+  "home-banner",
+  "coming-soon",
+  "about-hokupay",
+  "about",
+  "image",
+  "paragraph",
+  "footer",
+];
 
 export class GroupPickerDialog extends LitElement {
   static styles = groupPickerDialogStyles;
