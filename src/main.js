@@ -1,16 +1,17 @@
 import "./style.css";
 
-import "./elements/format/format-controls";
-import "./elements/block/blocks";
-import "./elements/group/index.js";
-import "./elements/utils/confirm-dialog";
-import "./elements/rich-text-editor";
-import "./elements/editor-output-button";
+import "./features/index.js";
+import "./editor/rich-text-editor.js";
 
-import heroImage from "./assets/hero.png";
-
-import pageData from "./assets/data/page-one.json";
+import pageDataUrl from "./assets/data/page-one.json?url";
 
 window.addEventListener("load", () => {
-  document.querySelector("rich-text-editor")?.init(pageData);
+  void initEditor();
 });
+
+async function initEditor() {
+  const response = await fetch(pageDataUrl);
+  const pageData = await response.json();
+
+  document.querySelector("rich-text-editor")?.init(pageData);
+}

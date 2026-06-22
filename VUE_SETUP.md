@@ -55,9 +55,7 @@ export default defineConfig({
       template: {
         compilerOptions: {
           isCustomElement: (tag) =>
-            editorElements.has(tag) ||
-            tag.endsWith("-block") ||
-            tag.endsWith("-group"),
+            editorElements.has(tag) || tag.endsWith("-block") || tag.endsWith("-group"),
         },
       },
     }),
@@ -93,9 +91,7 @@ function logOutput() {
       <group-order></group-order>
 
       <footer>
-        <button type="button" @click="logOutput">
-          Log Output
-        </button>
+        <button type="button" @click="logOutput">Log Output</button>
       </footer>
     </section>
 

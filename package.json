@@ -8,6 +8,10 @@
     "build": "tsc && vp build",
     "preview": "vp preview"
   },
+  "dependencies": {
+    "@vaadin/rich-text-editor": "^25.1.4",
+    "lit": "^3.3.3"
+  },
   "devDependencies": {
     "typescript": "~6.0.2",
     "vite": "npm:@voidzero-dev/vite-plus-core@latest",
@@ -17,9 +21,5 @@
     "vite": "npm:@voidzero-dev/vite-plus-core@latest",
     "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
   },
-  "packageManager": "npm@11.16.0",
-  "dependencies": {
-    "@vaadin/rich-text-editor": "^25.1.4",
-    "lit": "^3.3.3"
-  }
+  "packageManager": "npm@11.16.0"
 }
