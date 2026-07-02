@@ -7,7 +7,8 @@ export const formatLinkStyles = css`
   button,
   input {
     box-sizing: border-box;
-    height: 32px;
+    height: 26px;
+    border: 1px solid var(--gray-200);
   }
 
   input {
@@ -15,9 +16,8 @@ export const formatLinkStyles = css`
   }
 
   button {
-    background: white;
-    border: none;
-    border-radius: 4px;
+    background: var(--white);
+    border-radius: 0.5rem;
     cursor: pointer;
     min-width: 32px;
   }
@@ -55,5 +55,12 @@ export const formatLinkStyles = css`
     display: grid;
     grid-template-columns: 1fr auto auto;
     gap: 4px;
+  }
+
+  .btn-save {
+    color: var(--highlight);
+  }
+  .btn-remove {
+    color: var(--brand-600);
   }
 `;

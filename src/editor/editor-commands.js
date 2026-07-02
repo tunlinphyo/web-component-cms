@@ -28,6 +28,12 @@ export function applyFormatCommand(activeBlock, detail, notifyToolbar) {
     return;
   }
 
+  if (detail.command === "objectFit") {
+    if (!activeBlock?.setObjectFit?.(detail.value)) return;
+    notifyBlockFormat(activeBlock, notifyToolbar);
+    return;
+  }
+
   if (detail.command === "blockStyle") {
     if (!activeBlock?.setBlockStyle?.(detail.property, detail.value)) return;
     notifyBlockFormat(activeBlock, notifyToolbar);
@@ -73,6 +79,18 @@ export function applyFormatCommand(activeBlock, detail, notifyToolbar) {
   if (detail.command === "disabled") {
     const disabled = !activeBlock?.getSelectionFormat?.().disabled;
     if (!activeBlock?.setDisabled?.(disabled)) return;
+    notifyBlockFormat(activeBlock, notifyToolbar);
+    return;
+  }
+
+  if (detail.command === "tableHeaderRow") {
+    if (!activeBlock?.setHeaderRow?.(detail.value)) return;
+    notifyBlockFormat(activeBlock, notifyToolbar);
+    return;
+  }
+
+  if (detail.command === "tableHeaderColumn") {
+    if (!activeBlock?.setHeaderColumn?.(detail.value)) return;
     notifyBlockFormat(activeBlock, notifyToolbar);
     return;
   }

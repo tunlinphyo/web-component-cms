@@ -9,10 +9,7 @@ export function deserializeEditor(editor, pageData = {}) {
   removeGroupsOutsideSnapshot(groupOrder, groupsData);
 
   const groupsById = new Map(
-    [...editor.querySelectorAll(GROUP_SELECTOR)].map((group) => [
-      group.getAttribute("group-id"),
-      group,
-    ]),
+    getPageGroups(editor).map((group) => [group.getAttribute("group-id"), group]),
   );
   const blocksById = new Map(getContentBlocks(editor).map((block) => [block.blockId, block]));
 
@@ -30,17 +27,22 @@ export function deserializeEditor(editor, pageData = {}) {
 export function serializeEditor(editor) {
   return {
     version: CURRENT_PAGE_VERSION,
-    groups: [...editor.querySelectorAll(GROUP_SELECTOR)].map((group) => group.toJSON()),
+    groups: getPageGroups(editor).map((group) => group.toJSON()),
   };
 }
 
 function getContentBlocks(editor) {
   const ungroupedBlocks = [...editor.querySelectorAll(CONTENT_BLOCK_SELECTOR)];
-  const groupedBlocks = [...editor.querySelectorAll(GROUP_SELECTOR)].flatMap(
-    (group) => group.blocks,
-  );
+  const groupedBlocks = getPageGroups(editor).flatMap((group) => group.blocks);
 
   return [...ungroupedBlocks, ...groupedBlocks];
+}
+
+function getPageGroups(editor) {
+  const groupOrder = editor.querySelector("group-order");
+  if (!groupOrder) return [];
+
+  return [...groupOrder.children].filter((group) => group.matches(GROUP_SELECTOR));
 }
 
 function removeGroupsOutsideSnapshot(groupOrder, groupsData) {

@@ -1,21 +1,33 @@
 import { randomUUID } from "../../../utils/ids.js";
 import { getGroupDefinition } from "../../../registries/group-registry.js";
+import "./empty-group-picker-button.js";
 
 export class GroupOrder extends HTMLElement {
+  static get observedAttributes() {
+    return ["picker", "picker-dialog"];
+  }
+
+  attributeChangedCallback() {
+    this.#ensurePicker();
+    this.#syncPicker();
+  }
+
   connectedCallback() {
+    this.addEventListener("move-group-request", this.#moveGroup);
     this.addEventListener("add-group-request", this.#openPicker);
     this.addEventListener("delete-group-request", this.#deleteGroup);
     this.addEventListener("group-select", this.#addGroup);
 
-    if (!this.querySelector(":scope > group-picker-dialog")) {
-      this.append(document.createElement("group-picker-dialog"));
-    }
+    this.#ensurePicker();
+    this.#ensureEmptyPickerButton();
+    this.#syncPicker();
     if (!this.querySelector(":scope > confirm-dialog")) {
       this.append(document.createElement("confirm-dialog"));
     }
   }
 
   disconnectedCallback() {
+    this.removeEventListener("move-group-request", this.#moveGroup);
     this.removeEventListener("add-group-request", this.#openPicker);
     this.removeEventListener("delete-group-request", this.#deleteGroup);
     this.removeEventListener("group-select", this.#addGroup);
@@ -49,14 +61,42 @@ export class GroupOrder extends HTMLElement {
       groupIndex += 1;
     }
 
-    groupsById.forEach((group) => group.requestUpdate?.());
+    this.#updateOrder(this.#getGroups());
     return this;
   }
 
-  #openPicker = (event) => {
-    this.insertAfter = event.detail.after;
-    this.querySelector(":scope > group-picker-dialog")?.open();
+  #moveGroup = (event) => {
+    const { group, offset } = event.detail;
+    if (group?.parentElement !== this) return;
+
+    const groups = this.#getGroups();
+    const index = groups.indexOf(group);
+    const targetIndex = index + offset;
+    if (index < 0 || targetIndex < 0 || targetIndex >= groups.length) return;
+
+    groups.splice(index, 1);
+    groups.splice(targetIndex, 0, group);
+    this.#updateOrder(groups);
+    this.#dispatchChange();
   };
+
+  #openPicker = (event) => {
+    if (event.detail.after && event.detail.after.parentElement !== this) return;
+
+    this.insertAfter = event.detail.after;
+    this.#showPicker();
+  };
+
+  #openEmptyPicker = () => {
+    this.insertAfter = null;
+    this.#showPicker();
+  };
+
+  #showPicker() {
+    const picker = this.#getPicker();
+    this.#syncPicker();
+    picker?.open();
+  }
 
   #addGroup = (event) => {
     const { type } = event.detail;
@@ -70,17 +110,23 @@ export class GroupOrder extends HTMLElement {
     const groups = this.#getGroups();
     const index = groups.indexOf(this.insertAfter) + 1;
     groups.splice(index, 0, group);
-    this.insertBefore(group, this.querySelector(":scope > group-picker-dialog"));
-
     this.#updateOrder(groups);
 
-    const defaultData = group.constructor.defaultJson ?? {};
+    const defaultData = {
+      ...group.constructor.defaultJson,
+      style: {
+        ...definition.defaultStyle,
+        ...group.constructor.defaultJson?.style,
+      },
+    };
     group.init(defaultData);
     this.#dispatchChange();
     void group.focusFirstBlock?.();
   };
 
   #deleteGroup = async (event) => {
+    if (event.detail.group?.parentElement !== this) return;
+
     const confirmed = await this.querySelector(":scope > confirm-dialog")?.open({
       title: "Delete group?",
       message: "This group and all of its content will be permanently deleted.",
@@ -100,6 +146,15 @@ export class GroupOrder extends HTMLElement {
   }
 
   #updateOrder(groups) {
+    let anchor = this.#getPicker();
+    for (let index = groups.length - 1; index >= 0; index -= 1) {
+      const group = groups[index];
+      if (group.parentElement !== this || group.nextSibling !== anchor) {
+        this.insertBefore(group, anchor);
+      }
+      anchor = group;
+    }
+
     groups.forEach((group, sort) => {
       group.sort = sort;
       group.requestUpdate?.();
@@ -113,6 +168,40 @@ export class GroupOrder extends HTMLElement {
         composed: true,
       }),
     );
+  }
+
+  #syncPicker() {
+    const picker = this.#getPicker();
+    if (picker) picker.picker = this.getAttribute("picker") || "";
+  }
+
+  #ensurePicker() {
+    const tagName = this.#getPickerTagName();
+    const currentPicker = this.#getPicker();
+    if (currentPicker?.localName === tagName) return;
+
+    currentPicker?.remove();
+    const picker = document.createElement(tagName);
+    picker.setAttribute("data-group-picker-dialog", "");
+    this.append(picker);
+  }
+
+  #ensureEmptyPickerButton() {
+    if (this.querySelector(":scope > [data-empty-group-picker]")) return;
+
+    const button = document.createElement("empty-group-picker-button");
+    button.textContent = "Add Section";
+    button.setAttribute("data-empty-group-picker", "");
+    button.addEventListener("click", this.#openEmptyPicker);
+    this.insertBefore(button, this.#getPicker());
+  }
+
+  #getPicker() {
+    return this.querySelector(":scope > [data-group-picker-dialog]");
+  }
+
+  #getPickerTagName() {
+    return this.getAttribute("picker-dialog") || "group-picker-dialog";
   }
 }
 

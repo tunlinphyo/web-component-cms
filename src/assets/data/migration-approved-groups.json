@@ -1,0 +1,289 @@
+{
+  "version": 1,
+  "groups": [
+    {
+      "id": "baseline-about",
+      "type": "about",
+      "sort": 0,
+      "style": {},
+      "blocks": [
+        {
+          "id": "icon",
+          "type": "icon",
+          "icon": "plus",
+          "align": "left"
+        },
+        {
+          "id": "title",
+          "type": "h2",
+          "value": "About title",
+          "textAlign": "left",
+          "fontWeight": ""
+        },
+        {
+          "id": "description",
+          "type": "p",
+          "value": "About description",
+          "textAlign": "left",
+          "fontWeight": ""
+        }
+      ]
+    },
+    {
+      "id": "baseline-footer",
+      "type": "footer",
+      "sort": 1,
+      "style": {},
+      "blocks": [
+        {
+          "id": "logo",
+          "type": "image",
+          "src": "",
+          "alt": "Primary logo",
+          "objectFit": "contain"
+        },
+        {
+          "id": "logo2",
+          "type": "image",
+          "src": "",
+          "alt": "Secondary logo",
+          "objectFit": "contain"
+        },
+        {
+          "id": "logo3",
+          "type": "image",
+          "src": "",
+          "alt": "Tertiary logo",
+          "objectFit": "contain"
+        },
+        {
+          "id": "copyright",
+          "type": "p",
+          "value": "Baseline copyright",
+          "textAlign": "left"
+        }
+      ]
+    },
+    {
+      "id": "baseline-header",
+      "type": "header",
+      "sort": 2,
+      "style": {},
+      "blocks": [
+        {
+          "id": "title",
+          "type": "p",
+          "value": "Header title",
+          "textAlign": "left"
+        },
+        {
+          "id": "logo",
+          "type": "image",
+          "src": "",
+          "alt": "Header logo"
+        },
+        {
+          "id": "navs",
+          "type": "navs",
+          "children": [
+            {
+              "id": "baseline-nav-1",
+              "type": "button",
+              "sort": 0,
+              "text": "First navigation",
+              "design": "nav",
+              "link": "#first",
+              "target": "_self",
+              "tag": "a"
+            },
+            {
+              "id": "baseline-nav-2",
+              "type": "button",
+              "sort": 1,
+              "text": "Second navigation",
+              "design": "nav",
+              "link": "#second",
+              "target": "_self",
+              "tag": "a"
+            }
+          ]
+        },
+        {
+          "id": "button",
+          "type": "button",
+          "text": "Header action",
+          "link": "#action",
+          "target": "_self",
+          "tag": "a"
+        }
+      ]
+    },
+    {
+      "id": "baseline-hero",
+      "type": "hero",
+      "sort": 3,
+      "style": {},
+      "blocks": [
+        {
+          "id": "image",
+          "type": "image",
+          "src": "",
+          "alt": "Hero image"
+        },
+        {
+          "id": "title",
+          "type": "h1",
+          "value": "Hero title",
+          "textAlign": "left"
+        },
+        {
+          "id": "description",
+          "type": "p",
+          "value": "Hero description",
+          "textAlign": "left"
+        }
+      ]
+    },
+    {
+      "id": "baseline-home-news",
+      "type": "home-news",
+      "sort": 4,
+      "style": {},
+      "blocks": [
+        {
+          "id": "title",
+          "type": "h2",
+          "value": "Latest news",
+          "textAlign": "left"
+        },
+        {
+          "id": "news",
+          "type": "news",
+          "children": [
+            {
+              "id": "baseline-news-item-1",
+              "type": "news",
+              "sort": 0,
+              "style": {
+                "borderWidth": "1px",
+                "borderColor": "#F2ADC0",
+                "borderStyle": "solid",
+                "borderRadius": "16px"
+              },
+              "blocks": [
+                {
+                  "id": "date",
+                  "type": "h2",
+                  "value": "2026-07-02",
+                  "textAlign": "left"
+                },
+                {
+                  "id": "title",
+                  "type": "h2",
+                  "value": "Nested news title",
+                  "textAlign": "left"
+                },
+                {
+                  "id": "description",
+                  "type": "p",
+                  "value": "Nested news description",
+                  "textAlign": "left"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "baseline-image",
+      "type": "image",
+      "sort": 5,
+      "style": {},
+      "blocks": [
+        {
+          "id": "image",
+          "type": "image",
+          "src": "",
+          "alt": "Standalone image"
+        }
+      ]
+    },
+    {
+      "id": "baseline-news",
+      "type": "news",
+      "sort": 6,
+      "style": {
+        "borderWidth": "1px",
+        "borderColor": "#F2ADC0",
+        "borderStyle": "solid",
+        "borderRadius": "16px"
+      },
+      "blocks": [
+        {
+          "id": "date",
+          "type": "h2",
+          "value": "2026-07-02",
+          "textAlign": "left"
+        },
+        {
+          "id": "title",
+          "type": "h2",
+          "value": "Top-level news title",
+          "textAlign": "left"
+        },
+        {
+          "id": "description",
+          "type": "p",
+          "value": "Top-level news description",
+          "textAlign": "left"
+        }
+      ]
+    },
+    {
+      "id": "baseline-paragraph",
+      "type": "paragraph",
+      "sort": 7,
+      "style": {},
+      "blocks": [
+        {
+          "id": "paragraph",
+          "type": "p",
+          "value": "Baseline paragraph",
+          "textAlign": "left"
+        }
+      ]
+    },
+    {
+      "id": "baseline-table",
+      "type": "table",
+      "sort": 8,
+      "style": {},
+      "blocks": [
+        {
+          "id": "title",
+          "type": "h2",
+          "value": "Table title",
+          "textAlign": "left"
+        },
+        {
+          "id": "description",
+          "type": "p",
+          "value": "Table description",
+          "textAlign": "left"
+        },
+        {
+          "id": "table",
+          "type": "table",
+          "cells": [
+            ["Name", "Value"],
+            ["Baseline", "1"]
+          ],
+          "headerRow": true,
+          "headerColumn": false,
+          "disabled": false
+        }
+      ]
+    }
+  ]
+}

@@ -163,7 +163,7 @@ export class BlockListGroup extends HTMLElement {
   }
 
   getBlockLabel(block, index) {
-    return block.text || block.placeholder || `${this.itemLabel} ${index + 1}`;
+    return block.text?.trim() || block.placeholder || `${this.itemLabel} ${index + 1}`;
   }
 
   ensureMinimumBlocks() {

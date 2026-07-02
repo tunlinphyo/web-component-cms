@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Package consumer verification</title>
+  </head>
+  <body>
+    <output id="result">pending</output>
+    <script type="module">
+      import "./examples/package-consumer.js";
+      import { getGroupDefinition, getListDefinition } from "./src/public-api.js";
+
+      const list = document.createElement("example-group-list");
+      const item = list.addBlock();
+
+      const picker = document.createElement("example-group-picker");
+      document.body.append(picker);
+      await picker.open();
+
+      let selectedType = null;
+      picker.addEventListener("group-select", (event) => {
+        selectedType = event.detail.type;
+      });
+      const input = picker.renderRoot.querySelector("input");
+      input.checked = true;
+      input.dispatchEvent(new Event("change"));
+      picker.renderRoot.querySelector("form").requestSubmit();
+
+      const result = {
+        groupDefined: customElements.get("example-group") !== undefined,
+        groupRegistered: getGroupDefinition("example")?.tagName === "example-group",
+        listDefined: customElements.get("example-group-list") !== undefined,
+        listRegistered: getListDefinition("example-list")?.tagName === "example-group-list",
+        listCreatesItem: item?.localName === "example-group",
+        pickerDefined: customElements.get("example-group-picker") !== undefined,
+        pickerSelected: selectedType === "example",
+      };
+
+      document.querySelector("#result").textContent = JSON.stringify(result);
+    </script>
+  </body>
+</html>

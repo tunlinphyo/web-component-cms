@@ -2,6 +2,7 @@ import { LitElement } from "lit";
 import { html, unsafeStatic } from "lit/static-html.js";
 import {
   convertBlockTypeContent,
+  getSelectedAncestor,
   insertPlainText,
   isSelectionInside,
   normalizeBlockContent,
@@ -26,7 +27,7 @@ import {
 } from "./rich-text-editor-dom.js";
 import { applySelectionCommand, describeSelectionFormat } from "./rich-text-formatting.js";
 import {
-  featureData,
+  FEATURES,
   getCapabilities,
   toFeatureAttribute,
 } from "../../../registries/formatter-registry.js";
@@ -58,7 +59,7 @@ export class RichTextBlock extends LitElement {
     this.fontWeight = "";
     this.fontSize = "";
     this.fontFamily = "";
-    this.features = "";
+    this.features = undefined;
     this.selectedRange = null;
   }
 
@@ -74,16 +75,17 @@ export class RichTextBlock extends LitElement {
     super.disconnectedCallback();
   }
 
-  init({
-    id = "",
-    value = "",
-    textAlign = "left",
-    fontWeight = "",
-    fontSize = "",
-    fontFamily = "",
-    type = "p",
-    features = this.features,
-  } = {}) {
+  init(options = {}) {
+    const {
+      id = "",
+      value = "",
+      textAlign = "left",
+      fontWeight = "",
+      fontSize = "",
+      fontFamily = "",
+      type = "p",
+    } = options;
+
     this.blockId = id;
     this.type = normalizeBlockType(type);
     this.value = normalizeBlockContent(value, this.type);
@@ -91,7 +93,9 @@ export class RichTextBlock extends LitElement {
     this.fontWeight = fontWeight;
     this.fontSize = this.type === "p" ? "" : fontSize;
     this.fontFamily = fontFamily;
-    this.features = toFeatureAttribute(features);
+    if (Object.hasOwn(options, "features")) {
+      this.features = toFeatureAttribute(options.features);
+    }
 
     void this.updateComplete.then(() => {
       const editor = getEditorElement(this.renderRoot);
@@ -143,7 +147,6 @@ export class RichTextBlock extends LitElement {
       id: this.blockId,
       value: value ?? serializeHtml(this.value, false),
       ...data,
-      ...featureData(this.features),
     };
   }
 
@@ -177,6 +180,13 @@ export class RichTextBlock extends LitElement {
 
   #onKeyDown = (event) => {
     if (event.key !== "Enter" || this.type !== "p" || event.isComposing) return;
+    const editor = event.currentTarget;
+    const selection = getEditorSelection(this.renderRoot);
+    const range = selection?.rangeCount ? selection.getRangeAt(0) : null;
+    const isList = Boolean(getSelectedAncestor(editor, range, "ul, ol"));
+
+    if (isList) return;
+
     event.preventDefault();
     document.execCommand(event.shiftKey ? "insertParagraph" : "insertLineBreak");
     void this.updateComplete.then(() => {
@@ -188,11 +198,8 @@ export class RichTextBlock extends LitElement {
     });
   };
 
-  #onInput = () => {
-    if (this.type !== "p") return;
-    const editor = getEditorElement(this.renderRoot);
-    if (!editor) return;
-
+  #onInput = (event) => {
+    const editor = event.currentTarget;
     normalizeEditorInput(editor, this.type);
     this.#notifySelection();
   };
@@ -201,14 +208,14 @@ export class RichTextBlock extends LitElement {
     if (changedProperties.has("predefinedMargin")) {
       this.style.setProperty("--predefined-margin", this.predefinedMargin || "0.5rem");
     }
-    if (
-      changedProperties.has("value") ||
+    const contentChanged = changedProperties.has("value");
+    const presentationChanged =
       changedProperties.has("textAlign") ||
       changedProperties.has("fontWeight") ||
       changedProperties.has("fontSize") ||
-      changedProperties.has("fontFamily")
-    ) {
-      this.#syncEditor();
+      changedProperties.has("fontFamily");
+    if (contentChanged || presentationChanged) {
+      this.#syncEditor({ preserveContent: !contentChanged });
     }
     if (changedProperties.has("placeholder")) {
       const editor = getEditorElement(this.renderRoot);
@@ -216,12 +223,19 @@ export class RichTextBlock extends LitElement {
     }
   }
 
-  #syncEditor() {
+  #syncEditor({ preserveContent = false } = {}) {
     const editor = getEditorElement(this.renderRoot);
 
     if (!editor || this.renderRoot.activeElement === editor) return;
 
-    syncEditorFromProperties(editor, this);
+    syncEditorFromProperties(editor, {
+      value: preserveContent ? editor.innerHTML : this.value,
+      type: this.type,
+      textAlign: this.textAlign,
+      fontWeight: this.fontWeight,
+      fontSize: this.fontSize,
+      fontFamily: this.fontFamily,
+    });
   }
 
   captureSelection({ preserve = false } = {}) {
@@ -329,8 +343,15 @@ export class RichTextBlock extends LitElement {
         range: this.selectedRange,
         selection: getEditorSelection(this.renderRoot),
       }),
-      capabilities: getCapabilities("text", this.features),
+      capabilities: getCapabilities("text", this.#effectiveFeatures),
     };
+  }
+
+  get #effectiveFeatures() {
+    if (this.features != null) return this.features;
+    if (this.hasAttribute("features")) return this.getAttribute("features") ?? "";
+
+    return Object.values(FEATURES);
   }
 
   #notifySelection() {
@@ -370,6 +391,7 @@ export class RichTextBlock extends LitElement {
     event.preventDefault();
 
     const selection = getEditorSelection(this.renderRoot);
+    placeCaretInEmptyEditor(event.currentTarget, selection);
     const text = event.clipboardData?.getData("text/plain") ?? "";
     if (!insertPlainText(selection, text)) return;
     this.#notifySelection();

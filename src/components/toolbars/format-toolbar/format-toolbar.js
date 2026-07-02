@@ -16,6 +16,7 @@ const FORMATTERS = [
   "format-align-justify",
   "format-highlight",
   "format-link",
+  "format-link-target",
   "format-text-color",
   "format-text-color-palette",
   "format-icon-background-color",
@@ -23,7 +24,9 @@ const FORMATTERS = [
   "image-border-width",
   "image-border-color",
   "image-border-style",
+  "image-border-position",
   "image-border-radius",
+  "format-image-object-fit",
   "format-image-link",
   "format-image-link-target",
   "format-disabled",
@@ -31,6 +34,13 @@ const FORMATTERS = [
   "format-button-icon-placement",
   "format-button-link",
   "format-button-link-target",
+  "format-table-headers",
+  "table-header-background-color",
+  "table-body-background-color",
+  "table-border-width",
+  "table-border-color",
+  "table-border-style",
+  "table-border-position",
 ];
 
 const TEXT_FORMATTERS = [
@@ -44,6 +54,7 @@ const TEXT_FORMATTERS = [
   "format-unordered-list",
   "format-highlight",
   "format-link",
+  "format-link-target",
   "format-text-color",
   "format-text-color-palette",
 ];
@@ -74,6 +85,7 @@ const FORMATTER_FEATURES = {
   "format-align-justify": FEATURES.align,
   "format-highlight": FEATURES.backgroundColor,
   "format-link": FEATURES.link,
+  "format-link-target": FEATURES.linkTarget,
   "format-text-color": FEATURES.color,
   "format-text-color-palette": FEATURES.color,
   "format-icon-background-color": FEATURES.backgroundColor,
@@ -81,7 +93,9 @@ const FORMATTER_FEATURES = {
   "image-border-width": FEATURES.border,
   "image-border-color": FEATURES.border,
   "image-border-style": FEATURES.border,
+  "image-border-position": FEATURES.border,
   "image-border-radius": FEATURES.borderRadius,
+  "format-image-object-fit": FEATURES.objectFit,
   "format-image-link": FEATURES.link,
   "format-image-link-target": FEATURES.linkTarget,
   "format-disabled": FEATURES.disabled,
@@ -89,11 +103,104 @@ const FORMATTER_FEATURES = {
   "format-button-icon-placement": FEATURES.icon,
   "format-button-link": FEATURES.link,
   "format-button-link-target": FEATURES.linkTarget,
+  "format-table-headers": FEATURES.tableHeaders,
+  "table-header-background-color": FEATURES.backgroundColor,
+  "table-body-background-color": FEATURES.backgroundColor,
+  "table-border-width": FEATURES.border,
+  "table-border-color": FEATURES.border,
+  "table-border-style": FEATURES.border,
+  "table-border-position": FEATURES.border,
 };
 
 export class FormatToolbar extends LitElement {
+  static properties = {
+    title: { type: String },
+  };
+
+  constructor() {
+    super();
+    this.title = "Text";
+  }
+
+  createRenderRoot() {
+    return this;
+  }
+
   render() {
-    return html`<slot></slot>`;
+    return html`
+      <div id="text" class="tools">
+        <h2>${this.title}</h2>
+        <element-type-selector></element-type-selector>
+        <format-font-family></format-font-family>
+        <format-text-color-palette></format-text-color-palette>
+        <div class="format-group">
+          <format-bold></format-bold>
+          <format-italic></format-italic>
+          <format-underline></format-underline>
+          <format-font-size></format-font-size>
+        </div>
+        <div class="format-group-aligns">
+          <format-align-left applied></format-align-left>
+          <format-align-center></format-align-center>
+          <format-align-right></format-align-right>
+          <format-align-justify></format-align-justify>
+        </div>
+        <div class="format-group">
+          <format-ordered-list></format-ordered-list>
+          <format-unordered-list></format-unordered-list>
+          <format-link></format-link>
+          <format-link-target></format-link-target>
+        </div>
+        <div class="format-group">
+          <format-highlight></format-highlight>
+          <format-icon-background-color></format-icon-background-color>
+        </div>
+      </div>
+
+      <div id="button" hidden class="tools">
+        <h2>Button</h2>
+        <format-button-design></format-button-design>
+        <format-button-icon-placement></format-button-icon-placement>
+        <div class="format-link-group">
+          <format-button-link></format-button-link>
+          <format-disabled></format-disabled>
+          <format-button-link-target></format-button-link-target>
+        </div>
+      </div>
+
+      <div id="image" hidden class="tools">
+        <h2>Image</h2>
+        <div class="format-link-group">
+          <format-image-link></format-image-link>
+          <format-disabled></format-disabled>
+          <format-image-link-target></format-image-link-target>
+        </div>
+        <image-background-color></image-background-color>
+        <format-image-object-fit></format-image-object-fit>
+        <div class="group-label">Border</div>
+        <div class="format-border-group">
+          <image-border-style></image-border-style>
+          <image-border-color></image-border-color>
+          <image-border-width></image-border-width>
+        </div>
+        <image-border-position></image-border-position>
+        <image-border-radius></image-border-radius>
+      </div>
+
+      <div id="table" hidden class="tools">
+        <h2>Table</h2>
+        <format-table-headers></format-table-headers>
+        <table-header-background-color></table-header-background-color>
+        <table-body-background-color></table-body-background-color>
+        <div class="group-label">Border</div>
+        <div class="format-border-group">
+          <table-border-style></table-border-style>
+          <table-border-color></table-border-color>
+          <table-border-width></table-border-width>
+        </div>
+        <table-border-position></table-border-position>
+      </div>
+    `;
   }
 
   firstUpdated() {
@@ -115,17 +222,22 @@ export class FormatToolbar extends LitElement {
     const imageSelected = format?.type === "image";
     const buttonSelected = format?.type === "button";
     const iconSelected = format?.type === "icon";
-    const nonTextSelected = imageSelected || buttonSelected || iconSelected;
+    const tableSelected = format?.type === "table";
+    const nonTextSelected = imageSelected || buttonSelected || iconSelected || tableSelected;
     const backgroundColorSelected = iconSelected || format?.highlight;
 
-    this.querySelector("#text")?.toggleAttribute("hidden", buttonSelected || imageSelected);
+    this.querySelector("#text")?.toggleAttribute(
+      "hidden",
+      buttonSelected || imageSelected || tableSelected,
+    );
     this.querySelector("#button")?.toggleAttribute("hidden", !buttonSelected);
     this.querySelector("#image")?.toggleAttribute("hidden", !imageSelected);
+    this.querySelector("#table")?.toggleAttribute("hidden", !tableSelected);
 
     this.#setValue("element-type-selector", nonTextSelected ? "p" : (format?.type ?? "p"));
     this.#setValue(
       "format-font-family",
-      format?.fontFamily || (format?.type === "p" ? "var(--font-zen)" : "var(--font-heading)"),
+      format?.fontFamily || (format?.type === "p" ? "var(--font-body)" : "var(--font-heading)"),
     );
     this.#setValue("format-font-size", format?.fontSize ?? "");
     this.#setApplied("format-bold", format?.bold ?? false);
@@ -140,6 +252,7 @@ export class FormatToolbar extends LitElement {
     this.#setApplied("format-highlight", format?.highlight ?? false);
     this.#setApplied("format-link", Boolean(format?.link));
     this.#setValue("format-link", format?.link ?? "");
+    this.#setValue("format-link-target", format?.target ?? "_self");
     this.#setApplied("format-button-link", buttonSelected && Boolean(format?.link));
     this.#setValue("format-button-link", buttonSelected ? (format?.link ?? "") : "");
     this.#setValue(
@@ -156,10 +269,20 @@ export class FormatToolbar extends LitElement {
     this.#setValue("image-border-width", format?.borderWidth ?? "");
     this.#setValue("image-border-color", format?.borderColor ?? "");
     this.#setValue("image-border-style", format?.borderStyle ?? "");
+    this.#setValue("image-border-position", format?.borderPosition ?? "");
     this.#setValue("image-border-radius", format?.borderRadius ?? "");
+    this.#setValue("format-image-object-fit", format?.objectFit ?? "none");
     this.#setValue("format-button-design", format?.buttonDesign ?? "primary");
     this.#setValue("format-button-icon-placement", format?.buttonIconPlacement ?? "none");
     this.#setApplied("format-disabled", Boolean(format?.disabled));
+    this.#setProperty("format-table-headers", "headerRow", Boolean(format?.headerRow));
+    this.#setProperty("format-table-headers", "headerColumn", Boolean(format?.headerColumn));
+    this.#setValue("table-header-background-color", format?.headerBackgroundColor ?? "");
+    this.#setValue("table-body-background-color", format?.bodyBackgroundColor ?? "");
+    this.#setValue("table-border-width", format?.borderWidth ?? "");
+    this.#setValue("table-border-color", format?.borderColor ?? "");
+    this.#setValue("table-border-style", format?.borderStyle ?? "");
+    this.#setValue("table-border-position", format?.borderPosition ?? "");
 
     for (const selector of FORMATTERS) this.#setDisabled(selector, !format);
 
@@ -183,11 +306,14 @@ export class FormatToolbar extends LitElement {
       !format || nonTextSelected || format.collapsed !== false,
     );
     this.#setDisabled("format-icon-background-color", !backgroundColorSelected);
+    this.#setDisabled("format-link-target", nonTextSelected || !format?.link);
     this.#setDisabled("image-background-color", !imageSelected);
     this.#setDisabled("image-border-width", !imageSelected);
     this.#setDisabled("image-border-color", !imageSelected);
     this.#setDisabled("image-border-style", !imageSelected);
+    this.#setDisabled("image-border-position", !imageSelected || !hasBorder(format));
     this.#setDisabled("image-border-radius", !imageSelected);
+    this.#setDisabled("format-image-object-fit", !imageSelected);
     this.#setDisabled("format-button-design", !buttonSelected);
     this.#setDisabled("format-button-icon-placement", !buttonSelected);
     this.#setDisabled("format-button-link", !buttonSelected);
@@ -195,6 +321,13 @@ export class FormatToolbar extends LitElement {
     this.#setDisabled("format-image-link", !imageSelected);
     this.#setDisabled("format-image-link-target", !imageSelected || !format?.link);
     this.#setDisabled("format-disabled", !buttonSelected && !imageSelected);
+    this.#setDisabled("format-table-headers", !tableSelected);
+    this.#setDisabled("table-header-background-color", !tableSelected);
+    this.#setDisabled("table-body-background-color", !tableSelected);
+    this.#setDisabled("table-border-width", !tableSelected);
+    this.#setDisabled("table-border-color", !tableSelected);
+    this.#setDisabled("table-border-style", !tableSelected);
+    this.#setDisabled("table-border-position", !tableSelected || !hasBorder(format));
 
     if (iconSelected) {
       for (const selector of FORMATTERS) this.#setDisabled(selector, true);
@@ -220,6 +353,10 @@ export class FormatToolbar extends LitElement {
     for (const formatter of this.querySelectorAll(selector)) formatter.value = value;
   }
 
+  #setProperty(selector, property, value) {
+    for (const formatter of this.querySelectorAll(selector)) formatter[property] = value;
+  }
+
   #setDisabled(selector, disabled) {
     for (const formatter of this.querySelectorAll(selector)) formatter.disabled = disabled;
   }
@@ -230,9 +367,9 @@ export class FormatToolbar extends LitElement {
 
   #applyCapabilities(format) {
     for (const [selector, feature] of Object.entries(FORMATTER_FEATURES)) {
-      const hidden = Boolean(format) && !isFeatureEnabled(format, feature);
-      this.#setHidden(selector, hidden);
-      if (hidden) this.#setDisabled(selector, true);
+      const disabled = Boolean(format) && !isFeatureEnabled(format, feature);
+      this.#setHidden(selector, false);
+      if (disabled) this.#setDisabled(selector, true);
     }
   }
 }
@@ -247,6 +384,11 @@ function toHex(color, fallback) {
     .slice(0, 3)
     .map((value) => Number(value).toString(16).padStart(2, "0"))
     .join("")}`;
+}
+
+function hasBorder(format) {
+  if (!format) return false;
+  return Boolean(format.borderWidth) && format.borderStyle !== "";
 }
 
 customElements.define("format-toolbar", FormatToolbar);

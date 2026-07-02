@@ -16,6 +16,7 @@ export const PAGE_SCHEMA = {
     borderWidth: "string",
     borderColor: "string",
     borderStyle: "string",
+    borderPosition: "string",
     borderRadius: "string",
   },
   navsBlock: {
@@ -25,7 +26,18 @@ export const PAGE_SCHEMA = {
   },
 };
 
-export const PAGE_BLOCK_TYPES = new Set(["button", "icon", "image", "navs", "p", "h1", "h2", "h3"]);
+export const PAGE_BLOCK_TYPES = new Set([
+  "button",
+  "icon",
+  "image",
+  "navs",
+  "news",
+  "table",
+  "p",
+  "h1",
+  "h2",
+  "h3",
+]);
 
 export function isRichTextType(type) {
   return ["p", "h1", "h2", "h3"].includes(type);

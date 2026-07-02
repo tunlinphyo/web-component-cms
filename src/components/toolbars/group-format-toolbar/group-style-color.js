@@ -1,11 +1,13 @@
-import { LitElement, html } from "lit";
+import { html, nothing } from "lit";
+import { PopoverControl } from "../controls/popover-control.js";
 import { EDITOR_COLOR_SWATCHES_WITH_UNSET } from "../../../utils/colors.js";
 import { groupStyleColorStyles } from "./group-style-color.styles.js";
 
-class GroupStyleColor extends LitElement {
+class GroupStyleColor extends PopoverControl {
   static properties = {
     value: { type: String, reflect: true },
     disabled: { type: Boolean },
+    showLabel: { type: Boolean, attribute: "show-label" },
   };
 
   static styles = groupStyleColorStyles;
@@ -14,26 +16,43 @@ class GroupStyleColor extends LitElement {
     super();
     this.value = "";
     this.disabled = true;
+    this.showLabel = true;
   }
 
   render() {
-    const color = this.value || this.fallback;
-
     return html`
-      <span>${this.label}</span>
-      <button
-        class="trigger"
-        type="button"
-        title=${`Predefined ${this.label.toLowerCase()} color`}
-        popovertarget="colors"
-        ?disabled=${this.disabled}
-      >
-        <span
-          class="preview"
-          style=${`--preview-color: ${this.previewBorder(color)}; --preview-background: ${this.previewBackground(color)}`}
-        ></span>
-      </button>
-      <div id="colors" popover>
+      <div class="label-group">
+        ${this.showLabel ? html`<span>${this.label}</span>` : nothing}
+        <button
+          class="trigger"
+          type="button"
+          title=${`Predefined ${this.label.toLowerCase()} color`}
+          popovertarget="colors"
+          ?disabled=${this.disabled}
+        >
+          <span
+            class="selected-color"
+            style=${this.value ? `background: ${this.value}` : ""}
+          ></span>
+          <svg class="color-wheel-icon" viewBox="0 0 24 24" aria-hidden="true" width="20">
+            <foreignObject x="3" y="3" width="18" height="18">
+              <div
+                xmlns="http://www.w3.org/1999/xhtml"
+                style="width: 18px; height: 18px; border-radius: 50%; background: conic-gradient(#ff3b30, #ff9500, #ffcc00, #34c759, #00c7be, #007aff, #5856d6, #af52de, #ff2d55, #ff3b30);"
+              ></div>
+            </foreignObject>
+            <circle
+              cx="12"
+              cy="12"
+              r="9"
+              fill="none"
+              stroke="rgba(0, 0, 0, 0.18)"
+              stroke-width="1"
+            ></circle>
+          </svg>
+        </button>
+      </div>
+      <div id="colors" popover @toggle=${this.handlePopoverToggle}>
         <button
           class="unset"
           type="button"
@@ -69,24 +88,23 @@ class GroupStyleColor extends LitElement {
         composed: true,
       }),
     );
-    this.renderRoot.querySelector("[popover]")?.hidePopover();
+    this.closePopover();
   }
 }
 
 class GroupBackgroundColor extends GroupStyleColor {
-  label = "Background";
+  label = "Background Color";
   property = "backgroundColor";
-  fallback = "white";
-  previewBorder = () => "currentColor";
-  previewBackground = (color) => color;
 }
 
 class GroupBorderColor extends GroupStyleColor {
-  label = "Border";
+  label = "Border Color";
   property = "borderColor";
-  fallback = "black";
-  previewBorder = (color) => color;
-  previewBackground = () => "white";
+
+  constructor() {
+    super();
+    this.showLabel = false;
+  }
 }
 
 customElements.define("group-background-color", GroupBackgroundColor);

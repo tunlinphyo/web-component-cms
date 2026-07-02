@@ -1,20 +1,19 @@
 import { LitElement, html } from "lit";
 import { formatToggleStyles } from "./format-toggle.styles.js";
+import { sortListControlStyles } from "./sort-list-control.style.js";
 
 export class BlockGroupSort extends LitElement {
   static properties = {
-    hidden: { type: Boolean, reflect: true },
     disabled: { type: Boolean },
     items: { state: true },
     label: { type: String },
     draggingId: { state: true },
   };
 
-  static styles = formatToggleStyles;
+  static styles = [formatToggleStyles, sortListControlStyles];
 
   constructor() {
     super();
-    this.hidden = true;
     this.disabled = true;
     this.items = [];
     this.label = "items";
@@ -39,14 +38,30 @@ export class BlockGroupSort extends LitElement {
           stroke-width="2"
           aria-hidden="true"
         >
-          <path d="M8 7h12M4 7h.01M8 12h12M4 12h.01M8 17h12M4 17h.01" />
+          <path d="m3 16 4 4 4-4" />
+          <path d="M7 20V4" />
+          <path d="m21 8-4-4-4 4" />
+          <path d="M17 4v16" />
         </svg>
       </button>
       <dialog @close=${this.#resetDrag}>
         <form method="dialog">
           <header>
             <strong>Sort ${this.label}</strong>
-            <button type="submit" aria-label="Close">x</button>
+            <button type="submit" aria-label="Close">
+              <svg
+                viewBox="0 0 24 24"
+                width="16"
+                height="16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+              </svg>
+            </button>
           </header>
           <ol>
             ${this.items.map(
@@ -69,7 +84,9 @@ export class BlockGroupSort extends LitElement {
                     ?disabled=${index === 0}
                     @click=${() => this.#move(index, -1)}
                   >
-                    Up
+                    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                      <path d="m18 15-6-6-6 6" fill="none" stroke="currentColor" stroke-width="2" />
+                    </svg>
                   </button>
                   <button
                     type="button"
@@ -78,7 +95,9 @@ export class BlockGroupSort extends LitElement {
                     ?disabled=${index === this.items.length - 1}
                     @click=${() => this.#move(index, 1)}
                   >
-                    Down
+                    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                      <path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" />
+                    </svg>
                   </button>
                 </li>
               `,
@@ -90,7 +109,6 @@ export class BlockGroupSort extends LitElement {
   }
 
   setFormat(format) {
-    this.hidden = !format;
     this.disabled = !format || !format.canSort;
     this.items = format?.items ?? [];
     this.label = format?.label ?? "items";

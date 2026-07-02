@@ -1,16 +1,29 @@
 import { LitElement, html } from "lit";
 import { groupBaseStyles } from "./group-base.styles.js";
 import { getBlockSelector } from "../../../registries/block-registry.js";
+import { getListSelector } from "../../../registries/list-registry.js";
+import { FEATURES, parseFeatures } from "../../../registries/formatter-registry.js";
+
+export const GROUP_FEATURES = {
+  backgroundColor: FEATURES.backgroundColor,
+  border: FEATURES.border,
+  borderRadius: FEATURES.borderRadius,
+  blockGroup: "blockGroup",
+};
+
+const DEFAULT_GROUP_FEATURES = Object.values(GROUP_FEATURES);
 
 export class GroupBase extends LitElement {
   static properties = {
     groupId: { type: String, attribute: "group-id", reflect: true },
     groupType: { type: String, attribute: "group-type", reflect: true },
+    hashId: { type: String, attribute: "hash-id", reflect: true },
     sort: { type: Number, reflect: true },
     backgroundColor: { type: String, attribute: "background-color", reflect: true },
     borderWidth: { type: String, attribute: "border-width", reflect: true },
     borderColor: { type: String, attribute: "border-color", reflect: true },
     borderStyle: { type: String, attribute: "border-style", reflect: true },
+    borderPosition: { type: String, attribute: "border-position", reflect: true },
     borderRadius: { type: String, attribute: "border-radius", reflect: true },
   };
 
@@ -22,11 +35,13 @@ export class GroupBase extends LitElement {
     super();
     this.groupId = "";
     this.groupType = "";
+    this.hashId = "";
     this.sort = 0;
     this.backgroundColor = "";
     this.borderWidth = "";
     this.borderColor = "";
     this.borderStyle = "";
+    this.borderPosition = "";
     this.borderRadius = "";
   }
 
@@ -40,72 +55,122 @@ export class GroupBase extends LitElement {
     const groups = this.#getGroups();
 
     return html`
+      ${this.hashId ? html`<div class="hash-id-label" part="hash-id">#${this.hashId}</div>` : ""}
       <div class="sort-controls" part="sort-controls">
-        <button
-          type="button"
-          aria-label="Move group up"
-          title="Move group up"
-          ?disabled=${groups[0] === this}
-          @click=${() => this.#move(-1)}
-        >
-          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-            <path d="m18 15-6-6-6 6" fill="none" stroke="currentColor" stroke-width="2" />
-          </svg>
-        </button>
-        <button
-          type="button"
-          aria-label="Move group down"
-          title="Move group down"
-          ?disabled=${groups.at(-1) === this}
-          @click=${() => this.#move(1)}
-        >
-          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-            <path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" />
-          </svg>
-        </button>
-        <button
-          type="button"
-          aria-label="Add group below"
-          title="Add group below"
-          @click=${this.#requestGroupBelow}
-        >
-          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-            <path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" />
-          </svg>
-        </button>
-        <button
-          type="button"
-          aria-label="Delete group"
-          title="Delete group"
-          @click=${this.#requestDelete}
-        >
-          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-            <path
-              d="M4 7h16M10 11v6m4-6v6M9 7l1-3h4l1 3m3 0-1 13H7L6 7"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </button>
+        <div class="button-group">
+          <button
+            type="button"
+            aria-label="Move group up"
+            title="Move group up"
+            ?disabled=${groups[0] === this}
+            @click=${() => this.#requestMove(-1)}
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+              <path d="m18 15-6-6-6 6" fill="none" stroke="currentColor" stroke-width="2" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            aria-label="Move group down"
+            title="Move group down"
+            ?disabled=${groups.at(-1) === this}
+            @click=${() => this.#requestMove(1)}
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+              <path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            aria-label="Add group below"
+            title="Add group below"
+            @click=${this.#requestGroupBelow}
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+              <path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            aria-label="Set hash link"
+            title="Set hash link"
+            @click=${this.#openHashDialog}
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+              <path
+                d="M10 3 8 21M16 3l-2 18M4 9h16M3 15h16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+          </button>
+          <button
+            type="button"
+            aria-label="Delete group"
+            title="Delete group"
+            @click=${this.#requestDelete}
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+              <path
+                d="M4 7h16M10 11v6m4-6v6M9 7l1-3h4l1 3m3 0-1 13H7L6 7"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
+      <dialog class="hash-dialog" @click=${this.#closeHashDialogFromBackdrop}>
+        <form @submit=${this.#saveHashId}>
+          <h2>Set hash link</h2>
+          <label for="group-hash-id">Group ID</label>
+          <div class="hash-input">
+            <span aria-hidden="true">#</span>
+            <input
+              id="group-hash-id"
+              name="hashId"
+              type="text"
+              autocomplete="off"
+              placeholder="section-name"
+              .value=${this.hashId}
+            />
+          </div>
+          <menu>
+            <button type="button" @click=${this.#closeHashDialog}>Cancel</button>
+            <button type="submit">Save</button>
+          </menu>
+        </form>
+      </dialog>
     `;
   }
 
-  init({ blocks = [], style = {} } = {}) {
+  init({ blocks = [], style = {}, hashId = "" } = {}) {
+    this.hashId = normalizeHashId(hashId);
     this.backgroundColor = style.backgroundColor ?? "";
     this.borderWidth = style.borderWidth ?? "";
     this.borderColor = style.borderColor ?? "";
     this.borderStyle = style.borderStyle ?? "";
+    this.borderPosition = style.borderPosition ?? "";
     this.borderRadius = style.borderRadius ?? "";
 
     void this.updateComplete.then(() => {
       const blocksById = new Map(this.blocks.map((block) => [block.blockId, block]));
+      const listsById = new Map(
+        this.#getDataLists().map((list) => [list.getAttribute("block-id"), list]),
+      );
 
       for (const blockData of blocks) {
-        blocksById.get(blockData.id)?.init(blockData);
+        const list = listsById.get(blockData.id);
+        if (list) {
+          list.setBlockData?.(Array.isArray(blockData.children) ? blockData.children : []);
+        } else {
+          blocksById.get(blockData.id)?.init(blockData);
+        }
       }
     });
     return this;
@@ -127,20 +192,64 @@ export class GroupBase extends LitElement {
   }
 
   toJSON() {
+    const dataLists = new Set(this.#getDataLists());
+
     return {
       id: this.groupId,
       type: this.groupType || this.localName.replace(/-group$/, ""),
+      hashId: this.hashId,
       sort: this.sort,
-      style: this.getGroupFormat(),
-      blocks: this.blocks.map((block) => block.toJSON()),
+      style: this.getGroupStyle(),
+      blocks: this.#getDataBlocks().map((block) => {
+        if (!dataLists.has(block)) return block.toJSON();
+
+        return {
+          id: block.getAttribute("block-id"),
+          type: block.getAttribute("block-type") || block.getAttribute("block-id"),
+          children: block.blocks.map((item, sort) => ({
+            ...item.toJSON(),
+            sort,
+          })),
+        };
+      }),
     };
   }
 
+  #getDataLists() {
+    const selector = getListSelector();
+    if (!selector) return [];
+    return [...this.renderRoot.querySelectorAll(selector)].filter((list) =>
+      list.hasAttribute("block-id"),
+    );
+  }
+
+  #getDataBlocks() {
+    const listSelector = getListSelector();
+    const selector = [getBlockSelector(), listSelector].filter(Boolean).join(", ");
+    if (!selector) return [];
+
+    return [...this.renderRoot.querySelectorAll(selector)].filter((block) => {
+      if (listSelector && block.matches(listSelector)) {
+        return block.hasAttribute("block-id");
+      }
+
+      const list = listSelector ? block.closest(listSelector) : null;
+      return !list?.hasAttribute("block-id");
+    });
+  }
+
   setGroupStyle(property, value) {
+    if (!this.#canSetGroupStyle(property)) return false;
+
     if (
-      !["backgroundColor", "borderWidth", "borderColor", "borderStyle", "borderRadius"].includes(
-        property,
-      )
+      ![
+        "backgroundColor",
+        "borderWidth",
+        "borderColor",
+        "borderStyle",
+        "borderPosition",
+        "borderRadius",
+      ].includes(property)
     ) {
       return false;
     }
@@ -149,6 +258,11 @@ export class GroupBase extends LitElement {
     if (property === "borderColor" && !value) {
       this.borderWidth = "";
       this.borderStyle = "";
+    }
+    if (property === "borderStyle" && (!value || value === "none")) {
+      this.borderWidth = "";
+      this.borderColor = null;
+      this.borderPosition = "";
     }
     if (property === "borderWidth" && value && !this.borderStyle) this.borderStyle = "solid";
     if (property === "borderStyle" && value && value !== "none" && !this.borderWidth) {
@@ -160,26 +274,36 @@ export class GroupBase extends LitElement {
 
   getGroupFormat() {
     return {
+      ...this.getGroupStyle(),
+      capabilities: getGroupCapabilities(this.constructor.features),
+    };
+  }
+
+  getGroupStyle() {
+    return {
       backgroundColor: this.backgroundColor,
       borderWidth: this.borderWidth,
       borderColor: this.borderColor,
       borderStyle: this.borderStyle,
+      borderPosition: this.borderPosition,
       borderRadius: this.borderRadius,
     };
   }
 
-  #move(offset) {
-    const groups = this.#getGroups();
-    const index = groups.indexOf(this);
-    const adjacentGroup = groups[index + offset];
-    if (!adjacentGroup) return;
+  #canSetGroupStyle(property) {
+    const feature = getGroupStyleFeature(property);
+    if (!feature) return true;
 
-    const sort = this.sort;
-    this.sort = adjacentGroup.sort;
-    adjacentGroup.sort = sort;
+    return getGroupCapabilities(this.constructor.features)[feature] !== false;
+  }
 
-    groups.forEach((group) => group.requestUpdate());
-    this.#dispatchChange();
+  #requestMove(offset) {
+    this.dispatchEvent(
+      new CustomEvent("move-group-request", {
+        bubbles: true,
+        detail: { group: this, offset },
+      }),
+    );
   }
 
   #requestGroupBelow = () => {
@@ -200,15 +324,54 @@ export class GroupBase extends LitElement {
     );
   };
 
+  #openHashDialog = async () => {
+    await this.updateComplete;
+    const dialog = this.renderRoot.querySelector(".hash-dialog");
+    const input = dialog?.querySelector('input[name="hashId"]');
+    if (!dialog || !input) return;
+
+    input.value = this.hashId;
+    dialog.showModal();
+    input.focus();
+    input.select();
+  };
+
+  #closeHashDialog = () => {
+    this.renderRoot.querySelector(".hash-dialog")?.close();
+  };
+
+  #closeHashDialogFromBackdrop = (event) => {
+    if (event.target === event.currentTarget) this.#closeHashDialog();
+  };
+
+  #saveHashId = (event) => {
+    event.preventDefault();
+    this.hashId = normalizeHashId(event.currentTarget.elements.hashId.value);
+    this.#closeHashDialog();
+    this.dispatchEvent(
+      new CustomEvent("editor-change", {
+        bubbles: true,
+        composed: true,
+      }),
+    );
+  };
+
   #getGroups() {
-    return [...(this.parentElement?.children ?? [])]
-      .filter((element) => element instanceof GroupBase)
-      .sort((a, b) => a.sort - b.sort);
+    return [...(this.parentElement?.children ?? [])].filter(
+      (element) => element instanceof GroupBase,
+    );
   }
 
   updated(changedProperties) {
     if (changedProperties.has("sort")) {
-      this.style.order = this.sort;
+      this.style.removeProperty("order");
+    }
+    if (changedProperties.has("hashId")) {
+      if (this.hashId) {
+        this.id = this.hashId;
+      } else {
+        this.removeAttribute("id");
+      }
     }
     const groupBox = this.renderRoot.querySelector("[data-group-box]");
     if (!groupBox) return;
@@ -216,8 +379,8 @@ export class GroupBase extends LitElement {
     if (changedProperties.has("backgroundColor")) {
       groupBox.style.backgroundColor = this.backgroundColor;
     }
-    if (changedProperties.has("borderWidth")) {
-      groupBox.style.borderWidth = this.borderWidth;
+    if (changedProperties.has("borderWidth") || changedProperties.has("borderPosition")) {
+      groupBox.style.borderWidth = toBorderWidthValue(this.borderWidth, this.borderPosition);
     }
     if (changedProperties.has("borderColor")) {
       groupBox.style.borderColor = this.borderColor;
@@ -239,13 +402,40 @@ export class GroupBase extends LitElement {
       }),
     );
   }
+}
 
-  #dispatchChange() {
-    this.dispatchEvent(
-      new CustomEvent("editor-change", {
-        bubbles: true,
-        composed: true,
-      }),
-    );
+function normalizeHashId(value) {
+  return String(value ?? "")
+    .trim()
+    .replace(/^#+/, "")
+    .replace(/\s+/g, "-");
+}
+
+function toBorderWidthValue(width, position) {
+  if (!width || !position) return width;
+
+  const selected = new Set(String(position).split(/\s+/).filter(Boolean));
+  const positions = ["top", "right", "bottom", "left"];
+  if (!selected.size || positions.every((side) => selected.has(side))) return width;
+
+  return positions.map((side) => (selected.has(side) ? width : "0")).join(" ");
+}
+
+function getGroupCapabilities(features) {
+  const featureList = parseFeatures(features) ?? DEFAULT_GROUP_FEATURES;
+  const capabilities = {};
+
+  for (const feature of DEFAULT_GROUP_FEATURES) capabilities[feature] = false;
+  for (const feature of featureList) capabilities[feature] = true;
+
+  return capabilities;
+}
+
+function getGroupStyleFeature(property) {
+  if (property === "backgroundColor") return GROUP_FEATURES.backgroundColor;
+  if (["borderWidth", "borderColor", "borderStyle", "borderPosition"].includes(property)) {
+    return GROUP_FEATURES.border;
   }
+  if (property === "borderRadius") return GROUP_FEATURES.borderRadius;
+  return null;
 }

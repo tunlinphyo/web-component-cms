@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Migration baseline harness</title>
+  </head>
+  <body>
+    <rich-text-editor id="fixture-editor">
+      <group-order></group-order>
+    </rich-text-editor>
+    <rich-text-editor id="empty-editor">
+      <group-order></group-order>
+    </rich-text-editor>
+    <output id="result">pending</output>
+
+    <script type="module">
+      import "./src/features/index.js";
+      import "./src/editor/rich-text-editor.js";
+      import fixture from "./src/assets/data/migration-approved-groups.json";
+      import expected from "./src/assets/data/migration-approved-groups.expected.json";
+
+      const fixtureEditor = document.querySelector("#fixture-editor");
+      fixtureEditor.init(fixture);
+
+      const emptyEditor = document.querySelector("#empty-editor");
+      emptyEditor.init({ version: 1, groups: [] });
+      const emptyButton = emptyEditor.querySelector("[data-empty-group-picker]");
+      emptyButton?.click();
+
+      await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
+      const picker = emptyEditor.querySelector("[data-group-picker-dialog]");
+      const serialized = fixtureEditor.toJSON();
+      const groupList = await verifyGroupList(fixture);
+      const pickerOpened = Boolean(picker?.renderRoot?.querySelector("dialog")?.open);
+      const pickerSelection = verifyPickerSelection(picker);
+      const result = {
+        emptyPicker: {
+          buttonExists: Boolean(emptyButton),
+          pickerTag: picker?.localName ?? null,
+          isOpen: pickerOpened,
+        },
+        groupList,
+        pickerSelection,
+        serializedMatchesExpected: JSON.stringify(serialized) === JSON.stringify(expected),
+        serialized,
+      };
+
+      document.querySelector("#result").textContent = JSON.stringify(result);
+      document.documentElement.dataset.baselineReady = "true";
+
+      function verifyPickerSelection(pickerElement) {
+        let selectedType = null;
+        pickerElement.addEventListener(
+          "group-select",
+          (event) => {
+            selectedType = event.detail.type;
+          },
+          { once: true },
+        );
+
+        const input = pickerElement.renderRoot.querySelector('input[name="groupType"]');
+        input.checked = true;
+        input.dispatchEvent(new Event("change"));
+        pickerElement.renderRoot.querySelector("form").requestSubmit();
+
+        return {
+          selectedType,
+          closed: !pickerElement.renderRoot.querySelector("dialog").open,
+        };
+      }
+
+      async function verifyGroupList(pageFixture) {
+        const sourceItem = pageFixture.groups
+          .find((group) => group.type === "home-news")
+          .blocks.find((block) => block.id === "news").children[0];
+        const list = document.createElement("news-list-group");
+        list.setAttribute("min", "0");
+        list.setAttribute("max", "3");
+        list.setAttribute("prefix", "step-one");
+        document.body.append(list);
+
+        let changeEvents = 0;
+        list.addEventListener("block-group-change", () => {
+          changeEvents += 1;
+        });
+
+        list.setBlockData([
+          structuredClone(sourceItem),
+          { ...structuredClone(sourceItem), sort: 1 },
+          { ...structuredClone(sourceItem), sort: 2 },
+        ]);
+
+        const loadedIds = list.blocks.map((item) => item.groupId);
+        const loadedUniqueIds = new Set(loadedIds).size === loadedIds.length;
+        const maxEnforced = list.addBlock() === null && list.blocks.length === 3;
+
+        const deletedNext = list.deleteBlock(list.blocks[0]);
+        const deleteWorked = Boolean(deletedNext) && list.blocks.length === 2;
+        const added = list.addBlock(list.blocks[0]);
+        const addWorked =
+          Boolean(added) &&
+          list.blocks.length === 3 &&
+          new Set(list.blocks.map((item) => item.groupId)).size === 3;
+
+        const reversedIds = list.blocks.map((item) => item.groupId).reverse();
+        const reorderWorked =
+          list.reorderBlocks(reversedIds, added) &&
+          list.blocks.map((item) => item.groupId).join() === reversedIds.join();
+
+        list.setAttribute("min", "2");
+        list.deleteBlock(list.blocks[0]);
+        const minEnforced = list.blocks.length === 2 && list.deleteBlock(list.blocks[0]) === null;
+
+        const firstDefaults = list.createItemData("first");
+        const secondDefaults = list.createItemData("second");
+        firstDefaults.blocks[0].value = "changed";
+        const defaultsAreIsolated = secondDefaults.blocks[0].value !== "changed";
+
+        const emptyList = document.createElement("news-list-group");
+        emptyList.setAttribute("min", "0");
+        emptyList.setAttribute("max", "2");
+        document.body.append(emptyList);
+        const placeholder = emptyList.querySelector(".empty-placeholder");
+        placeholder?.click();
+        const placeholderAdds = Boolean(placeholder) && emptyList.blocks.length === 1;
+
+        await Promise.all(
+          [...list.blocks, ...emptyList.blocks].map(
+            (item) => item.updateComplete ?? Promise.resolve(),
+          ),
+        );
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        const savedItems = list.blocks.map((item, sort) => ({
+          ...item.toJSON(),
+          sort,
+        }));
+        const saveWorked =
+          savedItems.length === 2 &&
+          savedItems.every(
+            (item, sort) =>
+              item.type === "news" && item.sort === sort && Array.isArray(item.blocks),
+          );
+
+        list.remove();
+        emptyList.remove();
+
+        return {
+          loadWorked: loadedIds.length === 3,
+          loadedUniqueIds,
+          maxEnforced,
+          deleteWorked,
+          addWorked,
+          reorderWorked,
+          minEnforced,
+          defaultsAreIsolated,
+          placeholderAdds,
+          changeEvents: changeEvents >= 3,
+          saveWorked,
+        };
+      }
+    </script>
+  </body>
+</html>

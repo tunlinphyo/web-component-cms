@@ -4,6 +4,8 @@ export const groupBaseStyles = css`
   :host {
     display: block;
     padding: 0;
+    color: var(--brand-900);
+    position: relative;
   }
 
   [data-group-box] {
@@ -15,19 +17,45 @@ export const groupBaseStyles = css`
     outline-offset: 2px;
   }
 
+  .hash-id-label {
+    position: absolute;
+    z-index: 5;
+    top: 0;
+    left: 0;
+    width: fit-content;
+    margin: 0;
+    padding: 0.25rem 0.75rem;
+    color: var(--gray-900);
+    font-size: 1.25rem;
+    font-weight: 600;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
   .sort-controls {
     display: flex;
     justify-content: center;
-    gap: 0.25rem;
-    padding: 0.5rem;
-    background-color: #efefef;
+    translate: 0 -50%;
+    pointer-events: none;
     /* opacity: 0;
       pointer-events: none; */
   }
 
-  button {
-    width: 2.5rem;
-    height: 2.5rem;
+  .button-group {
+    pointer-events: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem;
+    background-color: oklch(from var(--gray-300) l c h / 0.5);
+    backdrop-filter: blur(3px);
+    border-radius: 100vh;
+  }
+
+  .button-group button {
+    width: 2rem;
+    height: 2rem;
     display: grid;
     place-content: center;
     border-radius: 50%;
@@ -36,9 +64,91 @@ export const groupBaseStyles = css`
     background-color: Canvas;
   }
 
-  button:not(:disabled):is(:hover, :focus-visible) {
+  .button-group button:not(:disabled):is(:hover, :focus-visible) {
     outline: 2px solid var(--highlight);
     outline-offset: 0;
+  }
+
+  .hash-dialog {
+    width: min(28rem, calc(100vw - 2rem));
+    padding: 0;
+    border: 1px solid var(--gray-200);
+    border-radius: 0.75rem;
+    color: inherit;
+  }
+
+  .hash-dialog::backdrop {
+    background: rgb(0 0 0 / 0.35);
+  }
+
+  .hash-dialog form {
+    display: grid;
+    gap: 1rem;
+    padding: 1.25rem;
+  }
+
+  .hash-dialog h2 {
+    margin: 0;
+    font-size: 1.125rem;
+  }
+
+  .hash-dialog label {
+    font-weight: 600;
+  }
+
+  .hash-input {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.25rem;
+    padding-inline: 0.75rem;
+    border: 1px solid var(--gray-300);
+    border-radius: 0.5rem;
+  }
+
+  .hash-input input {
+    min-width: 0;
+    padding: 0.5rem 0;
+    border: 0;
+    outline: 0;
+  }
+
+  .hash-dialog menu {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .hash-dialog menu button {
+    padding: 0.35rem 0.75rem;
+    border: 0;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    background: var(--gray-100);
+    color: inherit;
+    font-size: 0.9rem;
+  }
+
+  .hash-dialog menu button:not(:disabled):is(:hover, :focus-visible) {
+    background: var(--gray-200);
+    outline: 2px solid var(--highlight);
+    outline-offset: 0;
+  }
+
+  .hash-dialog button[type="submit"] {
+    background: var(--brand-600);
+    color: white;
+  }
+
+  .hash-dialog button[type="submit"]:hover:not(:disabled) {
+    background: var(--brand-700);
+  }
+
+  .hash-dialog button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
   }
 
   /* :host(:hover) .sort-controls,

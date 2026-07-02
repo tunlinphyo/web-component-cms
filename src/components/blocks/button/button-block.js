@@ -2,7 +2,6 @@ import { LitElement, html } from "lit";
 import { buttonBlockStyles } from "./button-block.styles.js";
 import { ICONS } from "../icons.js";
 import {
-  featureData,
   getCapabilities,
   toFeatureAttribute,
 } from "../../../registries/formatter-registry.js";
@@ -36,21 +35,22 @@ export class ButtonBlock extends LitElement {
     this.target = "_self";
     this.align = "left";
     this.disabled = false;
-    this.features = "";
+    this.features = undefined;
   }
 
-  init({
-    id = "",
-    text = "",
-    design = "primary",
-    icon = "",
-    iconPosition = icon ? "start" : "none",
-    link = "",
-    target = "_self",
-    align = "left",
-    disabled = false,
-    features = this.features,
-  } = {}) {
+  init(options = {}) {
+    const {
+      id = "",
+      text = "",
+      design = "primary",
+      icon = "",
+      iconPosition = icon ? "start" : "none",
+      link = "",
+      target = "_self",
+      align = "left",
+      disabled = false,
+    } = options;
+
     this.blockId = id;
     this.text = text;
     this.design = design;
@@ -60,7 +60,9 @@ export class ButtonBlock extends LitElement {
     this.target = target || "_self";
     this.align = align;
     this.disabled = disabled;
-    this.features = toFeatureAttribute(features);
+    if (Object.hasOwn(options, "features")) {
+      this.features = toFeatureAttribute(options.features);
+    }
     return this;
   }
 
@@ -77,7 +79,6 @@ export class ButtonBlock extends LitElement {
       align: this.align,
       disabled: this.disabled,
       type: "button",
-      ...featureData(this.features),
     };
   }
 
@@ -203,7 +204,9 @@ export class ButtonBlock extends LitElement {
   };
 
   #input = (event) => {
-    this.text = event.currentTarget.textContent ?? "";
+    const text = event.currentTarget.textContent ?? "";
+    this.text = text.trim() ? text : "";
+    if (!this.text) event.currentTarget.replaceChildren();
   };
 
   #keydown = (event) => {

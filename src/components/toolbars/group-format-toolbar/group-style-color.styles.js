@@ -7,9 +7,16 @@ export const groupStyleColorStyles = css`
     font-size: 0.75rem;
   }
 
+  .label-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
   button {
-    width: 32px;
-    height: 32px;
+    width: auto;
+    height: 26px;
     border: none;
     border-radius: 4px;
     background: white;
@@ -24,16 +31,35 @@ export const groupStyleColorStyles = css`
   .trigger {
     anchor-name: --group-color-trigger;
     display: grid;
+    grid-template-columns: 42px auto;
+    border: 1px solid var(--gray-200);
     place-content: center;
+    padding: 0;
+    overflow: hidden;
+    border-radius: 8px;
+  }
+
+  .selected-color {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-right: 1px solid var(--gray-200);
   }
 
   .preview {
     box-sizing: border-box;
     width: 18px;
     height: 18px;
-    border: 3px solid var(--preview-color);
+    border: 2px solid var(--preview-color);
     border-radius: 3px;
     background: var(--preview-background);
+  }
+
+  .color-wheel-icon {
+    display: block;
+    width: 24px;
+    height: 24px;
+    flex: 0 0 auto;
   }
 
   [popover] {

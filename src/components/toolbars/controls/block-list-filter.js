@@ -1,5 +1,6 @@
-import { LitElement, html } from "lit";
+import { LitElement, css, html } from "lit";
 import { formatToggleStyles } from "./format-toggle.styles.js";
+import "./sort-list-control.js";
 
 export class BlockGroupFilter extends LitElement {
   static properties = {
@@ -12,7 +13,17 @@ export class BlockGroupFilter extends LitElement {
     max: { type: Number },
   };
 
-  static styles = formatToggleStyles;
+  static styles = [
+    formatToggleStyles,
+    css`
+      :host {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 0.5rem;
+      }
+    `,
+  ];
 
   constructor() {
     super();
@@ -56,10 +67,17 @@ export class BlockGroupFilter extends LitElement {
           />
         </svg>
       </button>
+      <block-group-sort></block-group-sort>
     `;
   }
 
+  updated() {
+    this.renderRoot.querySelector("block-group-sort")?.setFormat(this.#format);
+  }
+
   setFormat(format) {
+    this.#format = format;
+    this.renderRoot.querySelector("block-group-sort")?.setFormat(format);
     this.hidden = !format;
     this.disabled = !format;
     this.canAdd = Boolean(format?.canAdd);
@@ -78,6 +96,8 @@ export class BlockGroupFilter extends LitElement {
       }),
     );
   }
+
+  #format = null;
 }
 
 customElements.define("block-group-filter", BlockGroupFilter);

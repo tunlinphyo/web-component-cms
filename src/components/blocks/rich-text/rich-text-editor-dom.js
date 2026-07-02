@@ -17,10 +17,10 @@ export function initializeEditor(
   { value, type, placeholder, textAlign, fontWeight, fontSize, fontFamily },
 ) {
   if (type === "p") {
-    editor.innerHTML = value || "<p></p>";
+    editor.innerHTML = isEmptyHtml(value) ? "<p></p>" : value;
     updateEditorPlaceholder(editor, placeholder);
   } else {
-    editor.innerHTML = value || "";
+    editor.innerHTML = isEmptyHtml(value) ? "" : value;
     editor.style.removeProperty("--placeholder");
   }
 
@@ -73,24 +73,72 @@ export function normalizeEditorParagraphs(editor, type) {
 export function normalizeEditorInput(editor, type) {
   const html = editor.innerHTML;
   if (isEmptyHtml(html)) {
-    editor.innerHTML = "";
-    return;
+    if (type !== "p") return false;
+
+    const existingParagraph =
+      editor.childElementCount === 1 && editor.firstElementChild?.tagName === "P"
+        ? editor.firstElementChild
+        : null;
+    const paragraph = existingParagraph ?? document.createElement("p");
+    paragraph.replaceChildren();
+    if (!existingParagraph) editor.replaceChildren(paragraph);
+
+    const selection = editor.getRootNode().getSelection?.() ?? document.getSelection();
+    if (selection) {
+      const range = document.createRange();
+      range.setStart(paragraph, 0);
+      range.collapse(true);
+      selectRange(selection, range);
+    }
+    return true;
   }
 
   const normalizedValue = normalizeParagraphs(html, type);
-  if (normalizedValue === html) return;
+  if (normalizedValue === html) return false;
 
-  const selection = document.getSelection();
-  editor.innerHTML = normalizedValue;
-  if (selection?.rangeCount) selectRange(selection, selection.getRangeAt(0).cloneRange());
+  const selection = editor.getRootNode().getSelection?.() ?? document.getSelection();
+  const range = selection?.rangeCount ? selection.getRangeAt(0) : null;
+  if (!range || !editor.contains(range.commonAncestorContainer)) {
+    editor.innerHTML = normalizedValue;
+    return true;
+  }
+
+  const marker = document.createElement("span");
+  marker.setAttribute("data-editor-caret", "");
+
+  const caretRange = range.cloneRange();
+  caretRange.collapse(false);
+  caretRange.insertNode(marker);
+
+  editor.innerHTML = normalizeParagraphs(editor.innerHTML, type);
+
+  const restoredMarker = editor.querySelector("[data-editor-caret]");
+  if (!restoredMarker || !selection) return true;
+
+  const restoredRange = document.createRange();
+  restoredRange.setStartBefore(restoredMarker);
+  restoredRange.collapse(true);
+  restoredMarker.remove();
+  selectRange(selection, restoredRange);
+  return true;
 }
 
 export function placeCaretInEmptyEditor(editor, selection) {
-  if (!editor || editor.textContent.trim() !== "") return false;
+  if (!editor || !selection || editor.textContent.trim() !== "") return false;
 
   const range = document.createRange();
-  range.selectNodeContents(editor);
-  range.collapse(false);
+  const paragraph =
+    editor.childElementCount === 1 && editor.firstElementChild?.tagName === "P"
+      ? editor.firstElementChild
+      : null;
+
+  if (paragraph) range.setStart(paragraph, 0);
+  else {
+    range.selectNodeContents(editor);
+    range.collapse(false);
+  }
+
+  range.collapse(true);
   selectRange(selection, range);
   return true;
 }
@@ -100,5 +148,5 @@ function applyEditorPresentation(editor, { type, textAlign, fontWeight, fontSize
   editor.style.fontWeight = fontWeight;
   editor.style.fontSize = type === "p" ? "" : fontSize;
   editor.style.fontFamily =
-    fontFamily || (type === "p" ? "var(--font-zen)" : "var(--font-heading)");
+    fontFamily || (type === "p" ? "var(--font-body)" : "var(--font-heading)");
 }

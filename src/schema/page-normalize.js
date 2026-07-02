@@ -22,6 +22,7 @@ function normalizeGroup(group = {}) {
 
   return {
     ...group,
+    hashId: group.hashId ?? "",
     sort: group.sort ?? 0,
     style: createDefaultGroupStyle(group.style),
     blocks: blocks.map(normalizeBlock),

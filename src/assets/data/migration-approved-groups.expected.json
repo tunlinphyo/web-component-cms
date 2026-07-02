@@ -1,0 +1,537 @@
+{
+  "version": 1,
+  "groups": [
+    {
+      "id": "baseline-about",
+      "type": "about",
+      "hashId": "",
+      "sort": 0,
+      "style": {
+        "backgroundColor": "",
+        "borderWidth": "",
+        "borderColor": "",
+        "borderStyle": "",
+        "borderPosition": "",
+        "borderRadius": ""
+      },
+      "blocks": [
+        {
+          "id": "icon",
+          "icon": "plus",
+          "fontSize": "",
+          "color": "",
+          "backgroundColor": "",
+          "link": "",
+          "align": "left",
+          "type": "icon"
+        },
+        {
+          "id": "title",
+          "value": "About title",
+          "textAlign": "left",
+          "fontWeight": "",
+          "fontSize": "",
+          "fontFamily": "var(--font-heading)",
+          "predefinedMargin": "0.5rem",
+          "type": "h2"
+        },
+        {
+          "id": "description",
+          "value": "<p>About description</p>",
+          "textAlign": "left",
+          "fontWeight": "",
+          "fontSize": "",
+          "fontFamily": "var(--font-body)",
+          "predefinedMargin": "0.5rem",
+          "type": "p"
+        }
+      ]
+    },
+    {
+      "id": "baseline-footer",
+      "type": "footer",
+      "hashId": "",
+      "sort": 1,
+      "style": {
+        "backgroundColor": "",
+        "borderWidth": "",
+        "borderColor": "",
+        "borderStyle": "",
+        "borderPosition": "",
+        "borderRadius": ""
+      },
+      "blocks": [
+        {
+          "id": "logo",
+          "src": "",
+          "alt": "Primary logo",
+          "maxWidth": "100%",
+          "objectFit": "contain",
+          "align": "left",
+          "link": "",
+          "target": "_self",
+          "backgroundColor": "",
+          "borderWidth": "",
+          "borderColor": "",
+          "borderStyle": "",
+          "borderPosition": "",
+          "borderRadius": "",
+          "disabled": false,
+          "type": "image"
+        },
+        {
+          "id": "logo2",
+          "src": "",
+          "alt": "Secondary logo",
+          "maxWidth": "100%",
+          "objectFit": "contain",
+          "align": "left",
+          "link": "",
+          "target": "_self",
+          "backgroundColor": "",
+          "borderWidth": "",
+          "borderColor": "",
+          "borderStyle": "",
+          "borderPosition": "",
+          "borderRadius": "",
+          "disabled": false,
+          "type": "image"
+        },
+        {
+          "id": "logo3",
+          "src": "",
+          "alt": "Tertiary logo",
+          "maxWidth": "100%",
+          "objectFit": "contain",
+          "align": "left",
+          "link": "",
+          "target": "_self",
+          "backgroundColor": "",
+          "borderWidth": "",
+          "borderColor": "",
+          "borderStyle": "",
+          "borderPosition": "",
+          "borderRadius": "",
+          "disabled": false,
+          "type": "image"
+        },
+        {
+          "id": "copyright",
+          "value": "<p>Baseline copyright</p>",
+          "textAlign": "left",
+          "fontWeight": "",
+          "fontSize": "",
+          "fontFamily": "var(--font-body)",
+          "predefinedMargin": "0",
+          "type": "p"
+        }
+      ]
+    },
+    {
+      "id": "baseline-header",
+      "type": "header",
+      "hashId": "",
+      "sort": 2,
+      "style": {
+        "backgroundColor": "",
+        "borderWidth": "",
+        "borderColor": "",
+        "borderStyle": "",
+        "borderPosition": "",
+        "borderRadius": ""
+      },
+      "blocks": [
+        {
+          "id": "title",
+          "value": "<p>Header title</p>",
+          "textAlign": "left",
+          "fontWeight": "",
+          "fontSize": "",
+          "fontFamily": "var(--font-body)",
+          "predefinedMargin": "0",
+          "type": "p"
+        },
+        {
+          "id": "logo",
+          "src": "",
+          "alt": "Header logo",
+          "maxWidth": "100%",
+          "objectFit": "none",
+          "align": "left",
+          "link": "",
+          "target": "_self",
+          "backgroundColor": "",
+          "borderWidth": "",
+          "borderColor": "",
+          "borderStyle": "",
+          "borderPosition": "",
+          "borderRadius": "",
+          "disabled": false,
+          "type": "image"
+        },
+        {
+          "id": "navs",
+          "type": "navs",
+          "children": [
+            {
+              "id": "baseline-nav-1",
+              "text": "First navigation",
+              "design": "nav",
+              "icon": "",
+              "iconPosition": "none",
+              "link": "#first",
+              "target": "_self",
+              "tag": "a",
+              "align": "left",
+              "disabled": false,
+              "type": "button",
+              "sort": 0
+            },
+            {
+              "id": "baseline-nav-2",
+              "text": "Second navigation",
+              "design": "nav",
+              "icon": "",
+              "iconPosition": "none",
+              "link": "#second",
+              "target": "_self",
+              "tag": "a",
+              "align": "left",
+              "disabled": false,
+              "type": "button",
+              "sort": 1
+            }
+          ]
+        },
+        {
+          "id": "button",
+          "text": "Header action",
+          "design": "primary",
+          "icon": "",
+          "iconPosition": "none",
+          "link": "#action",
+          "target": "_self",
+          "tag": "a",
+          "align": "left",
+          "disabled": false,
+          "type": "button"
+        }
+      ]
+    },
+    {
+      "id": "baseline-hero",
+      "type": "hero",
+      "hashId": "",
+      "sort": 3,
+      "style": {
+        "backgroundColor": "",
+        "borderWidth": "",
+        "borderColor": "",
+        "borderStyle": "",
+        "borderPosition": "",
+        "borderRadius": ""
+      },
+      "blocks": [
+        {
+          "id": "image",
+          "src": "",
+          "alt": "Hero image",
+          "maxWidth": "100%",
+          "objectFit": "none",
+          "align": "left",
+          "link": "",
+          "target": "_self",
+          "backgroundColor": "",
+          "borderWidth": "",
+          "borderColor": "",
+          "borderStyle": "",
+          "borderPosition": "",
+          "borderRadius": "",
+          "disabled": false,
+          "type": "image"
+        },
+        {
+          "id": "title",
+          "value": "Hero title",
+          "textAlign": "left",
+          "fontWeight": "",
+          "fontSize": "",
+          "fontFamily": "var(--font-heading)",
+          "predefinedMargin": "0.5rem",
+          "type": "h1"
+        },
+        {
+          "id": "description",
+          "value": "<p>Hero description</p>",
+          "textAlign": "left",
+          "fontWeight": "",
+          "fontSize": "",
+          "fontFamily": "var(--font-body)",
+          "predefinedMargin": "0.5rem",
+          "type": "p"
+        }
+      ]
+    },
+    {
+      "id": "baseline-home-news",
+      "type": "home-news",
+      "hashId": "",
+      "sort": 4,
+      "style": {
+        "backgroundColor": "",
+        "borderWidth": "",
+        "borderColor": "",
+        "borderStyle": "",
+        "borderPosition": "",
+        "borderRadius": ""
+      },
+      "blocks": [
+        {
+          "id": "title",
+          "value": "Latest news",
+          "textAlign": "left",
+          "fontWeight": "",
+          "fontSize": "",
+          "fontFamily": "var(--font-heading)",
+          "predefinedMargin": "0",
+          "type": "h2"
+        },
+        {
+          "id": "news",
+          "type": "news",
+          "children": [
+            {
+              "id": "baseline-news-item-1",
+              "type": "news",
+              "hashId": "",
+              "sort": 0,
+              "style": {
+                "backgroundColor": "",
+                "borderWidth": "1px",
+                "borderColor": "#F2ADC0",
+                "borderStyle": "solid",
+                "borderPosition": "",
+                "borderRadius": "16px"
+              },
+              "blocks": [
+                {
+                  "id": "date",
+                  "value": "2026-07-02",
+                  "textAlign": "left",
+                  "fontWeight": "",
+                  "fontSize": "",
+                  "fontFamily": "var(--font-heading)",
+                  "predefinedMargin": "0.5rem",
+                  "type": "h2"
+                },
+                {
+                  "id": "title",
+                  "value": "Nested news title",
+                  "textAlign": "left",
+                  "fontWeight": "",
+                  "fontSize": "",
+                  "fontFamily": "var(--font-heading)",
+                  "predefinedMargin": "0.5rem",
+                  "type": "h2"
+                },
+                {
+                  "id": "description",
+                  "value": "<p>Nested news description</p>",
+                  "textAlign": "left",
+                  "fontWeight": "",
+                  "fontSize": "",
+                  "fontFamily": "var(--font-body)",
+                  "predefinedMargin": "0.5rem",
+                  "type": "p"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "baseline-image",
+      "type": "image",
+      "hashId": "",
+      "sort": 5,
+      "style": {
+        "backgroundColor": "",
+        "borderWidth": "",
+        "borderColor": "",
+        "borderStyle": "",
+        "borderPosition": "",
+        "borderRadius": ""
+      },
+      "blocks": [
+        {
+          "id": "image",
+          "src": "",
+          "alt": "Standalone image",
+          "maxWidth": "100%",
+          "objectFit": "none",
+          "align": "left",
+          "link": "",
+          "target": "_self",
+          "backgroundColor": "",
+          "borderWidth": "",
+          "borderColor": "",
+          "borderStyle": "",
+          "borderPosition": "",
+          "borderRadius": "",
+          "disabled": false,
+          "type": "image"
+        }
+      ]
+    },
+    {
+      "id": "baseline-news",
+      "type": "news",
+      "hashId": "",
+      "sort": 6,
+      "style": {
+        "backgroundColor": "",
+        "borderWidth": "1px",
+        "borderColor": "#F2ADC0",
+        "borderStyle": "solid",
+        "borderPosition": "",
+        "borderRadius": "16px"
+      },
+      "blocks": [
+        {
+          "id": "date",
+          "value": "2026-07-02",
+          "textAlign": "left",
+          "fontWeight": "",
+          "fontSize": "",
+          "fontFamily": "var(--font-heading)",
+          "predefinedMargin": "0.5rem",
+          "type": "h2"
+        },
+        {
+          "id": "title",
+          "value": "Top-level news title",
+          "textAlign": "left",
+          "fontWeight": "",
+          "fontSize": "",
+          "fontFamily": "var(--font-heading)",
+          "predefinedMargin": "0.5rem",
+          "type": "h2"
+        },
+        {
+          "id": "description",
+          "value": "<p>Top-level news description</p>",
+          "textAlign": "left",
+          "fontWeight": "",
+          "fontSize": "",
+          "fontFamily": "var(--font-body)",
+          "predefinedMargin": "0.5rem",
+          "type": "p"
+        }
+      ]
+    },
+    {
+      "id": "baseline-paragraph",
+      "type": "paragraph",
+      "hashId": "",
+      "sort": 7,
+      "style": {
+        "backgroundColor": "",
+        "borderWidth": "",
+        "borderColor": "",
+        "borderStyle": "",
+        "borderPosition": "",
+        "borderRadius": ""
+      },
+      "blocks": [
+        {
+          "id": "paragraph",
+          "value": "<p>Baseline paragraph</p>",
+          "textAlign": "left",
+          "fontWeight": "",
+          "fontSize": "",
+          "fontFamily": "var(--font-body)",
+          "predefinedMargin": "0.5rem",
+          "type": "p"
+        }
+      ]
+    },
+    {
+      "id": "baseline-table",
+      "type": "table",
+      "hashId": "",
+      "sort": 8,
+      "style": {
+        "backgroundColor": "",
+        "borderWidth": "",
+        "borderColor": "",
+        "borderStyle": "",
+        "borderPosition": "",
+        "borderRadius": ""
+      },
+      "blocks": [
+        {
+          "id": "title",
+          "value": "Table title",
+          "textAlign": "left",
+          "fontWeight": "",
+          "fontSize": "",
+          "fontFamily": "var(--font-heading)",
+          "predefinedMargin": "0",
+          "type": "h2"
+        },
+        {
+          "id": "description",
+          "value": "<p>Table description</p>",
+          "textAlign": "left",
+          "fontWeight": "",
+          "fontSize": "",
+          "fontFamily": "var(--font-body)",
+          "predefinedMargin": "0.5rem",
+          "type": "p"
+        },
+        {
+          "id": "table",
+          "type": "table",
+          "cells": [
+            [
+              {
+                "value": "<p>Name</p>",
+                "textAlign": "left",
+                "fontWeight": "",
+                "fontSize": "",
+                "fontFamily": "var(--font-body)"
+              },
+              {
+                "value": "<p>Value</p>",
+                "textAlign": "left",
+                "fontWeight": "",
+                "fontSize": "",
+                "fontFamily": "var(--font-body)"
+              }
+            ],
+            [
+              {
+                "value": "<p>Baseline</p>",
+                "textAlign": "left",
+                "fontWeight": "",
+                "fontSize": "",
+                "fontFamily": "var(--font-body)"
+              },
+              {
+                "value": "<p>1</p>",
+                "textAlign": "left",
+                "fontWeight": "",
+                "fontSize": "",
+                "fontFamily": "var(--font-body)"
+              }
+            ]
+          ],
+          "headerRow": true,
+          "headerColumn": false,
+          "disabled": false
+        }
+      ]
+    }
+  ]
+}

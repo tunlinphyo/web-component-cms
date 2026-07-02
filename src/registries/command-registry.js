@@ -23,6 +23,8 @@ export function listCommandDefinitions() {
 
 function getBlockStyleFeature(property) {
   if (property === "backgroundColor") return FEATURES.backgroundColor;
-  if (["borderWidth", "borderColor", "borderStyle"].includes(property)) return FEATURES.border;
+  if (["borderWidth", "borderColor", "borderStyle", "borderPosition"].includes(property)) {
+    return FEATURES.border;
+  }
   return getCommandDefinition("blockStyle")?.feature ?? null;
 }

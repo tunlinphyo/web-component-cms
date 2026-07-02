@@ -87,36 +87,36 @@ export const buttonBlockStyles = css`
   }
 
   :host([design="primary"]) .button {
-    background: var(--brand);
+    background: var(--brand-500);
     color: white;
   }
 
   :host([design="dark"]) .button {
-    background: var(--brand-dark);
+    background: var(--brand-600);
     color: white;
   }
 
   :host([design="outline"]) .button {
-    border-color: var(--brand);
+    border-color: var(--brand-500);
     background: transparent;
-    color: var(--brand);
+    color: var(--brand-500);
   }
 
   :host([design="soft"]) .button {
-    background: var(--brand-pale);
-    color: var(--brand-dark);
+    background: var(--brand-50);
+    color: var(--brand-500);
   }
 
   :host([design="nav"]) .button {
     background: transparent;
-    color: var(--text-ink);
+    color: var(--brand-900);
     padding-inline: 0.5rem;
 
     .icon-picker-trigger {
       width: 2rem;
       height: 2rem;
-      background-color: var(--text-brand);
-      color: #fff;
+      background-color: var(--brand-500);
+      color: var(--white);
 
       svg {
         width: 20px;
@@ -127,7 +127,8 @@ export const buttonBlockStyles = css`
 
   :host([disabled]) .button {
     cursor: not-allowed;
-    opacity: 0.6;
+    background-color: var(--gray-400);
+    color: var(--gray-100);
   }
 
   button {

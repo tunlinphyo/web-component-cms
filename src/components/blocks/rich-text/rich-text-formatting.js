@@ -31,6 +31,8 @@ export function applySelectionCommand({
     toggleInlineCommand(command, value, editor, range, selection);
   } else if (command === "linkEdit") {
     if (!prepareLinkSelection(editor, range, selection)) return { range, shouldNotify: false };
+  } else if (command === "linkTarget") {
+    applyLinkTarget(value, editor, range, selection);
   } else if (command === "fontSize") {
     if (type === "p") {
       applyFontSize(value, editor, range, selection);
@@ -83,6 +85,7 @@ export function describeSelectionFormat({ editor, type, textAlign, range, select
       highlightStyles?.getPropertyValue("--yellow-200").trim() ||
       "",
     link: findSelectedAncestor("a")?.getAttribute("href") ?? "",
+    target: findSelectedAncestor("a")?.getAttribute("target") ?? "_self",
     color: document.queryCommandValue("foreColor"),
     colorApplied: Boolean(findSelectedAncestor("font[color], [style*='color']")),
   };
@@ -105,24 +108,38 @@ function applyBlockFontSize(value, editor, onFontSizeChange) {
 function applyFontSize(value, editor, range, selection) {
   if (range.collapsed) return;
 
-  const fontSizeElement = getSelectedAncestor(editor, range, "[style*='font-size']");
+  const fontSizeElement = getOutermostSelectedAncestor(editor, range, "[style*='font-size']");
   const selectionWithinFontSize = fontSizeElement?.contains(range.endContainer);
   const fragment = range.extractContents();
   removeFontSize(fragment);
 
-  if (value) {
+  if (selectionWithinFontSize) {
+    insertWithFontSize(fontSizeElement, fragment, range, value);
+  } else if (value) {
     const element = document.createElement("span");
     element.style.fontSize = value;
     element.append(fragment);
     range.insertNode(element);
     range.selectNodeContents(element);
-  } else if (selectionWithinFontSize) {
-    insertWithoutAncestorFontSize(fontSizeElement, fragment, range);
   } else {
     insertAndSelectFragment(fragment, range);
   }
 
   selectRange(selection, range);
+}
+
+function getOutermostSelectedAncestor(editor, range, selector) {
+  let selectedElement = getSelectedAncestor(editor, range, selector);
+  let ancestor = selectedElement?.parentElement;
+
+  while (ancestor && ancestor !== editor) {
+    if (ancestor.matches(selector) && ancestor.contains(range.endContainer)) {
+      selectedElement = ancestor;
+    }
+    ancestor = ancestor.parentElement;
+  }
+
+  return selectedElement;
 }
 
 function applyTextColor(value, editor, range, selection) {
@@ -168,7 +185,7 @@ function removeTextColor(fragment) {
   }
 }
 
-function insertWithoutAncestorFontSize(fontSizeElement, fragment, range) {
+function insertWithFontSize(fontSizeElement, fragment, range, value) {
   const afterRange = document.createRange();
   afterRange.setStart(range.startContainer, range.startOffset);
   afterRange.setEnd(fontSizeElement, fontSizeElement.childNodes.length);
@@ -177,7 +194,8 @@ function insertWithoutAncestorFontSize(fontSizeElement, fragment, range) {
   afterElement.append(afterRange.extractContents());
 
   const selectedElement = fontSizeElement.cloneNode(false);
-  selectedElement.style.removeProperty("font-size");
+  if (value) selectedElement.style.fontSize = value;
+  else selectedElement.style.removeProperty("font-size");
   if (!selectedElement.getAttribute("style")) selectedElement.removeAttribute("style");
   selectedElement.append(fragment);
 
@@ -194,6 +212,16 @@ function insertWithoutAncestorFontSize(fontSizeElement, fragment, range) {
 
   if (!fontSizeElement.hasChildNodes()) fontSizeElement.remove();
   if (!afterElement.hasChildNodes()) afterElement.remove();
+}
+
+function applyLinkTarget(value, editor, range, selection) {
+  const link = getSelectedAncestor(editor, range, "a");
+  if (!link) return;
+
+  if (value && value !== "_self") link.setAttribute("target", value);
+  else link.removeAttribute("target");
+  range.selectNodeContents(link);
+  selectRange(selection, range);
 }
 
 function insertWithoutAncestorTextColor(colorElement, fragment, range) {

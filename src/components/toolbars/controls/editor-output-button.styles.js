@@ -8,16 +8,16 @@ export const editorOutputButtonStyles = css`
   button {
     padding: 0.625rem 1rem;
     color: var(--text-white);
-    background-color: var(--brand);
-    border: 1px solid var(--border-brand);
+    background-color: var(--brand-500);
+    border: 1px solid var(--border-600);
     border-radius: 0.375rem;
     cursor: pointer;
     font-weight: 600;
   }
 
   button:hover {
-    background-color: var(--brand-dark);
-    border-color: var(--border-brand-dark);
+    background-color: var(--brand-600);
+    border-color: var(--brand-700);
   }
 
   button:focus-visible {

@@ -4,10 +4,17 @@ export const formatTextColorPaletteStyles = css`
   button {
     background: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 0.5rem;
     cursor: pointer;
-    height: 32px;
-    min-width: 32px;
+    height: 26px;
+  }
+
+  .label-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
   }
 
   button:disabled {
@@ -16,11 +23,26 @@ export const formatTextColorPaletteStyles = css`
 
   .trigger {
     anchor-name: --color-trigger;
-    color: var(--text-color, currentColor);
-    font-weight: bold;
-    text-decoration: underline;
-    text-decoration-color: currentColor;
-    text-decoration-thickness: 3px;
+    display: grid;
+    grid-template-columns: 42px auto;
+    border: 1px solid var(--gray-200);
+    place-content: center;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .selected-color {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-right: 1px solid var(--gray-200);
+  }
+
+  .color-wheel-icon {
+    display: block;
+    width: 24px;
+    height: 24px;
+    flex: 0 0 auto;
   }
 
   [popover] {

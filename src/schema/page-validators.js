@@ -34,6 +34,9 @@ function validateGroup(group, path, errors) {
 
   requireString(group.id, `${path}.id`, errors);
   requireString(group.type, `${path}.type`, errors);
+  if (group.hashId != null && typeof group.hashId !== "string") {
+    errors.push(`${path}.hashId must be a string`);
+  }
   requireNumber(group.sort, `${path}.sort`, errors);
 
   if (!isObject(group.style)) errors.push(`${path}.style must be an object`);

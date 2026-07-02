@@ -2,7 +2,6 @@ import { LitElement, html } from "lit";
 import { iconBlockStyles } from "./icon-block.styles.js";
 import { ICONS } from "../icons.js";
 import {
-  featureData,
   getCapabilities,
   toFeatureAttribute,
 } from "../../../registries/formatter-registry.js";
@@ -32,19 +31,20 @@ export class IconBlock extends LitElement {
     this.link = "";
     this.align = "left";
     this.disabled = false;
-    this.features = "";
+    this.features = undefined;
   }
 
-  init({
-    id = "",
-    icon = "plus",
-    fontSize = "",
-    color = "",
-    backgroundColor = "",
-    link = "",
-    align = "left",
-    features = this.features,
-  } = {}) {
+  init(options = {}) {
+    const {
+      id = "",
+      icon = "plus",
+      fontSize = "",
+      color = "",
+      backgroundColor = "",
+      link = "",
+      align = "left",
+    } = options;
+
     this.blockId = id;
     this.icon = icon;
     this.fontSize = fontSize;
@@ -52,7 +52,9 @@ export class IconBlock extends LitElement {
     this.backgroundColor = backgroundColor;
     this.link = link;
     this.align = align;
-    this.features = toFeatureAttribute(features);
+    if (Object.hasOwn(options, "features")) {
+      this.features = toFeatureAttribute(options.features);
+    }
     return this;
   }
 
@@ -66,7 +68,6 @@ export class IconBlock extends LitElement {
       link: this.link,
       align: this.align,
       type: "icon",
-      ...featureData(this.features),
     };
   }
 

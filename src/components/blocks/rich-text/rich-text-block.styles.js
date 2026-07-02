@@ -29,13 +29,13 @@ export const richTextBlockStyles = css`
     outline-offset: 2px;
   }
 
-  .editor:empty::before {
+  .editor:empty::after {
     content: attr(data-placeholder);
     color: #888;
     pointer-events: none;
   }
 
-  .editor > p:only-child:empty::before {
+  .editor > p:only-child:empty::after {
     content: var(--placeholder);
     color: #888;
     pointer-events: none;

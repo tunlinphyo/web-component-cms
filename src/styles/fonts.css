@@ -1,14 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700;900&display=swap");
-
-@font-face {
-  font-family: "FOT-Chiaro Std";
-  src: url("/fonts/FOT-Chiaro%20Std/chiarostd_b.otf") format("opentype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
+@import url('https://fonts.googleapis.com/css2?family=Asset&family=Elms+Sans:ital,wght@0,100..900;1,100..900&family=Google+Sans+Flex:opsz,wdth,wght@6..144,112.5,1..1000&display=swap');
 
 :root {
-  --font-heading: "FOT-Chiaro Std", sans-serif;
-  --font-zen: "Zen Kaku Gothic New", sans-serif;
+  --font-heading: "Asset", serif;
+  --font-body: "Google Sans Flex", sans-serif;
+  --font-sans: "Elms Sans", sans-serif;
 }

@@ -1,9 +1,10 @@
 const DEFAULT_HISTORY_LIMIT = 100;
 
 export class EditorHistory {
-  constructor({ capture, restore, limit = DEFAULT_HISTORY_LIMIT }) {
+  constructor({ capture, restore, onChange, limit = DEFAULT_HISTORY_LIMIT }) {
     this.captureSnapshot = capture;
     this.restoreSnapshot = restore;
+    this.onChange = onChange;
     this.limit = limit;
     this.snapshots = [];
     this.future = [];
@@ -15,6 +16,7 @@ export class EditorHistory {
     this.#clearScheduledCapture();
     this.snapshots = [cloneSnapshot(snapshot)];
     this.future = [];
+    this.#notifyChange();
   }
 
   capture() {
@@ -27,6 +29,7 @@ export class EditorHistory {
     this.snapshots.push(snapshot);
     if (this.snapshots.length > this.limit) this.snapshots.shift();
     this.future = [];
+    this.#notifyChange();
     return true;
   }
 
@@ -47,6 +50,7 @@ export class EditorHistory {
     const current = this.snapshots.pop();
     this.future.push(cloneSnapshot(current));
     this.#restore(this.snapshots.at(-1));
+    this.#notifyChange();
     return true;
   }
 
@@ -57,6 +61,7 @@ export class EditorHistory {
     const snapshot = this.future.pop();
     this.snapshots.push(cloneSnapshot(snapshot));
     this.#restore(snapshot);
+    this.#notifyChange();
     return true;
   }
 
@@ -82,6 +87,10 @@ export class EditorHistory {
 
     window.clearTimeout(this.captureTimer);
     this.captureTimer = null;
+  }
+
+  #notifyChange() {
+    this.onChange?.({ canUndo: this.canUndo, canRedo: this.canRedo });
   }
 }
 

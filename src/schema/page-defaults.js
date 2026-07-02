@@ -3,6 +3,7 @@ export const DEFAULT_GROUP_STYLE = {
   borderWidth: "",
   borderColor: "",
   borderStyle: "",
+  borderPosition: "",
   borderRadius: "",
 };
 

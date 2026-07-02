@@ -1,4 +1,5 @@
 import { LitElement, html } from "lit";
+import { resolveConfigOptions } from "../../../customize/config/index.js";
 import { borderRadiusControlStyles } from "./border-radius-control.styles.js";
 
 class BorderRadiusControl extends LitElement {
@@ -25,52 +26,54 @@ class BorderRadiusControl extends LitElement {
 
   render() {
     const corners = expandRadius(this.value);
+    const options = resolveConfigOptions("border-radius");
+    const cornerControls = [
+      { label: "Top left", index: 0 },
+      { label: "Top right", index: 1 },
+      { label: "Bottom left", index: 3 },
+      { label: "Bottom right", index: 2 },
+    ];
 
     return html`
       <div class="heading">
-        <span>Radius</span>
+        <span class="title">Border Radius</span>
         <label class="mode">
+          <span>Custom corners</span>
           <input
             type="checkbox"
+            role="switch"
             .checked=${this.custom}
             ?disabled=${this.disabled}
             @change=${this.#modeChange}
           />
-          Custom corners
         </label>
       </div>
       ${this.custom
         ? html`
             <div class="corners">
-              ${["Top left", "Top right", "Bottom right", "Bottom left"].map(
-                (label, index) => html`
+              ${cornerControls.map(
+                ({ label, index }) => html`
                   <label>
                     ${label}
-                    <input
-                      type="number"
-                      min="0"
-                      step="1"
-                      .value=${toNumber(corners[index])}
+                    <select
+                      .value=${corners[index]}
                       ?disabled=${this.disabled}
                       data-index=${index}
                       @change=${this.#cornerChange}
-                    />
+                    >
+                      ${renderOptions(options, corners[index])}
+                    </select>
                   </label>
                 `,
               )}
             </div>
           `
         : html`
-            <label>
+            <label class="all-corners">
               All corners
-              <input
-                type="number"
-                min="0"
-                step="1"
-                .value=${toNumber(corners[0])}
-                ?disabled=${this.disabled}
-                @change=${this.#allChange}
-              />
+              <select .value=${corners[0]} ?disabled=${this.disabled} @change=${this.#allChange}>
+                ${renderOptions(options, corners[0])}
+              </select>
             </label>
           `}
     `;
@@ -83,12 +86,12 @@ class BorderRadiusControl extends LitElement {
   };
 
   #allChange = (event) => {
-    this.#apply(toPx(event.currentTarget.value));
+    this.#apply(event.currentTarget.value);
   };
 
   #cornerChange = (event) => {
     const corners = expandRadius(this.value);
-    corners[Number(event.currentTarget.dataset.index)] = toPx(event.currentTarget.value);
+    corners[Number(event.currentTarget.dataset.index)] = event.currentTarget.value;
     this.#apply(corners.join(" "));
   };
 
@@ -133,12 +136,13 @@ function expandRadius(value) {
   return [radius, radius, radius, radius];
 }
 
-function toNumber(value) {
-  return String(Number.parseFloat(value) || 0);
-}
+function renderOptions(options, value) {
+  const hasValue = options.some((option) => option.value === value);
 
-function toPx(value) {
-  return `${Math.max(0, Number(value) || 0)}px`;
+  return [
+    ...(!hasValue ? [html`<option value=${value}>Custom (${value})</option>`] : []),
+    ...options.map((option) => html`<option value=${option.value}>${option.label}</option>`),
+  ];
 }
 
 customElements.define("image-border-radius", ImageBorderRadius);

@@ -26,6 +26,9 @@ export class EditorController {
     this.history = new EditorHistory({
       capture: () => serializeEditor(this.editor),
       restore: (snapshot) => this.#restoreSnapshot(snapshot),
+      onChange: (state) => {
+        this.editor.dispatchEvent(new CustomEvent("history-state-change", { detail: state }));
+      },
     });
   }
 
@@ -79,6 +82,14 @@ export class EditorController {
 
   redo() {
     return this.history.redo();
+  }
+
+  get canUndo() {
+    return this.history.canUndo;
+  }
+
+  get canRedo() {
+    return this.history.canRedo;
   }
 
   #selectionFormatChange = (event) => {
@@ -158,7 +169,13 @@ export class EditorController {
   };
 
   #input = (event) => {
-    if (findSelectionTargets(event).contentBlock) this.history.captureSoon(500);
+    const { group, blockGroup, contentBlock } = findSelectionTargets(event);
+    if (!contentBlock) return;
+
+    this.history.captureSoon(500);
+    if (group && blockGroup) {
+      this.#notifyGroupToolbar(group.getGroupFormat(), blockGroup, contentBlock);
+    }
   };
 
   #keydown = (event) => {

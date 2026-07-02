@@ -1,8 +1,9 @@
-import { LitElement, html } from "lit";
+import { html } from "lit";
+import { PopoverControl } from "./popover-control.js";
 import { EDITOR_COLOR_SWATCHES } from "../../../utils/colors.js";
 import { formatTextColorPaletteStyles } from "./format-text-color-palette.styles.js";
 
-export class FormatIconBackgroundColor extends LitElement {
+export class FormatIconBackgroundColor extends PopoverControl {
   static properties = {
     disabled: { type: Boolean },
     value: { type: String, reflect: true },
@@ -27,9 +28,25 @@ export class FormatIconBackgroundColor extends LitElement {
         style=${`--text-color: ${this.value}`}
         @mousedown=${(event) => event.preventDefault()}
       >
-        BG
+        <span class="selected-color" style=${this.value ? `background: ${this.value}` : ""}></span>
+        <svg class="color-wheel-icon" viewBox="0 0 24 24" aria-hidden="true" width="20">
+          <foreignObject x="3" y="3" width="18" height="18">
+            <div
+              xmlns="http://www.w3.org/1999/xhtml"
+              style="width: 18px; height: 18px; border-radius: 50%; background: conic-gradient(#ff3b30, #ff9500, #ffcc00, #34c759, #00c7be, #007aff, #5856d6, #af52de, #ff2d55, #ff3b30);"
+            ></div>
+          </foreignObject>
+          <circle
+            cx="12"
+            cy="12"
+            r="9"
+            fill="none"
+            stroke="rgba(0, 0, 0, 0.18)"
+            stroke-width="1"
+          ></circle>
+        </svg>
       </button>
-      <div id="colors" popover>
+      <div id="colors" popover @toggle=${this.handlePopoverToggle}>
         ${EDITOR_COLOR_SWATCHES.map((color) =>
           color.spacer
             ? html`<span class="spacer" aria-hidden="true"></span>`
@@ -58,10 +75,7 @@ export class FormatIconBackgroundColor extends LitElement {
         composed: true,
       }),
     );
-    queueMicrotask(() => {
-      const popover = this.renderRoot.querySelector("[popover]");
-      if (popover?.matches(":popover-open")) popover.hidePopover();
-    });
+    this.closePopover({ defer: true });
   }
 }
 

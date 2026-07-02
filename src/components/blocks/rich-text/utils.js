@@ -109,7 +109,17 @@ function breaksToParagraphs(value) {
 }
 
 export function isEmptyHtml(html) {
-  return html === "" || /^\s*(?:<br\s*\/?>)+\s*$/i.test(html);
+  if (!html) return true;
+
+  const template = document.createElement("template");
+  template.innerHTML = html;
+
+  const text = template.content.textContent.replace(/[\u00a0\u200b-\u200d\ufeff]/g, "").trim();
+  const hasEmbeddedContent = template.content.querySelector(
+    "audio, canvas, embed, hr, iframe, img, input, object, select, svg, textarea, video",
+  );
+
+  return text === "" && !hasEmbeddedContent;
 }
 
 export function serializeHtml(html, trimTrailingBreaks = true) {

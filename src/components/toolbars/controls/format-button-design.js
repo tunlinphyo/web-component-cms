@@ -1,82 +1,20 @@
-import { LitElement, html } from "lit";
+import { PickerPopoverControl } from "./picker-popover-control.js";
 import { formatButtonDesignStyles } from "./format-button-design.styles.js";
+import { pickerPopoverControlStyles } from "./picker-popover-control.styles.js";
+import { buttonDesignOptions } from "../../../customize/config/button-design.js";
 
-const DESIGNS = [
-  ["primary", "Primary"],
-  ["dark", "Dark"],
-  ["outline", "Outline"],
-  ["soft", "Soft"],
-  ["nav", "Navigation"],
-];
-
-export class FormatButtonDesign extends LitElement {
-  static properties = {
-    value: { type: String, reflect: true },
-    disabled: { type: Boolean },
-  };
-
-  static styles = formatButtonDesignStyles;
+export class FormatButtonDesign extends PickerPopoverControl {
+  static configKey = "button-design";
+  static styles = [pickerPopoverControlStyles, formatButtonDesignStyles];
+  static options = buttonDesignOptions;
+  static command = "buttonDesign";
+  static popoverId = "button-designs";
+  static title = "Button design";
+  static fallbackLabel = "Button design";
 
   constructor() {
     super();
     this.value = "primary";
-    this.disabled = true;
-  }
-
-  updated(changedProperties) {
-    if (changedProperties.has("disabled") && this.disabled) {
-      const popover = this.renderRoot.querySelector("[popover]");
-      if (popover?.matches(":popover-open")) popover.hidePopover();
-    }
-  }
-
-  render() {
-    return html`
-      <button
-        class="trigger"
-        type="button"
-        title="Button design"
-        popovertarget="button-designs"
-        ?disabled=${this.disabled}
-      >
-        ${this.#label(this.value)}
-      </button>
-      <div id="button-designs" popover>
-        <div class="options">
-          ${DESIGNS.map(
-            ([value, label]) => html`
-              <button
-                type="button"
-                data-value=${value}
-                aria-pressed=${this.value === value}
-                @click=${this.#change}
-              >
-                ${label}
-              </button>
-            `,
-          )}
-        </div>
-      </div>
-    `;
-  }
-
-  #change = (event) => {
-    const value = event.currentTarget.dataset.value;
-    this.renderRoot.querySelector("[popover]")?.hidePopover();
-    if (value === this.value) return;
-
-    this.value = value;
-    this.dispatchEvent(
-      new CustomEvent("format-command", {
-        detail: { command: "buttonDesign", value },
-        bubbles: true,
-        composed: true,
-      }),
-    );
-  };
-
-  #label(value) {
-    return DESIGNS.find(([design]) => design === value)?.[1] ?? "Button design";
   }
 }
 

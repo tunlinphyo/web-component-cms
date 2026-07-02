@@ -1,0 +1,26 @@
+import { css } from "lit";
+
+export const tableGroupStyles = css`
+  :host {
+    display: block;
+  }
+
+  [data-group-box] {
+    display: grid;
+    gap: 1rem;
+    padding: 3rem 2rem;
+  }
+
+  rich-text-block[block-id="title"] {
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  rich-text-block[block-id="description"] {
+    line-height: 1.7;
+  }
+
+  table-block {
+    margin-block-start: 1rem;
+  }
+`;

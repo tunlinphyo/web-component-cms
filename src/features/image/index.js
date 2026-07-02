@@ -5,6 +5,7 @@ import "../../components/toolbars/controls/border-radius-control.js";
 import "../../components/toolbars/controls/format-disabled.js";
 import "../../components/toolbars/controls/format-image-link-target.js";
 import "../../components/toolbars/controls/format-image-link.js";
+import "../../components/toolbars/controls/format-image-object-fit.js";
 import { registerBlock } from "../../registries/block-registry.js";
 import { registerCommand } from "../../registries/command-registry.js";
 import { FEATURES } from "../../registries/formatter-registry.js";
@@ -18,6 +19,7 @@ registerBlock({
   capabilities: [
     FEATURES.align,
     FEATURES.imageUpload,
+    FEATURES.objectFit,
     FEATURES.backgroundColor,
     FEATURES.border,
     FEATURES.borderRadius,
@@ -29,6 +31,7 @@ registerBlock({
 
 for (const definition of [
   { command: "borderRadius", feature: FEATURES.borderRadius },
+  { command: "objectFit", feature: FEATURES.objectFit },
   { command: "blockStyle", feature: FEATURES.backgroundColor },
   { command: "imageLink", feature: FEATURES.link },
   { command: "imageLinkTarget", feature: FEATURES.linkTarget },

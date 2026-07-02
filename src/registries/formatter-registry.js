@@ -15,9 +15,11 @@ export const FEATURES = {
   buttonDesign: "buttonDesign",
   icon: "icon",
   imageUpload: "imageUpload",
+  objectFit: "objectFit",
   border: "border",
   borderRadius: "borderRadius",
   disabled: "disabled",
+  tableHeaders: "tableHeaders",
 };
 
 const DEFAULT_FEATURES = {
@@ -34,6 +36,7 @@ const DEFAULT_FEATURES = {
     FEATURES.align,
     FEATURES.backgroundColor,
     FEATURES.link,
+    FEATURES.linkTarget,
   ],
   button: [
     FEATURES.align,
@@ -46,6 +49,7 @@ const DEFAULT_FEATURES = {
   image: [
     FEATURES.align,
     FEATURES.imageUpload,
+    FEATURES.objectFit,
     FEATURES.backgroundColor,
     FEATURES.border,
     FEATURES.borderRadius,
@@ -60,6 +64,7 @@ const DEFAULT_FEATURES = {
     FEATURES.backgroundColor,
     FEATURES.link,
   ],
+  table: [FEATURES.tableHeaders, FEATURES.backgroundColor, FEATURES.border],
 };
 
 export function getCapabilities(type, features) {
@@ -74,7 +79,8 @@ export function getCapabilities(type, features) {
 
 export function parseFeatures(features) {
   if (Array.isArray(features)) return features;
-  if (typeof features !== "string" || !features.trim()) return null;
+  if (typeof features !== "string") return null;
+  if (!features.trim()) return [];
 
   return features
     .split(",")

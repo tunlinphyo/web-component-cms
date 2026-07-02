@@ -29,14 +29,20 @@ export const confirmDialogStyles = css`
   }
 
   button {
-    padding: 0.5rem 0.75rem;
+    padding: 0.35rem 0.75rem;
     border: none;
     border-radius: 0.5rem;
     cursor: pointer;
+    font-size: 0.9rem;
+  }
+
+  button:not(:disabled):is(:hover, :focus-visible) {
+    outline: 2px solid var(--highlight);
+    outline-offset: 0;
   }
 
   .confirm {
-    background: var(--red);
+    background: var(--brand-600);
     color: white;
   }
 `;

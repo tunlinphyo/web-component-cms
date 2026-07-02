@@ -36,6 +36,14 @@ export class RichTextEditor extends LitElement {
   redo() {
     return this.controller.redo();
   }
+
+  get canUndo() {
+    return this.controller.canUndo;
+  }
+
+  get canRedo() {
+    return this.controller.canRedo;
+  }
 }
 
 customElements.define("rich-text-editor", RichTextEditor);
