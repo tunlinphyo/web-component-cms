@@ -1,5 +1,5 @@
 import { PickerPopoverControl } from "./picker-popover-control.js";
-import { linkTargetOptions } from "../../../customize/config/link-target.js";
+import { linkTargetOptions } from "../../../../customize/config/link-target.js";
 
 export class LinkTargetPickerControl extends PickerPopoverControl {
   static configKey = "link-target";

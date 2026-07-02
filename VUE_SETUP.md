@@ -8,32 +8,33 @@ The current editor structure is:
 
 ```text
 src/
-  components/
-    blocks/
-    groups/
-    lists/
-    toolbars/
-    dialogs/
-  editor/
-    rich-text-editor.js
-    editor-controller.js
-    editor-commands.js
-    editor-history.js
-    editor-serializer.js
-  features/
-    index.js
-    rich-text/
-    button/
-    image/
-    icon/
-    group/
-    list/
-  registries/
-  schema/
+  plugin/
+    components/
+      blocks/
+      groups/
+      lists/
+      toolbars/
+      dialogs/
+    editor/
+      rich-text-editor.js
+      editor-controller.js
+      editor-commands.js
+      editor-history.js
+      editor-serializer.js
+    features/
+      index.js
+      rich-text/
+      button/
+      image/
+      icon/
+      group/
+      list/
+    registries/
+    schema/
   style.css
 ```
 
-The important startup rule is: import `src/features/index.js` before `src/editor/rich-text-editor.js`. Features register blocks, groups, lists, toolbar controls, and command metadata before the editor computes selectors.
+Import `src/plugin/index.js` to register the editor, blocks, groups, lists, toolbar controls, and command metadata.
 
 ## 1. Register Editor Elements
 
@@ -42,8 +43,7 @@ Create a file like `src/editor-elements.js` in your Vue project:
 ```js
 import "./style.css";
 
-import "./features/index.js";
-import "./editor/rich-text-editor.js";
+import "./plugin/index.js";
 ```
 
 This registers tags such as:
@@ -58,7 +58,7 @@ This registers tags such as:
 <button-block></button-block>
 ```
 
-Do not import old `src/elements/...` paths. They were replaced by `components/`, `editor/`, `features/`, and `registries/`.
+Do not import old `src/elements/...` paths. They were replaced by modules under `src/plugin/`.
 
 ## 2. Configure Vue Custom Elements
 
@@ -306,7 +306,7 @@ If no `picker` is set on `<group-order>`, the picker shows all groups where `add
 
 ## Custom Lists
 
-Lists live under `src/components/lists/` and register in `src/features/list/index.js`.
+Lists live under `src/plugin/components/lists/` and register in `src/plugin/features/list/index.js`.
 
 ```js
 import { BlockListGroup } from "../block-list/block-list-group.js";

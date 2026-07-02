@@ -1,6 +1,6 @@
 import { html, svg } from "lit";
 
-export const ICONS = [
+export const iconOptions = [
   {
     value: "book",
     label: "Book",
@@ -97,3 +97,5 @@ export const ICONS = [
     `,
   },
 ];
+
+export default iconOptions;

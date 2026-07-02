@@ -1,6 +1,32 @@
 import { LitElement, html } from "lit";
-import { resolveConfigOptions } from "../../../customize/config/index.js";
+import { borderRadiusOptions } from "../../../../customize/config/border-radius.js";
 import { borderRadiusControlStyles } from "./border-radius-control.styles.js";
+import { PickerPopoverControl } from "./picker-popover-control.js";
+
+class BorderRadiusPicker extends PickerPopoverControl {
+  static configKey = "border-radius";
+  static options = borderRadiusOptions;
+  static popoverId = "border-radius-options";
+  static title = "Border radius";
+  static fallbackLabel = "None";
+
+  get options() {
+    const options = super.options;
+    if (!this.value || options.some((option) => option.value === this.value)) return options;
+
+    return [{ value: this.value, label: `Custom (${this.value})` }, ...options];
+  }
+
+  dispatchValueChange(value) {
+    this.dispatchEvent(
+      new CustomEvent("picker-value-change", {
+        detail: { value },
+        bubbles: true,
+        composed: true,
+      }),
+    );
+  }
+}
 
 class BorderRadiusControl extends LitElement {
   static properties = {
@@ -26,7 +52,6 @@ class BorderRadiusControl extends LitElement {
 
   render() {
     const corners = expandRadius(this.value);
-    const options = resolveConfigOptions("border-radius");
     const cornerControls = [
       { label: "Top left", index: 0 },
       { label: "Top right", index: 1 },
@@ -43,7 +68,6 @@ class BorderRadiusControl extends LitElement {
             type="checkbox"
             role="switch"
             .checked=${this.custom}
-            ?disabled=${this.disabled}
             @change=${this.#modeChange}
           />
         </label>
@@ -54,15 +78,13 @@ class BorderRadiusControl extends LitElement {
               ${cornerControls.map(
                 ({ label, index }) => html`
                   <label>
-                    ${label}
-                    <select
+                    <span>${label}</span>
+                    <border-radius-picker
                       .value=${corners[index]}
-                      ?disabled=${this.disabled}
+                      .disabled=${this.disabled}
                       data-index=${index}
-                      @change=${this.#cornerChange}
-                    >
-                      ${renderOptions(options, corners[index])}
-                    </select>
+                      @picker-value-change=${this.#cornerChange}
+                    ></border-radius-picker>
                   </label>
                 `,
               )}
@@ -70,10 +92,12 @@ class BorderRadiusControl extends LitElement {
           `
         : html`
             <label class="all-corners">
-              All corners
-              <select .value=${corners[0]} ?disabled=${this.disabled} @change=${this.#allChange}>
-                ${renderOptions(options, corners[0])}
-              </select>
+              <span>All corners</span>
+              <border-radius-picker
+                .value=${corners[0]}
+                .disabled=${this.disabled}
+                @picker-value-change=${this.#allChange}
+              ></border-radius-picker>
             </label>
           `}
     `;
@@ -86,12 +110,12 @@ class BorderRadiusControl extends LitElement {
   };
 
   #allChange = (event) => {
-    this.#apply(event.currentTarget.value);
+    this.#apply(event.detail.value);
   };
 
   #cornerChange = (event) => {
     const corners = expandRadius(this.value);
-    corners[Number(event.currentTarget.dataset.index)] = event.currentTarget.value;
+    corners[Number(event.currentTarget.dataset.index)] = event.detail.value;
     this.#apply(corners.join(" "));
   };
 
@@ -136,14 +160,6 @@ function expandRadius(value) {
   return [radius, radius, radius, radius];
 }
 
-function renderOptions(options, value) {
-  const hasValue = options.some((option) => option.value === value);
-
-  return [
-    ...(!hasValue ? [html`<option value=${value}>Custom (${value})</option>`] : []),
-    ...options.map((option) => html`<option value=${option.value}>${option.label}</option>`),
-  ];
-}
-
+customElements.define("border-radius-picker", BorderRadiusPicker);
 customElements.define("image-border-radius", ImageBorderRadius);
 customElements.define("group-border-radius", GroupBorderRadius);

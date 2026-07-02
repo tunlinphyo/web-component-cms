@@ -1,5 +1,5 @@
 import { html } from "lit";
-import { GroupBase } from "../../../components/groups/base/group-base.js";
+import { GroupBase } from "../../../plugin/index.js";
 
 export class AboutGroup extends GroupBase {
   static defaultJson = {

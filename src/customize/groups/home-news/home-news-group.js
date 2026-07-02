@@ -1,7 +1,7 @@
 import { html } from "lit";
 import "./news-list-group.js";
 import { NewsGroup } from "../news/news-group.js";
-import { GroupBase } from "../../../components/groups/base/group-base.js";
+import { GroupBase } from "../../../plugin/index.js";
 import { decoratedTitleStyles, renderDecoratedTitle } from "../shared/decorated-title.js";
 import { hostGroupStyles } from "./home-news-group.style.js";
 

@@ -1,6 +1,6 @@
 import { LitElement, html } from "lit";
+import { iconOptions } from "../../../../customize/config/icons.js";
 import { buttonBlockStyles } from "./button-block.styles.js";
-import { ICONS } from "../icons.js";
 import {
   getCapabilities,
   toFeatureAttribute,
@@ -108,7 +108,7 @@ export class ButtonBlock extends LitElement {
     }
     if (!["start", "end"].includes(placement)) return false;
 
-    this.icon ||= ICONS[0].value;
+    this.icon ||= iconOptions[0].value;
     this.iconPosition = placement;
     return true;
   }
@@ -143,7 +143,7 @@ export class ButtonBlock extends LitElement {
                 popovertarget="button-icon-picker"
                 ?disabled=${this.disabled}
               >
-                ${ICONS.find(({ value }) => value === this.icon)?.svg}
+                ${iconOptions.find(({ value }) => value === this.icon)?.svg}
               </button>
             `
           : null}
@@ -159,7 +159,7 @@ export class ButtonBlock extends LitElement {
       </span>
       <div id="button-icon-picker" popover>
         <div class="icon-options">
-          ${ICONS.map(
+          ${iconOptions.map(
             ({ value, label, svg }) => html`
               <button
                 type="button"

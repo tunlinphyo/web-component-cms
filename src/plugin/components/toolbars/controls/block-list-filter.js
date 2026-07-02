@@ -20,7 +20,7 @@ export class BlockGroupFilter extends LitElement {
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.25rem;
       }
     `,
   ];

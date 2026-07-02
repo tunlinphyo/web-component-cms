@@ -1,8 +1,6 @@
 import { html } from "lit";
-import { GroupBase } from "../../../components/groups/base/group-base.js";
+import { getListDefinition, GroupBase } from "../../../plugin/index.js";
 import { headerGroupStyles } from "./header-group.style.js";
-import "../../../components/lists/header-nav/header-nav-list.js";
-import { getListDefinition } from "../../../registries/list-registry.js";
 
 const HEADER_NAV_SELECTOR =
   getListDefinition("header-nav")?.selector ?? "header-button-block-group";

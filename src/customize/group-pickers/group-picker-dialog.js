@@ -1,8 +1,7 @@
 import { html } from "lit";
 import { html as staticHtml, unsafeStatic } from "lit/static-html.js";
-import { GroupPickerBase } from "../../components/group-pickers/base/group-picker-base.js";
+import { GroupPickerBase, listGroupDefinitions } from "../../plugin/index.js";
 import "../layout-designs/index.js";
-import { listGroupDefinitions } from "../../registries/group-registry.js";
 import { groupPickerDialogStyles } from "./group-picker-dialog.styles.js";
 
 export class GroupPickerDialog extends GroupPickerBase {

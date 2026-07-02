@@ -1,5 +1,5 @@
 import { html } from "lit";
-import { GroupBase } from "../../../components/groups/base/group-base.js";
+import { GroupBase } from "../../../plugin/index.js";
 import { hostGroupStyles } from "./news-group.style.js";
 
 export class NewsGroup extends GroupBase {

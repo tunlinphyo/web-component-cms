@@ -15,4 +15,4 @@ export type {
   PageGroupType,
   RichTextBlock,
   RichTextType,
-} from "../src/schema/page.types";
+} from "../src/plugin/schema/page.types";

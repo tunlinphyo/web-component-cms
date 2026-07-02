@@ -1,4 +1,4 @@
-import { listGroupDefinitions } from "../../registries/group-registry.js";
+import { listGroupDefinitions } from "../../plugin/index.js";
 import { GroupPickerDialog } from "./group-picker-dialog.js";
 
 const ALLOWED_GROUP_TYPES = new Set(["home-news", "table"]);

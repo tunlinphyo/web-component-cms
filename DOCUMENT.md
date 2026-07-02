@@ -11,7 +11,7 @@ vp check
 vp build
 ```
 
-The app starts from `src/main.js`. It imports `src/features/index.js` first so blocks, groups, lists, toolbar controls, and registry metadata are available before the editor loads.
+The app starts from `src/main.js`. It imports `src/plugin/index.js`, which registers the editor, blocks, groups, lists, toolbar controls, and command metadata.
 
 ## Editor Data
 
@@ -46,7 +46,7 @@ Project groups live in `src/customize/groups/<name>/`. Extend `GroupBase`, rende
 
 ```js
 import { html } from "lit";
-import { GroupBase } from "../../../components/groups/base/group-base.js";
+import { GroupBase } from "../../../plugin/components/groups/base/group-base.js";
 
 export class QuoteGroup extends GroupBase {
   static defaultJson = {
@@ -115,7 +115,7 @@ export class NewsListGroup extends BlockListGroup {
 customElements.define("news-list-group", NewsListGroup);
 ```
 
-Register it in `src/features/list/index.js`:
+Register it in `src/plugin/features/list/index.js`:
 
 ```js
 import "../../components/lists/news/news-list-group.js";
@@ -149,14 +149,14 @@ The group toolbar controls `block-group-filter` and `block-group-sort` use these
 
 ## Feature Registration Rules
 
-Add imports and registrations in `src/features/`, not in the registries.
+Add imports and registrations in `src/plugin/features/`, not in the registries.
 
 - Blocks: `registerBlock()` in the relevant feature module.
-- Groups: `registerGroup()` in `src/features/group/index.js`.
-- Lists: `registerList()` in `src/features/list/index.js`.
+- Groups: `registerGroup()` in `src/plugin/features/group/index.js`.
+- Lists: `registerList()` in `src/plugin/features/list/index.js`.
 - Commands: `registerCommand()` in the feature that owns the behavior.
 
-Registries in `src/registries/` should stay pure lookup/registration modules.
+Registries in `src/plugin/registries/` should stay pure lookup/registration modules.
 
 ## Image Picker
 

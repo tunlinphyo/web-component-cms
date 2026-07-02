@@ -7,6 +7,12 @@ class TableBorderWidth extends BlockBorderWidth {}
 class TableBorderStyle extends BlockBorderStyle {}
 
 class TableBorderPosition extends BlockStyleSelector {
+  static includeCurrentOption = false;
+  static options = [
+    { value: "", position: "both", label: "Horizontal and vertical borders" },
+    { value: "horizontal", position: "horizontal", label: "Horizontal borders" },
+    { value: "vertical", position: "vertical", label: "Vertical borders" },
+  ];
   static styles = [
     groupStyleSelectorStyles,
     css`
@@ -48,11 +54,6 @@ class TableBorderPosition extends BlockStyleSelector {
 
   label = "Border Position";
   property = "borderPosition";
-  options = [
-    { value: "", position: "both", label: "Horizontal and vertical borders" },
-    { value: "horizontal", position: "horizontal", label: "Horizontal borders" },
-    { value: "vertical", position: "vertical", label: "Vertical borders" },
-  ];
 
   render() {
     return html`

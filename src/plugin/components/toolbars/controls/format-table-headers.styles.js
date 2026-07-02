@@ -56,7 +56,7 @@ export const formatTableHeadersStyles = css`
   input::before {
     position: absolute;
     top: 50%;
-    left: 0.125rem;
+    left: 0.1rem;
     width: 1rem;
     height: 1rem;
     border-radius: 50%;

@@ -1,4 +1,4 @@
-import { GroupListBase } from "../../../components/lists/base/group-list-base.js";
+import { GroupListBase } from "../../../plugin/index.js";
 import { NewsGroup } from "../news/news-group.js";
 
 export class NewsListGroup extends GroupListBase {

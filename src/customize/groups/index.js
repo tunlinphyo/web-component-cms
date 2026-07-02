@@ -7,8 +7,7 @@ import "./image/image-group.js";
 import "./news/news-group.js";
 import "./paragraph/paragraph-group.js";
 import "./table/table-group.js";
-import { registerGroup } from "../../registries/group-registry.js";
-import { registerList } from "../../registries/list-registry.js";
+import { registerGroup, registerList } from "../../plugin/index.js";
 
 registerList({
   type: "news-list",

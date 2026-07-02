@@ -4,18 +4,18 @@ export const pickerPopoverControlStyles = css`
   :host {
     display: block;
     width: 100%;
+    flex: 1;
   }
 
   button {
     box-sizing: border-box;
     width: 100%;
-    padding: 0.25rem 0.5rem;
+    padding: 0.35rem 0.5rem;
     border: 1px solid var(--gray-200);
     border-radius: 0.5rem;
     background: var(--white, white);
     color: inherit;
     cursor: pointer;
-    font-size: 0.9rem;
     text-align: left;
   }
 
@@ -29,15 +29,20 @@ export const pickerPopoverControlStyles = css`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    font-size: 0.75rem;
   }
 
   .trigger::after {
     content: "";
-    width: 0.35rem;
-    height: 0.35rem;
-    border-right: 1px solid currentColor;
-    border-bottom: 1px solid currentColor;
-    transform: translateY(-25%) rotate(45deg);
+    width: 0.5rem;
+    height: 0.3rem;
+    background-color: var(--gray-400);
+    mask: center / contain no-repeat
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 5'%3E%3Cpath d='M0 0h10L5 5z'/%3E%3C/svg%3E");
+  }
+
+  .trigger:has(+ [popover]:popover-open)::after {
+    rotate: 180deg;
   }
 
   [popover] {

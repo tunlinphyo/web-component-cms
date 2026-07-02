@@ -7,6 +7,7 @@ import { buttonIconPlacementOptions } from "./button-icon-placement.js";
 import { elementTypeOptions } from "./element-type.js";
 import { fontFamilyOptions } from "./font-family.js";
 import { fontSizeOptions } from "./font-size.js";
+import { iconOptions } from "./icons.js";
 import { linkTargetOptions } from "./link-target.js";
 import { objectFitOptions } from "./object-fit.js";
 
@@ -20,6 +21,7 @@ const CONFIG_OPTIONS = {
   "element-type": elementTypeOptions,
   "font-family": fontFamilyOptions,
   "font-size": fontSizeOptions,
+  icons: iconOptions,
   "link-target": linkTargetOptions,
   "object-fit": objectFitOptions,
 };

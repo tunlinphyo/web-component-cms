@@ -1,5 +1,5 @@
 import { PickerPopoverControl } from "./picker-popover-control.js";
-import { objectFitOptions } from "../../../customize/config/object-fit.js";
+import { objectFitOptions } from "../../../../customize/config/object-fit.js";
 
 export class FormatImageObjectFit extends PickerPopoverControl {
   static configKey = "object-fit";

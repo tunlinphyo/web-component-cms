@@ -1,6 +1,6 @@
 import { LitElement, html } from "lit";
+import { iconOptions } from "../../../../customize/config/icons.js";
 import { iconBlockStyles } from "./icon-block.styles.js";
-import { ICONS } from "../icons.js";
 import {
   getCapabilities,
   toFeatureAttribute,
@@ -106,11 +106,11 @@ export class IconBlock extends LitElement {
         style=${`font-size: ${this.fontSize}; color: ${this.color}; background-color: ${this.backgroundColor};`}
         @click=${this.#openPicker}
       >
-        ${ICONS.find(({ value }) => value === this.icon)?.svg}
+        ${iconOptions.find(({ value }) => value === this.icon)?.svg}
       </a>
       <div id="icon-picker" popover>
         <div class="options">
-          ${ICONS.map(
+          ${iconOptions.map(
             ({ value, label, svg }) => html`
               <button
                 type="button"

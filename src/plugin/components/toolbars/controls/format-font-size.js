@@ -1,5 +1,5 @@
 import { PickerPopoverControl } from "./picker-popover-control.js";
-import { fontSizeOptions } from "../../../customize/config/font-size.js";
+import { fontSizeOptions } from "../../../../customize/config/font-size.js";
 
 export class FormatFontSize extends PickerPopoverControl {
   static configKey = "font-size";

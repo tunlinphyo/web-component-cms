@@ -8,7 +8,7 @@
     <output id="result">pending</output>
     <script type="module">
       import "./examples/package-consumer.js";
-      import { getGroupDefinition, getListDefinition } from "./src/public-api.js";
+      import { getGroupDefinition, getListDefinition } from "./src/plugin/index.js";
 
       const list = document.createElement("example-group-list");
       const item = list.addBlock();

@@ -5,7 +5,7 @@ import {
   GroupPickerBase,
   registerGroup,
   registerList,
-} from "../src/public-api.js";
+} from "../src/plugin/index.js";
 
 export class ExampleGroup extends GroupBase {
   static defaultJson = {

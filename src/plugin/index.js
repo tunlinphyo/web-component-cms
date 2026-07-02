@@ -15,3 +15,6 @@ export {
   listListDefinitions,
   registerList,
 } from "./registries/list-registry.js";
+
+import "./features/index.js";
+import "./editor/rich-text-editor.js";

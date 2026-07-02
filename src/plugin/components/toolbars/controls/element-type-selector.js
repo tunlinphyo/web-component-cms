@@ -2,7 +2,7 @@ import { html } from "lit";
 import { PickerPopoverControl } from "./picker-popover-control.js";
 import { elementTypeSelectorStyles } from "./element-type-selector.styles.js";
 import { pickerPopoverControlStyles } from "./picker-popover-control.styles.js";
-import { elementTypeOptions } from "../../../customize/config/element-type.js";
+import { elementTypeOptions } from "../../../../customize/config/element-type.js";
 
 export class ElementTypeSelector extends PickerPopoverControl {
   static configKey = "element-type";

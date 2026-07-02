@@ -1,5 +1,5 @@
 import { html } from "lit";
-import { resolveConfigOptions } from "../../../customize/config/index.js";
+import { resolveConfigOptions } from "../../../../customize/config/index.js";
 import { PopoverControl } from "./popover-control.js";
 import { pickerPopoverControlStyles } from "./picker-popover-control.styles.js";
 

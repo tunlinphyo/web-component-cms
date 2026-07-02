@@ -52,7 +52,7 @@ export const borderRadiusControlStyles = css`
   .mode input::before {
     position: absolute;
     top: 50%;
-    left: 0.125rem;
+    left: 0.1rem;
     width: 1rem;
     height: 1rem;
     border-radius: 50%;
@@ -69,17 +69,12 @@ export const borderRadiusControlStyles = css`
   }
 
   .mode input:checked::before {
-    transform: translate(1rem, -50%);
+    transform: translate(calc(1rem - 1px), -50%);
   }
 
   .mode input:focus-visible {
     outline: 2px solid var(--highlight);
     outline-offset: 2px;
-  }
-
-  .mode input:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
   }
 
   .corners {
@@ -91,23 +86,16 @@ export const borderRadiusControlStyles = css`
   label:not(.mode) {
     display: grid;
     gap: 0.2rem;
+    justify-content: stretch;
   }
 
-  select {
-    box-sizing: border-box;
+  border-radius-picker {
+    flex: 1;
     width: 100%;
     min-width: 0;
-    padding: 0.25rem 0.5rem;
-    border: 1px solid var(--gray-200);
-    border-radius: 0.5rem;
-    background: var(--white, white);
-    color: inherit;
-    cursor: pointer;
-    font: inherit;
   }
 
-  select:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
+  .all-corners border-radius-picker {
+    width: 6rem;
   }
 `;
