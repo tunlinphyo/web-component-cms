@@ -15,6 +15,16 @@ const PRESERVE_SELECTION_CONTROLS = new Set([
   "format-align-right",
   "format-align-justify",
   "format-highlight",
+  "quill-format-bold",
+  "quill-format-italic",
+  "quill-format-underline",
+  "quill-format-ordered-list",
+  "quill-format-unordered-list",
+  "quill-format-align-left",
+  "quill-format-align-center",
+  "quill-format-align-right",
+  "quill-format-align-justify",
+  "quill-format-highlight",
 ]);
 
 export class EditorController {
@@ -32,39 +42,27 @@ export class EditorController {
     });
   }
 
-  connect() {
-    this.editor.addEventListener("selection-format-change", this.#selectionFormatChange);
-    this.editor.addEventListener("format-command", this.#formatCommand);
-    this.editor.addEventListener("element-type-change", this.#elementTypeChange);
-    this.editor.addEventListener("group-style-change", this.#groupStyleChange);
-    this.editor.addEventListener("block-group-command", this.#blockGroupCommand);
-    this.editor.addEventListener("block-group-change", this.#blockGroupChange);
-    this.editor.addEventListener("restore-selection", this.#restoreSelection);
-    this.editor.addEventListener("editor-change", this.#editorChange);
-    this.editor.addEventListener("image-change", this.#editorChange);
-    this.editor.addEventListener("button-icon-change", this.#editorChange);
-    this.editor.addEventListener("icon-change", this.#editorChange);
-    this.editor.addEventListener("input", this.#input);
-    this.editor.addEventListener("keydown", this.#keydown);
-    this.editor.addEventListener("mousedown", this.#mousedown);
-  }
+  handleEvent = (event) => {
+    const handlers = {
+      "selection-format-change": this.#selectionFormatChange,
+      "format-command": this.#formatCommand,
+      "quill-format-command": this.#quillFormatCommand,
+      "element-type-change": this.#elementTypeChange,
+      "group-style-change": this.#groupStyleChange,
+      "block-group-command": this.#blockGroupCommand,
+      "block-group-change": this.#blockGroupChange,
+      "restore-selection": this.#restoreSelection,
+      "editor-change": this.#editorChange,
+      "image-change": this.#editorChange,
+      "button-icon-change": this.#editorChange,
+      "icon-change": this.#editorChange,
+      input: this.#input,
+      keydown: this.#keydown,
+      mousedown: this.#mousedown,
+    };
 
-  disconnect() {
-    this.editor.removeEventListener("selection-format-change", this.#selectionFormatChange);
-    this.editor.removeEventListener("format-command", this.#formatCommand);
-    this.editor.removeEventListener("element-type-change", this.#elementTypeChange);
-    this.editor.removeEventListener("group-style-change", this.#groupStyleChange);
-    this.editor.removeEventListener("block-group-command", this.#blockGroupCommand);
-    this.editor.removeEventListener("block-group-change", this.#blockGroupChange);
-    this.editor.removeEventListener("restore-selection", this.#restoreSelection);
-    this.editor.removeEventListener("editor-change", this.#editorChange);
-    this.editor.removeEventListener("image-change", this.#editorChange);
-    this.editor.removeEventListener("button-icon-change", this.#editorChange);
-    this.editor.removeEventListener("icon-change", this.#editorChange);
-    this.editor.removeEventListener("input", this.#input);
-    this.editor.removeEventListener("keydown", this.#keydown);
-    this.editor.removeEventListener("mousedown", this.#mousedown);
-  }
+    handlers[event.type]?.(event);
+  };
 
   init(pageData = {}) {
     deserializeEditor(this.editor, pageData);
@@ -103,6 +101,11 @@ export class EditorController {
 
   #formatCommand = (event) => {
     applyFormatCommand(this.activeBlock, event.detail, (format) => this.#notifyToolbar(format));
+    this.history.capture();
+  };
+
+  #quillFormatCommand = (event) => {
+    if (!this.activeBlock?.applyQuillFormat?.(event.detail.format, event.detail.value)) return;
     this.history.capture();
   };
 

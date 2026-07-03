@@ -9,7 +9,7 @@ export class EditorOutputButton extends LitElement {
   }
 
   #output = () => {
-    const editor = this.closest("rich-text-editor");
+    const editor = this.closest("page-editor");
     if (editor) console.log(editor.toJSON());
   };
 }

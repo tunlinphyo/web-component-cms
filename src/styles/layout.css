@@ -36,58 +36,45 @@ header {
   }
 }
 
-rich-text-editor {
+page-editor {
   min-height: calc(100vh - var(--header-height));
   display: grid;
   grid-template-columns: 1fr 240px;
   align-items: start;
   background-color: var(--gray-50);
 
-  & section {
+  & > group-order {
     width: 100%;
+    max-width: 68rem;
+    min-height: calc(100vh - var(--header-height));
     align-self: stretch;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    border-inline-end: 1px solid var(--gray-200);
+    justify-self: center;
+    display: grid;
+    align-content: start;
     background-color: var(--gray-100);
     position: relative;
+    padding: 5rem 1rem 1rem;
+    gap: 0;
 
-    padding-block-start: 4rem;
-
-    & group-order {
+    & > empty-group-picker-button {
       display: grid;
-      width: 100%;
-      max-width: 68rem;
-      padding: 1rem;
-      gap: 0;
-
-      & > empty-group-picker-button {
-        display: grid;
-        place-items: center;
-        min-height: 12rem;
-        border: 2px dashed var(--gray-300);
-        border-radius: 0.75rem;
-        cursor: pointer;
-        background: var(--gray-50);
-        color: inherit;
-        font: inherit;
-      }
-
-      &:has(> [group-id]) > empty-group-picker-button {
-        display: none;
-      }
+      place-items: center;
+      min-height: 12rem;
+      border: 2px dashed var(--gray-300);
+      border-radius: 0.75rem;
+      cursor: pointer;
+      background: var(--gray-50);
+      color: inherit;
+      font: inherit;
     }
 
-    .editor-history-controls {
-      position: sticky;
-      z-index: 5;
-      top: 0;
+    &:has(> [group-id]) > empty-group-picker-button {
+      display: none;
     }
   }
 
-  & nav {
+  & > editor-toolbar {
+    display: block;
     position: sticky;
     top: var(--header-height);
     padding: 1rem;

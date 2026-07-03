@@ -1,8 +1,8 @@
-# Using `<rich-text-editor>` In Vue
+# Using `<page-editor>` In Vue
 
 carefully read the CODE_MIGRATE.md and do the step 1. and notify me if you done.
 
-`<rich-text-editor>` is a Web Component/custom element. A Vue app can use it without rewriting the editor in Vue.
+`<page-editor>` is a Web Component/custom element. A Vue app can use it without rewriting the editor in Vue.
 
 The current editor structure is:
 
@@ -10,13 +10,14 @@ The current editor structure is:
 src/
   plugin/
     components/
+      page-editor/
+        page-editor.js
       blocks/
       groups/
       lists/
       toolbars/
       dialogs/
     editor/
-      rich-text-editor.js
       editor-controller.js
       editor-commands.js
       editor-history.js
@@ -49,16 +50,11 @@ import "./plugin/index.js";
 This registers tags such as:
 
 ```html
-<rich-text-editor></rich-text-editor>
-<group-order></group-order>
-<format-toolbar></format-toolbar>
-<group-format-toolbar></group-format-toolbar>
-<rich-text-block></rich-text-block>
-<image-block></image-block>
-<button-block></button-block>
+<page-editor></page-editor>
 ```
 
-Do not import old `src/elements/...` paths. They were replaced by modules under `src/plugin/`.
+`<page-editor>` renders its group order, toolbars, groups, and blocks internally. Consumer
+templates must not provide those internal elements.
 
 ## 2. Configure Vue Custom Elements
 
@@ -68,15 +64,7 @@ In `vite.config.js`, tell Vue not to resolve editor tags as Vue components:
 import vue from "@vitejs/plugin-vue";
 import { defineConfig } from "vite";
 
-const editorElements = new Set([
-  "rich-text-editor",
-  "group-order",
-  "format-toolbar",
-  "group-format-toolbar",
-  "editor-output-button",
-  "group-picker-dialog",
-  "confirm-dialog",
-]);
+const editorElements = new Set(["page-editor"]);
 
 export default defineConfig({
   plugins: [
@@ -133,7 +121,7 @@ onMounted(async () => {
   const response = await fetch(pageDataUrl);
   const pageData = await response.json();
 
-  editorRef.value?.init(pageData);
+  await editorRef.value?.init(pageData);
 });
 
 function logOutput() {
@@ -155,45 +143,12 @@ function handleImagePickerOpen(event) {
 </script>
 
 <template>
-  <rich-text-editor ref="editorRef" @image-picker-open="handleImagePickerOpen">
-    <section>
-      <group-order picker="content"></group-order>
-
-      <footer>
-        <button type="button" @click="logOutput">Log Output</button>
-        <button type="button" @click="undo">Undo</button>
-        <button type="button" @click="redo">Redo</button>
-      </footer>
-    </section>
-
-    <nav>
-      <group-format-toolbar>
-        <h2>Group</h2>
-        <div class="format-group">
-          <group-background-color></group-background-color>
-          <group-border-color></group-border-color>
-        </div>
-        <div class="format-group">
-          <group-border-width></group-border-width>
-          <group-border-style></group-border-style>
-        </div>
-        <div class="format-group">
-          <group-border-radius></group-border-radius>
-        </div>
-        <hr />
-        <div class="format-group">
-          <block-group-filter></block-group-filter>
-          <block-group-sort></block-group-sort>
-        </div>
-      </group-format-toolbar>
-
-      <hr />
-
-      <format-toolbar>
-        <!-- Move the existing toolbar markup from index.html here. -->
-      </format-toolbar>
-    </nav>
-  </rich-text-editor>
+  <page-editor ref="editorRef" @image-picker-open="handleImagePickerOpen"></page-editor>
+  <footer>
+    <button type="button" @click="logOutput">Log Output</button>
+    <button type="button" @click="undo">Undo</button>
+    <button type="button" @click="redo">Redo</button>
+  </footer>
 </template>
 ```
 
@@ -218,7 +173,7 @@ import RichTextEditorWrapper from "./components/RichTextEditorWrapper.vue";
 Vue controls the Web Component through a normal DOM ref:
 
 ```js
-editorRef.value.init(pageData);
+await editorRef.value.init(pageData);
 editorRef.value.toJSON();
 editorRef.value.undo();
 editorRef.value.redo();
@@ -231,9 +186,7 @@ The editor keeps its internal Lit/Web Component behavior. Vue owns layout, routi
 `image-block` no longer opens the native file picker. It emits `image-picker-open`, and Vue can provide the current image list:
 
 ```vue
-<rich-text-editor ref="editorRef" @image-picker-open="handleImagePickerOpen">
-  ...
-</rich-text-editor>
+<page-editor ref="editorRef" @image-picker-open="handleImagePickerOpen"></page-editor>
 ```
 
 ```js
@@ -282,27 +235,11 @@ Notes:
 - Group components should extend `GroupBase`.
 - Editable child blocks need stable `block-id` values.
 
-## Multiple Group Pickers
+## Internal Editor Structure
 
-You can place multiple group orders with different picker contexts:
-
-```html
-<group-order picker="landing"></group-order> <group-order picker="content"></group-order>
-```
-
-Register groups against one or more picker contexts:
-
-```js
-registerGroup({
-  type: "image",
-  tagName: "image-group",
-  selector: "image-group",
-  label: "image",
-  picker: ["landing", "content"],
-});
-```
-
-If no `picker` is set on `<group-order>`, the picker shows all groups where `addable !== false`.
+Vue must treat `<page-editor>` as the complete editor boundary. Do not place `group-order`,
+toolbar, group, or block elements inside it. Extend editor behavior through the public
+configuration and registration APIs.
 
 ## Custom Lists
 

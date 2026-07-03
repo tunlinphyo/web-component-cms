@@ -6,6 +6,7 @@ import "./home-news/home-news-group.js";
 import "./image/image-group.js";
 import "./news/news-group.js";
 import "./paragraph/paragraph-group.js";
+import "./quill-test/quill-test-group.js";
 import "./table/table-group.js";
 import { registerGroup, registerList } from "../../plugin/index.js";
 
@@ -38,6 +39,12 @@ for (const definition of [
     tagName: "paragraph-group",
     selector: "paragraph-group",
     label: "paragraph",
+  },
+  {
+    type: "quill-test",
+    tagName: "quill-test-group",
+    selector: "quill-test-group",
+    label: "Quill test",
   },
   { type: "table", tagName: "table-group", selector: "table-group", label: "table" },
   { type: "footer", tagName: "footer-group", selector: "footer-group", label: "footer" },

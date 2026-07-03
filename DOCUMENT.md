@@ -15,10 +15,11 @@ The app starts from `src/main.js`. It imports `src/plugin/index.js`, which regis
 
 ## Editor Data
 
-The editor loads a versioned page JSON file and initializes `<rich-text-editor>`.
+The host page renders only `<page-editor>`. The component creates its group-order and toolbar
+elements internally in Lit-managed light DOM.
 
 ```js
-document.querySelector("rich-text-editor")?.init(pageData);
+await document.querySelector("page-editor")?.init(pageData);
 ```
 
 The saved shape is:
@@ -180,7 +181,7 @@ const imageResponse = {
 };
 ```
 
-Listen for `image-picker-open` on a parent such as `<rich-text-editor>`:
+Listen for `image-picker-open` on `<page-editor>`:
 
 ```js
 editor.addEventListener("image-picker-open", (event) => {

@@ -159,7 +159,7 @@ export class EditorHistoryControls extends LitElement {
 function findEditor(element) {
   let current = element;
   while (current) {
-    const editor = current.closest?.("rich-text-editor");
+    const editor = current.closest?.("page-editor");
     if (editor) return editor;
     current = current.getRootNode?.().host;
   }

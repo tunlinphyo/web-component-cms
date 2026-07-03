@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "@vaadin/rich-text-editor": "^25.1.4",
-    "lit": "^3.3.3"
+    "lit": "^3.3.3",
+    "quill": "^2.0.3"
   },
   "devDependencies": {
     "typescript": "~6.0.2",

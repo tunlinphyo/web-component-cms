@@ -61,7 +61,7 @@ class BorderRadiusControl extends LitElement {
 
     return html`
       <div class="heading">
-        <span class="title">Border Radius</span>
+        <!-- <span class="title">Border Radius</span> -->
         <label class="mode">
           <span>Custom corners</span>
           <input

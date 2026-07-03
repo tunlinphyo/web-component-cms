@@ -5,12 +5,8 @@
     <title>Migration baseline harness</title>
   </head>
   <body>
-    <rich-text-editor id="fixture-editor">
-      <group-order></group-order>
-    </rich-text-editor>
-    <rich-text-editor id="empty-editor">
-      <group-order></group-order>
-    </rich-text-editor>
+    <page-editor id="fixture-editor"></page-editor>
+    <page-editor id="empty-editor"></page-editor>
     <output id="result">pending</output>
 
     <script type="module">
@@ -19,10 +15,10 @@
       import expected from "./src/assets/data/migration-approved-groups.expected.json";
 
       const fixtureEditor = document.querySelector("#fixture-editor");
-      fixtureEditor.init(fixture);
+      await fixtureEditor.init(fixture);
 
       const emptyEditor = document.querySelector("#empty-editor");
-      emptyEditor.init({ version: 1, groups: [] });
+      await emptyEditor.init({ version: 1, groups: [] });
       const emptyButton = emptyEditor.querySelector("[data-empty-group-picker]");
       emptyButton?.click();
 

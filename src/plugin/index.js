@@ -1,3 +1,4 @@
+export { PageEditor } from "./components/page-editor/page-editor.js";
 export { GroupBase, GROUP_FEATURES } from "./components/groups/base/group-base.js";
 export { EmptyGroupPickerButton } from "./components/groups/base/empty-group-picker-button.js";
 export { GroupOrder } from "./components/groups/base/group-order.js";
@@ -17,4 +18,3 @@ export {
 } from "./registries/list-registry.js";
 
 import "./features/index.js";
-import "./editor/rich-text-editor.js";

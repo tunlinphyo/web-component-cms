@@ -1,5 +1,6 @@
 import { LitElement, html } from "lit";
 import { FEATURES, isFeatureEnabled } from "../../../registries/formatter-registry.js";
+import "../controls/quill/index.js";
 
 const FORMATTERS = [
   "element-type-selector",
@@ -70,6 +71,26 @@ const INLINE_FORMATTERS = [
   ["format-text-color-palette", "colorApplied"],
 ];
 
+const QUILL_FORMATTERS = [
+  "quill-element-type-selector",
+  "quill-format-font-family",
+  "quill-format-font-size",
+  "quill-format-bold",
+  "quill-format-italic",
+  "quill-format-underline",
+  "quill-format-ordered-list",
+  "quill-format-unordered-list",
+  "quill-format-align-left",
+  "quill-format-align-center",
+  "quill-format-align-right",
+  "quill-format-align-justify",
+  "quill-format-highlight",
+  "quill-format-link",
+  "quill-format-link-target",
+  "quill-format-text-color",
+  "quill-format-text-color-palette",
+];
+
 const FORMATTER_FEATURES = {
   "element-type-selector": FEATURES.type,
   "format-font-family": FEATURES.fontFamily,
@@ -110,6 +131,23 @@ const FORMATTER_FEATURES = {
   "table-border-color": FEATURES.border,
   "table-border-style": FEATURES.border,
   "table-border-position": FEATURES.border,
+  "quill-element-type-selector": FEATURES.type,
+  "quill-format-font-family": FEATURES.fontFamily,
+  "quill-format-font-size": FEATURES.fontSize,
+  "quill-format-bold": FEATURES.bold,
+  "quill-format-italic": FEATURES.italic,
+  "quill-format-underline": FEATURES.underline,
+  "quill-format-ordered-list": FEATURES.orderedList,
+  "quill-format-unordered-list": FEATURES.unorderedList,
+  "quill-format-align-left": FEATURES.align,
+  "quill-format-align-center": FEATURES.align,
+  "quill-format-align-right": FEATURES.align,
+  "quill-format-align-justify": FEATURES.align,
+  "quill-format-highlight": FEATURES.backgroundColor,
+  "quill-format-link": FEATURES.link,
+  "quill-format-link-target": FEATURES.linkTarget,
+  "quill-format-text-color": FEATURES.color,
+  "quill-format-text-color-palette": FEATURES.color,
 };
 
 export class FormatToolbar extends LitElement {
@@ -154,6 +192,35 @@ export class FormatToolbar extends LitElement {
         <div class="format-group">
           <format-highlight></format-highlight>
           <format-icon-background-color></format-icon-background-color>
+        </div>
+      </div>
+
+      <div id="quill-text" hidden class="tools">
+        <h2>Quill Text</h2>
+        <quill-element-type-selector></quill-element-type-selector>
+        <quill-format-font-family></quill-format-font-family>
+        <quill-format-text-color-palette></quill-format-text-color-palette>
+        <div class="format-group">
+          <quill-format-bold></quill-format-bold>
+          <quill-format-italic></quill-format-italic>
+          <quill-format-underline></quill-format-underline>
+          <quill-format-font-size></quill-format-font-size>
+        </div>
+        <div class="format-group-aligns">
+          <quill-format-align-left applied></quill-format-align-left>
+          <quill-format-align-center></quill-format-align-center>
+          <quill-format-align-right></quill-format-align-right>
+          <quill-format-align-justify></quill-format-align-justify>
+        </div>
+        <div class="format-group">
+          <quill-format-ordered-list></quill-format-ordered-list>
+          <quill-format-unordered-list></quill-format-unordered-list>
+          <quill-format-link></quill-format-link>
+          <quill-format-link-target></quill-format-link-target>
+        </div>
+        <div class="format-group">
+          <quill-format-highlight></quill-format-highlight>
+          <quill-format-text-color></quill-format-text-color>
         </div>
       </div>
 
@@ -204,7 +271,9 @@ export class FormatToolbar extends LitElement {
   }
 
   firstUpdated() {
-    for (const selector of FORMATTERS) this.#setDisabled(selector, true);
+    for (const selector of [...FORMATTERS, ...QUILL_FORMATTERS]) {
+      this.#setDisabled(selector, true);
+    }
   }
 
   connectedCallback() {
@@ -223,13 +292,15 @@ export class FormatToolbar extends LitElement {
     const buttonSelected = format?.type === "button";
     const iconSelected = format?.type === "icon";
     const tableSelected = format?.type === "table";
+    const quillSelected = format?.editor === "quill";
     const nonTextSelected = imageSelected || buttonSelected || iconSelected || tableSelected;
     const backgroundColorSelected = iconSelected || format?.highlight;
 
     this.querySelector("#text")?.toggleAttribute(
       "hidden",
-      buttonSelected || imageSelected || tableSelected,
+      quillSelected || buttonSelected || imageSelected || tableSelected,
     );
+    this.querySelector("#quill-text")?.toggleAttribute("hidden", !quillSelected);
     this.querySelector("#button")?.toggleAttribute("hidden", !buttonSelected);
     this.querySelector("#image")?.toggleAttribute("hidden", !imageSelected);
     this.querySelector("#table")?.toggleAttribute("hidden", !tableSelected);
@@ -283,8 +354,12 @@ export class FormatToolbar extends LitElement {
     this.#setValue("table-border-color", format?.borderColor ?? "");
     this.#setValue("table-border-style", format?.borderStyle ?? "");
     this.#setValue("table-border-position", format?.borderPosition ?? "");
+    this.#setQuillFormatterState(format);
 
     for (const selector of FORMATTERS) this.#setDisabled(selector, !format);
+    for (const selector of QUILL_FORMATTERS) {
+      this.#setDisabled(selector, !format || !quillSelected);
+    }
 
     for (const selector of TEXT_FORMATTERS) {
       this.#setDisabled(selector, !format || nonTextSelected);
@@ -305,6 +380,7 @@ export class FormatToolbar extends LitElement {
       "format-text-color-palette",
       !format || nonTextSelected || format.collapsed !== false,
     );
+    this.#setDisabled("quill-format-link-target", !quillSelected || !format?.link);
     this.#setDisabled("format-icon-background-color", !backgroundColorSelected);
     this.#setDisabled("format-link-target", nonTextSelected || !format?.link);
     this.#setDisabled("image-background-color", !imageSelected);
@@ -344,6 +420,30 @@ export class FormatToolbar extends LitElement {
 
     this.#applyCapabilities(format);
   };
+
+  #setQuillFormatterState(format) {
+    this.#setValue("quill-element-type-selector", format?.type ?? "p");
+    this.#setValue(
+      "quill-format-font-family",
+      format?.fontFamily || (format?.type === "p" ? "var(--font-body)" : "var(--font-heading)"),
+    );
+    this.#setValue("quill-format-font-size", format?.fontSize ?? "");
+    this.#setApplied("quill-format-bold", format?.bold ?? false);
+    this.#setApplied("quill-format-italic", format?.italic ?? false);
+    this.#setApplied("quill-format-underline", format?.underline ?? false);
+    this.#setApplied("quill-format-ordered-list", format?.orderedList ?? false);
+    this.#setApplied("quill-format-unordered-list", format?.unorderedList ?? false);
+    this.#setApplied("quill-format-align-left", !format?.align || format.align === "left");
+    this.#setApplied("quill-format-align-center", format?.align === "center");
+    this.#setApplied("quill-format-align-right", format?.align === "right");
+    this.#setApplied("quill-format-align-justify", format?.align === "justify");
+    this.#setApplied("quill-format-highlight", format?.highlight ?? false);
+    this.#setApplied("quill-format-link", Boolean(format?.link));
+    this.#setValue("quill-format-link", format?.link ?? "");
+    this.#setValue("quill-format-link-target", format?.target ?? "_self");
+    this.#setValue("quill-format-text-color", toHex(format?.color, "#000000"));
+    this.#setValue("quill-format-text-color-palette", toHex(format?.color, "#000000"));
+  }
 
   #setApplied(selector, applied) {
     for (const formatter of this.querySelectorAll(selector)) formatter.applied = applied;

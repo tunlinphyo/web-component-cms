@@ -8,6 +8,7 @@ const GROUP_LAYOUT_TYPES = [
   "image",
   "news",
   "paragraph",
+  "quill-test",
   "table",
   "footer",
 ];

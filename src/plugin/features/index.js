@@ -3,6 +3,7 @@ import "../components/toolbars/controls/editor-history-controls.js";
 import "../components/toolbars/format-toolbar/format-toolbar.js";
 import "../components/toolbars/group-format-toolbar/group-format-toolbar.js";
 import "./rich-text/index.js";
+import "./quill-text/index.js";
 import "./button/index.js";
 import "./image/index.js";
 import "./icon/index.js";
