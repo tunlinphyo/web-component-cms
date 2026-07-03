@@ -78,13 +78,27 @@ function renderDesign(type) {
         <span class="title"></span>
         <span class="line"></span>
         <span class="line"></span>
-        <span class="line"></span>
         <span class="line medium"></span>
       </div>
     `;
   }
 
-  if (type === "image" || type === "hero") {
+  if (type === "hero") {
+    return html`
+      <div class="split">
+        <span class="stack">
+          <span class="title"></span>
+          <span class="line"></span>
+          <span class="line"></span>
+          <span class="line"></span>
+          <span class="line medium"></span>
+        </span>
+        <span class="media"></span>
+      </div>
+    `;
+  }
+
+  if (type === "image") {
     return html`<span class="media"></span>`;
   }
 

@@ -106,10 +106,93 @@
             ]
         },
         {
+            "id": "b40bd576-00ee-414f-b9a7-8bce726f0908",
+            "type": "hero",
+            "hashId": "",
+            "sort": 1,
+            "style": {
+                "backgroundColor": "#ffffff",
+                "borderWidth": "",
+                "borderColor": "",
+                "borderStyle": "",
+                "borderPosition": "",
+                "borderRadius": ""
+            },
+            "blocks": [
+                {
+                    "id": "title",
+                    "value": "Website Description",
+                    "textAlign": "left",
+                    "fontWeight": "",
+                    "fontSize": "40px",
+                    "fontFamily": "var(--font-heading)",
+                    "predefinedMargin": "0.5rem",
+                    "type": "h1"
+                },
+                {
+                    "id": "description",
+                    "value": "<p><span style=\"font-size: 24px;\"><b>Pulvinar vivamus fringilla lacus nec metus bibendum egestas.</b></span></p>",
+                    "textAlign": "left",
+                    "fontWeight": "",
+                    "fontSize": "",
+                    "fontFamily": "var(--font-body)",
+                    "predefinedMargin": "0.5rem",
+                    "type": "p"
+                },
+                {
+                    "id": "icon-1",
+                    "icon": "calendar_today",
+                    "fontSize": "20px",
+                    "color": "#ffffff",
+                    "backgroundColor": "#2684ff",
+                    "link": "",
+                    "align": "left",
+                    "type": "icon"
+                },
+                {
+                    "id": "icon-2",
+                    "icon": "featured_seasonal_and_gifts",
+                    "fontSize": "20px",
+                    "color": "#ffffff",
+                    "backgroundColor": "#e8426e",
+                    "link": "",
+                    "align": "left",
+                    "type": "icon"
+                },
+                {
+                    "id": "icon-3",
+                    "icon": "storefront",
+                    "fontSize": "20px",
+                    "color": "#ffffff",
+                    "backgroundColor": "#cc9a06",
+                    "link": "",
+                    "align": "left",
+                    "type": "icon"
+                },
+                {
+                    "id": "image",
+                    "src": "/images/app.png",
+                    "alt": "app.png",
+                    "objectFit": "contain",
+                    "align": "left",
+                    "link": "",
+                    "target": "_self",
+                    "backgroundColor": "",
+                    "borderWidth": "",
+                    "borderColor": "",
+                    "borderStyle": "",
+                    "borderPosition": "",
+                    "borderRadius": "",
+                    "disabled": false,
+                    "type": "image"
+                }
+            ]
+        },
+        {
             "id": "8bf96176-6527-43f6-a598-fe405d8e0a8d",
             "type": "home-news",
             "hashId": "",
-            "sort": 1,
+            "sort": 2,
             "style": {
                 "backgroundColor": "",
                 "borderWidth": "",
@@ -233,7 +316,7 @@
             "id": "e9fcf1ae-6cae-42f1-85ff-78072db6d0ff",
             "type": "image",
             "hashId": "",
-            "sort": 2,
+            "sort": 3,
             "style": {
                 "backgroundColor": "",
                 "borderWidth": "",
@@ -266,7 +349,7 @@
             "id": "a0d07c45-bf34-4828-8804-8a5d33cfb0ea",
             "type": "table",
             "hashId": "",
-            "sort": 3,
+            "sort": 4,
             "style": {
                 "backgroundColor": "",
                 "borderWidth": "",
@@ -386,7 +469,7 @@
             "id": "0803c542-54ef-446e-a8af-e11b9b36f008",
             "type": "about",
             "hashId": "",
-            "sort": 4,
+            "sort": 5,
             "style": {
                 "backgroundColor": "",
                 "borderWidth": "",
@@ -422,7 +505,7 @@
             "id": "1f309b6c-04bd-4c94-8ae6-8fe511b1ed0f",
             "type": "footer",
             "hashId": "",
-            "sort": 5,
+            "sort": 6,
             "style": {
                 "backgroundColor": "",
                 "borderWidth": "",

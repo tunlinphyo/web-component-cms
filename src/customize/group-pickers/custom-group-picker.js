@@ -1,7 +1,7 @@
 import { listGroupDefinitions } from "../../plugin/index.js";
 import { GroupPickerDialog } from "./group-picker-dialog.js";
 
-const ALLOWED_GROUP_TYPES = new Set(["header", "home-news", "about", "image", "table", "footer"]);
+const ALLOWED_GROUP_TYPES = new Set(["header", "hero", "home-news", "about", "image", "table", "footer"]);
 
 export class CustomGroupPicker extends GroupPickerDialog {
   get groups() {

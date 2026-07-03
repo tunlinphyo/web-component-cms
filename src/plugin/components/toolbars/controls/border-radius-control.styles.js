@@ -40,7 +40,7 @@ export const borderRadiusControlStyles = css`
     height: 1.25rem;
     margin: 0;
     appearance: none;
-    border: 1px solid var(--gray-400);
+    border: 1px solid var(--gray-300);
     border-radius: 999px;
     background: var(--gray-200);
     cursor: pointer;
