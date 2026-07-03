@@ -35,20 +35,23 @@ export const groupBaseStyles = css`
   .sort-controls {
     display: flex;
     justify-content: center;
-    translate: 0 -50%;
     pointer-events: none;
-    /* opacity: 0;
-      pointer-events: none; */
+    position: relative;
+    height: 1.5rem;
   }
 
   .button-group {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    translate: -50% 0;
     pointer-events: auto;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 0.25rem;
     padding: 0.5rem;
-    background-color: oklch(from var(--gray-300) l c h / 0.5);
+    background-color: oklch(from var(--gray-200) l c h / 0.5);
     backdrop-filter: blur(3px);
     border-radius: 100vh;
   }

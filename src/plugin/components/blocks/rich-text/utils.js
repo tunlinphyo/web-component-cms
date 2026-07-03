@@ -1,5 +1,6 @@
 const BLOCK_TYPES = ["h1", "h2", "h3", "p"];
 const PARAGRAPH_CONTENT_TAGS = ["P", "UL", "OL"];
+const ELEMENT_NODE = 1;
 
 export function normalizeBlockType(type) {
   return BLOCK_TYPES.includes(type) ? type : "p";
@@ -183,6 +184,8 @@ export function unwrapListsFromParagraphs(editor) {
 }
 
 export function wrapParagraphContent(editor) {
+  if (!needsParagraphWrapping(editor)) return false;
+
   const fragment = document.createDocumentFragment();
   let paragraph = null;
 
@@ -205,6 +208,13 @@ export function wrapParagraphContent(editor) {
   }
 
   editor.append(fragment);
+  return true;
+}
+
+export function needsParagraphWrapping(editor) {
+  return Array.from(editor.childNodes).some(
+    (node) => node.nodeType !== ELEMENT_NODE || !PARAGRAPH_CONTENT_TAGS.includes(node.tagName),
+  );
 }
 
 export function removeLinkSelectionPreview(editor, range) {

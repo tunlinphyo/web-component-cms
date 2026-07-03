@@ -1,4 +1,5 @@
 import { FormatColor } from "./format-color";
+import { DEFAULT_TEXT_COLOR } from "../../../utils/colors.js";
 
 export class FormatTextColor extends FormatColor {
   command = "foreColor";
@@ -6,7 +7,7 @@ export class FormatTextColor extends FormatColor {
 
   constructor() {
     super();
-    this.value = "#000000";
+    this.value = DEFAULT_TEXT_COLOR;
   }
 }
 

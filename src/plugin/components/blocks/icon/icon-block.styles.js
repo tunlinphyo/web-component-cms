@@ -60,19 +60,7 @@ export const iconBlockStyles = css`
     padding: 0.25em;
   }
 
-  .options {
-    display: grid;
-    grid-template-columns: repeat(3, 2.75rem);
-    gap: 4px;
-  }
-
-  .icon {
-    width: 100%;
-    height: 100%;
-    fill: none;
-    stroke: currentColor;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-width: 2;
+  .input .material-symbol {
+    font-size: 1em;
   }
 `;

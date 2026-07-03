@@ -46,17 +46,13 @@ import "./style.css";
 import "./plugin/index.js";
 ```
 
-This registers tags such as:
+This registers the public editor element:
 
 ```html
 <rich-text-editor></rich-text-editor>
-<group-order></group-order>
-<format-toolbar></format-toolbar>
-<group-format-toolbar></group-format-toolbar>
-<rich-text-block></rich-text-block>
-<image-block></image-block>
-<button-block></button-block>
 ```
+
+The editor creates its group order, toolbars, groups, and blocks internally.
 
 Do not import old `src/elements/...` paths. They were replaced by modules under `src/plugin/`.
 
@@ -133,7 +129,7 @@ onMounted(async () => {
   const response = await fetch(pageDataUrl);
   const pageData = await response.json();
 
-  editorRef.value?.init(pageData);
+  await editorRef.value?.init(pageData);
 });
 
 function logOutput() {
@@ -155,45 +151,12 @@ function handleImagePickerOpen(event) {
 </script>
 
 <template>
-  <rich-text-editor ref="editorRef" @image-picker-open="handleImagePickerOpen">
-    <section>
-      <group-order picker="content"></group-order>
-
-      <footer>
-        <button type="button" @click="logOutput">Log Output</button>
-        <button type="button" @click="undo">Undo</button>
-        <button type="button" @click="redo">Redo</button>
-      </footer>
-    </section>
-
-    <nav>
-      <group-format-toolbar>
-        <h2>Group</h2>
-        <div class="format-group">
-          <group-background-color></group-background-color>
-          <group-border-color></group-border-color>
-        </div>
-        <div class="format-group">
-          <group-border-width></group-border-width>
-          <group-border-style></group-border-style>
-        </div>
-        <div class="format-group">
-          <group-border-radius></group-border-radius>
-        </div>
-        <hr />
-        <div class="format-group">
-          <block-group-filter></block-group-filter>
-          <block-group-sort></block-group-sort>
-        </div>
-      </group-format-toolbar>
-
-      <hr />
-
-      <format-toolbar>
-        <!-- Move the existing toolbar markup from index.html here. -->
-      </format-toolbar>
-    </nav>
-  </rich-text-editor>
+  <rich-text-editor ref="editorRef" @image-picker-open="handleImagePickerOpen"></rich-text-editor>
+  <footer>
+    <button type="button" @click="logOutput">Log Output</button>
+    <button type="button" @click="undo">Undo</button>
+    <button type="button" @click="redo">Redo</button>
+  </footer>
 </template>
 ```
 
@@ -218,7 +181,7 @@ import RichTextEditorWrapper from "./components/RichTextEditorWrapper.vue";
 Vue controls the Web Component through a normal DOM ref:
 
 ```js
-editorRef.value.init(pageData);
+await editorRef.value.init(pageData);
 editorRef.value.toJSON();
 editorRef.value.undo();
 editorRef.value.redo();
@@ -231,9 +194,7 @@ The editor keeps its internal Lit/Web Component behavior. Vue owns layout, routi
 `image-block` no longer opens the native file picker. It emits `image-picker-open`, and Vue can provide the current image list:
 
 ```vue
-<rich-text-editor ref="editorRef" @image-picker-open="handleImagePickerOpen">
-  ...
-</rich-text-editor>
+<rich-text-editor ref="editorRef" @image-picker-open="handleImagePickerOpen"></rich-text-editor>
 ```
 
 ```js

@@ -2,16 +2,3 @@
 @import url(./styles/fonts.css);
 @import url(./styles/color.css);
 @import url(./styles/layout.css);
-
-:where(html, body) {
-  color: var(--brand-900);
-}
-
-.editor-page {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 64rem;
-  margin: 1rem auto;
-  border-block: 2px solid #999;
-}

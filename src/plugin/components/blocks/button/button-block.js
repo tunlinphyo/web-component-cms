@@ -1,10 +1,12 @@
 import { LitElement, html } from "lit";
-import { iconOptions } from "../../../../customize/config/icons.js";
-import { buttonBlockStyles } from "./button-block.styles.js";
+import { materialIconNames } from "../../../../customize/config/material-icons.js";
 import {
-  getCapabilities,
-  toFeatureAttribute,
-} from "../../../registries/formatter-registry.js";
+  materialSymbolStyles,
+  renderMaterialIcon,
+  toMaterialIconName,
+} from "../../icon-picker/material-icon-picker.js";
+import { buttonBlockStyles } from "./button-block.styles.js";
+import { getCapabilities, toFeatureAttribute } from "../../../registries/formatter-registry.js";
 
 export class ButtonBlock extends LitElement {
   static properties = {
@@ -21,7 +23,7 @@ export class ButtonBlock extends LitElement {
     features: { type: String, reflect: true },
   };
 
-  static styles = buttonBlockStyles;
+  static styles = [materialSymbolStyles, buttonBlockStyles];
 
   constructor() {
     super();
@@ -108,7 +110,7 @@ export class ButtonBlock extends LitElement {
     }
     if (!["start", "end"].includes(placement)) return false;
 
-    this.icon ||= iconOptions[0].value;
+    this.icon ||= materialIconNames[0];
     this.iconPosition = placement;
     return true;
   }
@@ -137,13 +139,14 @@ export class ButtonBlock extends LitElement {
           ? html`
               <button
                 class="icon-picker-trigger"
+                part="icon-picker-trigger"
                 type="button"
                 title="Choose button icon"
                 aria-label="Choose button icon"
                 popovertarget="button-icon-picker"
                 ?disabled=${this.disabled}
               >
-                ${iconOptions.find(({ value }) => value === this.icon)?.svg}
+                ${renderMaterialIcon(toMaterialIconName(this.icon))}
               </button>
             `
           : null}
@@ -158,22 +161,10 @@ export class ButtonBlock extends LitElement {
         ></span>
       </span>
       <div id="button-icon-picker" popover>
-        <div class="icon-options">
-          ${iconOptions.map(
-            ({ value, label, svg }) => html`
-              <button
-                type="button"
-                title=${label}
-                aria-label=${label}
-                aria-pressed=${this.icon === value}
-                data-icon=${value}
-                @click=${this.#changeIcon}
-              >
-                ${svg}
-              </button>
-            `,
-          )}
-        </div>
+        <material-icon-picker
+          .value=${toMaterialIconName(this.icon)}
+          @icon-select=${this.#changeIcon}
+        ></material-icon-picker>
       </div>
     `;
   }
@@ -192,7 +183,7 @@ export class ButtonBlock extends LitElement {
   }
 
   #changeIcon = (event) => {
-    this.icon = event.currentTarget.dataset.icon;
+    this.icon = event.detail.icon;
     this.renderRoot.querySelector("[popover]")?.hidePopover();
     this.dispatchEvent(
       new CustomEvent("button-icon-change", {

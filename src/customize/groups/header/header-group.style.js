@@ -1,13 +1,15 @@
 import { css } from "lit";
 
 export const headerGroupStyles = css`
+
   header {
-    padding-inline: 0 1rem;
+    padding-inline: 1rem;
+    margin-bottom: 0.5rem;
   }
 
-  rich-text-block[block-id="title"] {
+  /* rich-text-block[block-id="title"] {
     padding-inline-start: 1rem;
-  }
+  } */
 
   .container {
     display: grid;
@@ -18,14 +20,14 @@ export const headerGroupStyles = css`
   }
 
   nav,
-  header-button-block-group {
+  nav-button-group {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     gap: 0.5rem;
   }
 
-  header-button-block-group .empty-placeholder {
+  nav-button-group .empty-placeholder {
     width: auto;
     min-width: 7rem;
     min-height: 2.5rem;
@@ -38,6 +40,12 @@ export const headerGroupStyles = css`
   }
 
   image-block::part(picker) {
+    width: auto;
     min-height: 4rem;
+  }
+
+  image-block::part(image) {
+    width: auto;
+    height: 100%;
   }
 `;

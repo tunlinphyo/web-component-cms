@@ -1,0 +1,135 @@
+import { css, html, LitElement } from "lit";
+import { materialIconNames } from "../../../customize/config/material-icons.js";
+
+// loadMaterialSymbols();
+
+export const materialSymbolStyles = css`
+  .material-symbol {
+    display: inline-block;
+    direction: ltr;
+    font-family: "Material Symbols Outlined";
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: normal;
+    font-feature-settings: "liga";
+    letter-spacing: normal;
+    line-height: 1;
+    text-transform: none;
+    white-space: nowrap;
+    word-wrap: normal;
+    -webkit-font-smoothing: antialiased;
+  }
+`;
+
+const materialIconPickerStyles = css`
+  :host {
+    display: grid;
+    grid-template-columns: repeat(10, 2.75rem);
+    gap: 0.25rem;
+  }
+
+  button {
+    display: inline-grid;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: white;
+    color: inherit;
+    cursor: pointer;
+    place-items: center;
+  }
+
+  button:hover,
+  button:focus-visible,
+  button[aria-pressed="true"] {
+    outline: 2px solid var(--highlight);
+    outline-offset: -1px;
+  }
+`;
+
+export class MaterialIconPicker extends LitElement {
+  static properties = {
+    value: { type: String },
+  };
+
+  static styles = [materialSymbolStyles, materialIconPickerStyles];
+
+  constructor() {
+    super();
+    this.value = "";
+  }
+
+  render() {
+    return materialIconNames.map(
+      (name) => html`
+        <button
+          type="button"
+          title=${toIconLabel(name)}
+          aria-label=${toIconLabel(name)}
+          aria-pressed=${this.value === name}
+          data-value=${name}
+          @click=${this.#select}
+        >
+          ${renderMaterialIcon(name)}
+        </button>
+      `,
+    );
+  }
+
+  #select = (event) => {
+    const icon = event.currentTarget.dataset.value;
+    this.value = icon;
+    this.dispatchEvent(
+      new CustomEvent("icon-select", {
+        detail: { icon },
+        bubbles: true,
+        composed: true,
+      }),
+    );
+  };
+}
+
+customElements.define("material-icon-picker", MaterialIconPicker);
+
+export function renderMaterialIcon(name) {
+  return html`<span class="material-symbol" aria-hidden="true">${name}</span>`;
+}
+
+export function toMaterialIconName(name) {
+  return (
+    {
+      "arrow-left": "arrow_back",
+      "arrow-right": "arrow_forward",
+      "external-link": "open_in_new",
+      gift: "redeem",
+      heart: "favorite",
+      plus: "add",
+      store: "storefront",
+    }[name] ?? name
+  );
+}
+
+function toIconLabel(name) {
+  return name
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
+function loadMaterialSymbols() {
+  if (typeof document === "undefined") return;
+  if (document.querySelector("link[data-material-symbols]")) return;
+
+  const query = new URLSearchParams({
+    family: "Material Symbols Outlined",
+    icon_names: [...materialIconNames].sort().join(","),
+    display: "block",
+  });
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.href = `https://fonts.googleapis.com/css2?${query}`;
+  link.dataset.materialSymbols = "";
+  document.head.append(link);
+}

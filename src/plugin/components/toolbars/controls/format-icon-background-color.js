@@ -1,6 +1,10 @@
 import { html } from "lit";
 import { PopoverControl } from "./popover-control.js";
-import { EDITOR_COLOR_SWATCHES } from "../../../utils/colors.js";
+import {
+  COLOR_WHEEL_GRADIENT,
+  DEFAULT_BACKGROUND_COLOR,
+  EDITOR_COLOR_SWATCHES,
+} from "../../../utils/colors.js";
 import { formatTextColorPaletteStyles } from "./format-text-color-palette.styles.js";
 
 export class FormatIconBackgroundColor extends PopoverControl {
@@ -14,7 +18,7 @@ export class FormatIconBackgroundColor extends PopoverControl {
   constructor() {
     super();
     this.disabled = false;
-    this.value = "#ffffff";
+    this.value = DEFAULT_BACKGROUND_COLOR;
   }
 
   render() {
@@ -33,7 +37,7 @@ export class FormatIconBackgroundColor extends PopoverControl {
           <foreignObject x="3" y="3" width="18" height="18">
             <div
               xmlns="http://www.w3.org/1999/xhtml"
-              style="width: 18px; height: 18px; border-radius: 50%; background: conic-gradient(#ff3b30, #ff9500, #ffcc00, #34c759, #00c7be, #007aff, #5856d6, #af52de, #ff2d55, #ff3b30);"
+              style=${`width: 18px; height: 18px; border-radius: 50%; background: ${COLOR_WHEEL_GRADIENT};`}
             ></div>
           </foreignObject>
           <circle

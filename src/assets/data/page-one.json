@@ -1,4 +1,499 @@
 {
-  "version": 1,
-  "groups": []
+    "version": 1,
+    "groups": [
+        {
+            "id": "e3c337fb-dd4b-4d88-8bc3-4b856e058a86",
+            "type": "header",
+            "hashId": "",
+            "sort": 0,
+            "style": {
+                "backgroundColor": "#fef0f4",
+                "borderWidth": "",
+                "borderColor": "",
+                "borderStyle": "",
+                "borderPosition": "",
+                "borderRadius": ""
+            },
+            "blocks": [
+                {
+                    "id": "title",
+                    "value": "<p><b><span style=\"font-size: 14px;\"><font color=\"#d6295a\">Test website for Testing</font><font color=\"#0c430d\"></font></span></b></p>",
+                    "textAlign": "left",
+                    "fontWeight": "",
+                    "fontSize": "",
+                    "fontFamily": "var(--font-body)",
+                    "predefinedMargin": "0",
+                    "type": "p"
+                },
+                {
+                    "id": "logo",
+                    "src": "/images/logo-h.png",
+                    "alt": "logo-h.png",
+                    "objectFit": "contain",
+                    "align": "left",
+                    "link": "",
+                    "target": "_self",
+                    "backgroundColor": "",
+                    "borderWidth": "",
+                    "borderColor": "",
+                    "borderStyle": "",
+                    "borderPosition": "",
+                    "borderRadius": "",
+                    "disabled": false,
+                    "type": "image"
+                },
+                {
+                    "id": "navs",
+                    "type": "navs",
+                    "children": [
+                        {
+                            "id": "aec1ba51bdc2",
+                            "text": "Stores",
+                            "design": "nav",
+                            "icon": "storefront",
+                            "iconPosition": "start",
+                            "link": "",
+                            "target": "_self",
+                            "tag": "button",
+                            "align": "left",
+                            "disabled": false,
+                            "type": "button",
+                            "sort": 0
+                        },
+                        {
+                            "id": "618ecbc2a368",
+                            "text": "Promotion",
+                            "design": "nav",
+                            "icon": "percent_discount",
+                            "iconPosition": "start",
+                            "link": "",
+                            "target": "_self",
+                            "tag": "button",
+                            "align": "left",
+                            "disabled": false,
+                            "type": "button",
+                            "sort": 1
+                        },
+                        {
+                            "id": "9e8bc318d097",
+                            "text": "QAndA",
+                            "design": "nav",
+                            "icon": "help",
+                            "iconPosition": "start",
+                            "link": "",
+                            "target": "_self",
+                            "tag": "button",
+                            "align": "left",
+                            "disabled": false,
+                            "type": "button",
+                            "sort": 2
+                        }
+                    ]
+                },
+                {
+                    "id": "button",
+                    "text": "Partner",
+                    "design": "dark",
+                    "icon": "",
+                    "iconPosition": "none",
+                    "link": "",
+                    "target": "_self",
+                    "tag": "button",
+                    "align": "left",
+                    "disabled": false,
+                    "type": "button"
+                }
+            ]
+        },
+        {
+            "id": "8bf96176-6527-43f6-a598-fe405d8e0a8d",
+            "type": "home-news",
+            "hashId": "",
+            "sort": 1,
+            "style": {
+                "backgroundColor": "",
+                "borderWidth": "",
+                "borderColor": "",
+                "borderStyle": "",
+                "borderPosition": "",
+                "borderRadius": ""
+            },
+            "blocks": [
+                {
+                    "id": "title",
+                    "value": "<font color=\"#d6295a\">News</font>",
+                    "textAlign": "left",
+                    "fontWeight": "",
+                    "fontSize": "",
+                    "fontFamily": "var(--font-heading)",
+                    "predefinedMargin": "0",
+                    "type": "h2"
+                },
+                {
+                    "id": "news",
+                    "type": "news",
+                    "children": [
+                        {
+                            "id": "news-1",
+                            "type": "news",
+                            "hashId": "",
+                            "sort": 0,
+                            "style": {
+                                "backgroundColor": "",
+                                "borderWidth": "1px",
+                                "borderColor": "#F2ADC0",
+                                "borderStyle": "solid",
+                                "borderPosition": "",
+                                "borderRadius": "16px"
+                            },
+                            "blocks": [
+                                {
+                                    "id": "date",
+                                    "value": "<font color=\"#d6295a\">January 2 </font>",
+                                    "textAlign": "left",
+                                    "fontWeight": "normal",
+                                    "fontSize": "24px",
+                                    "fontFamily": "var(--font-shiokaze)",
+                                    "predefinedMargin": "0.5rem",
+                                    "type": "h2"
+                                },
+                                {
+                                    "id": "title",
+                                    "value": "<font color=\"#d6295a\">Google News</font>",
+                                    "textAlign": "left",
+                                    "fontWeight": "",
+                                    "fontSize": "20px",
+                                    "fontFamily": "var(--font-body)",
+                                    "predefinedMargin": "0.5rem",
+                                    "type": "h2"
+                                },
+                                {
+                                    "id": "description",
+                                    "value": "<p>Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p>",
+                                    "textAlign": "left",
+                                    "fontWeight": "",
+                                    "fontSize": "",
+                                    "fontFamily": "var(--font-body)",
+                                    "predefinedMargin": "0.5rem",
+                                    "type": "p"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "news-2",
+                            "type": "news",
+                            "hashId": "",
+                            "sort": 1,
+                            "style": {
+                                "backgroundColor": "#fef0f4",
+                                "borderWidth": "1px",
+                                "borderColor": "#f2adc0",
+                                "borderStyle": "solid",
+                                "borderPosition": "",
+                                "borderRadius": "16px"
+                            },
+                            "blocks": [
+                                {
+                                    "id": "date",
+                                    "value": "<font color=\"#d6295a\">March 28</font>",
+                                    "textAlign": "left",
+                                    "fontWeight": "normal",
+                                    "fontSize": "24px",
+                                    "fontFamily": "var(--font-shiokaze)",
+                                    "predefinedMargin": "0.5rem",
+                                    "type": "h2"
+                                },
+                                {
+                                    "id": "title",
+                                    "value": "<font color=\"#d6295a\">Apple News</font>",
+                                    "textAlign": "left",
+                                    "fontWeight": "",
+                                    "fontSize": "20px",
+                                    "fontFamily": "var(--font-body)",
+                                    "predefinedMargin": "0.5rem",
+                                    "type": "h2"
+                                },
+                                {
+                                    "id": "description",
+                                    "value": "<p><font color=\"#0c430d\"></font>Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.<font color=\"#0c430d\"></font></p>",
+                                    "textAlign": "left",
+                                    "fontWeight": "",
+                                    "fontSize": "",
+                                    "fontFamily": "var(--font-body)",
+                                    "predefinedMargin": "0.5rem",
+                                    "type": "p"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "e9fcf1ae-6cae-42f1-85ff-78072db6d0ff",
+            "type": "image",
+            "hashId": "",
+            "sort": 2,
+            "style": {
+                "backgroundColor": "",
+                "borderWidth": "",
+                "borderColor": "",
+                "borderStyle": "",
+                "borderPosition": "",
+                "borderRadius": ""
+            },
+            "blocks": [
+                {
+                    "id": "image",
+                    "src": "/images/hokupay2.jpg",
+                    "alt": "hokupay2.jpg",
+                    "objectFit": "none",
+                    "align": "left",
+                    "link": "",
+                    "target": "_self",
+                    "backgroundColor": "#f0f0f0",
+                    "borderWidth": "",
+                    "borderColor": "",
+                    "borderStyle": "",
+                    "borderPosition": "",
+                    "borderRadius": "",
+                    "disabled": false,
+                    "type": "image"
+                }
+            ]
+        },
+        {
+            "id": "a0d07c45-bf34-4828-8804-8a5d33cfb0ea",
+            "type": "table",
+            "hashId": "",
+            "sort": 3,
+            "style": {
+                "backgroundColor": "",
+                "borderWidth": "",
+                "borderColor": "",
+                "borderStyle": "",
+                "borderPosition": "",
+                "borderRadius": ""
+            },
+            "blocks": [
+                {
+                    "id": "title",
+                    "value": "<font color=\"#d6295a\">Table</font>",
+                    "textAlign": "center",
+                    "fontWeight": "",
+                    "fontSize": "",
+                    "fontFamily": "var(--font-heading)",
+                    "predefinedMargin": "0",
+                    "type": "h2"
+                },
+                {
+                    "id": "description",
+                    "value": "<p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. </p><p>Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p>",
+                    "textAlign": "left",
+                    "fontWeight": "",
+                    "fontSize": "",
+                    "fontFamily": "var(--font-body)",
+                    "predefinedMargin": "0.5rem",
+                    "type": "p"
+                },
+                {
+                    "id": "table",
+                    "type": "table",
+                    "cells": [
+                        [
+                            {
+                                "value": "<p>One</p>",
+                                "textAlign": "left",
+                                "fontWeight": "",
+                                "fontSize": "",
+                                "fontFamily": "var(--font-body)"
+                            },
+                            {
+                                "value": "<p>Two</p>",
+                                "textAlign": "left",
+                                "fontWeight": "",
+                                "fontSize": "",
+                                "fontFamily": "var(--font-body)"
+                            },
+                            {
+                                "value": "<p>Three</p>",
+                                "textAlign": "left",
+                                "fontWeight": "",
+                                "fontSize": "",
+                                "fontFamily": "var(--font-body)"
+                            }
+                        ],
+                        [
+                            {
+                                "value": "<p>apple</p>",
+                                "textAlign": "left",
+                                "fontWeight": "",
+                                "fontSize": "",
+                                "fontFamily": "var(--font-body)"
+                            },
+                            {
+                                "value": "<p>mango</p>",
+                                "textAlign": "left",
+                                "fontWeight": "",
+                                "fontSize": "",
+                                "fontFamily": "var(--font-body)"
+                            },
+                            {
+                                "value": "<p>orange</p>",
+                                "textAlign": "left",
+                                "fontWeight": "",
+                                "fontSize": "",
+                                "fontFamily": "var(--font-body)"
+                            }
+                        ],
+                        [
+                            {
+                                "value": "<p>banana</p>",
+                                "textAlign": "left",
+                                "fontWeight": "",
+                                "fontSize": "",
+                                "fontFamily": "var(--font-body)"
+                            },
+                            {
+                                "value": "<p>lime</p>",
+                                "textAlign": "left",
+                                "fontWeight": "",
+                                "fontSize": "",
+                                "fontFamily": "var(--font-body)"
+                            },
+                            {
+                                "value": "<p>pineapple</p>",
+                                "textAlign": "left",
+                                "fontWeight": "",
+                                "fontSize": "",
+                                "fontFamily": "var(--font-body)"
+                            }
+                        ]
+                    ],
+                    "headerRow": true,
+                    "headerColumn": false,
+                    "headerBackgroundColor": "#ec83a1",
+                    "bodyBackgroundColor": "#fef0f4",
+                    "borderWidth": "1px",
+                    "borderColor": "#FFFFFF",
+                    "borderStyle": "solid",
+                    "borderPosition": "",
+                    "disabled": false
+                }
+            ]
+        },
+        {
+            "id": "0803c542-54ef-446e-a8af-e11b9b36f008",
+            "type": "about",
+            "hashId": "",
+            "sort": 4,
+            "style": {
+                "backgroundColor": "",
+                "borderWidth": "",
+                "borderColor": "",
+                "borderStyle": "",
+                "borderPosition": "",
+                "borderRadius": ""
+            },
+            "blocks": [
+                {
+                    "id": "title",
+                    "value": "<font color=\"#d6295a\">Paragraph</font>",
+                    "textAlign": "left",
+                    "fontWeight": "",
+                    "fontSize": "",
+                    "fontFamily": "var(--font-heading)",
+                    "predefinedMargin": "0",
+                    "type": "h2"
+                },
+                {
+                    "id": "description",
+                    "value": "<p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.<br><br>Lorem ipsum dolor sit amet consectetur adipiscing elit. <mark style=\"--mark-highlight-color: #FFC107;\">Quisque faucibus ex sapien vitae pellentesque sem placerat.</mark> In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.<br><br>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p>",
+                    "textAlign": "left",
+                    "fontWeight": "",
+                    "fontSize": "",
+                    "fontFamily": "var(--font-body)",
+                    "predefinedMargin": "0.5rem",
+                    "type": "p"
+                }
+            ]
+        },
+        {
+            "id": "1f309b6c-04bd-4c94-8ae6-8fe511b1ed0f",
+            "type": "footer",
+            "hashId": "",
+            "sort": 5,
+            "style": {
+                "backgroundColor": "",
+                "borderWidth": "",
+                "borderColor": "",
+                "borderStyle": "",
+                "borderPosition": "",
+                "borderRadius": ""
+            },
+            "blocks": [
+                {
+                    "id": "logo",
+                    "src": "/images/logo-v.png",
+                    "alt": "logo-v.png",
+                    "objectFit": "contain",
+                    "align": "start",
+                    "link": "",
+                    "target": "_self",
+                    "backgroundColor": "",
+                    "borderWidth": "",
+                    "borderColor": "",
+                    "borderStyle": "",
+                    "borderPosition": "",
+                    "borderRadius": "",
+                    "disabled": false,
+                    "type": "image"
+                },
+                {
+                    "id": "logo2",
+                    "src": "/images/kita-city.png",
+                    "alt": "kita-city.png",
+                    "objectFit": "contain",
+                    "align": "start",
+                    "link": "",
+                    "target": "_self",
+                    "backgroundColor": "",
+                    "borderWidth": "",
+                    "borderColor": "",
+                    "borderStyle": "",
+                    "borderPosition": "",
+                    "borderRadius": "",
+                    "disabled": false,
+                    "type": "image"
+                },
+                {
+                    "id": "logo3",
+                    "src": "/images/beyond.png",
+                    "alt": "beyond.png",
+                    "objectFit": "contain",
+                    "align": "start",
+                    "link": "",
+                    "target": "_self",
+                    "backgroundColor": "",
+                    "borderWidth": "",
+                    "borderColor": "",
+                    "borderStyle": "",
+                    "borderPosition": "",
+                    "borderRadius": "",
+                    "disabled": false,
+                    "type": "image"
+                },
+                {
+                    "id": "copyright",
+                    "value": "<p><span style=\"font-size: 14px;\"><font color=\"#d6295a\">copyright@ 2026</font></span></p>",
+                    "textAlign": "left",
+                    "fontWeight": "",
+                    "fontSize": "",
+                    "fontFamily": "var(--font-body)",
+                    "predefinedMargin": "0",
+                    "type": "p"
+                }
+            ]
+        }
+    ]
 }

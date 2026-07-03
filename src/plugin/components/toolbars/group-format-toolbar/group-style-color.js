@@ -1,6 +1,9 @@
 import { html, nothing } from "lit";
 import { PopoverControl } from "../controls/popover-control.js";
-import { EDITOR_COLOR_SWATCHES_WITH_UNSET } from "../../../utils/colors.js";
+import {
+  COLOR_WHEEL_GRADIENT,
+  EDITOR_COLOR_SWATCHES_WITH_UNSET,
+} from "../../../utils/colors.js";
 import { groupStyleColorStyles } from "./group-style-color.styles.js";
 
 class GroupStyleColor extends PopoverControl {
@@ -38,7 +41,7 @@ class GroupStyleColor extends PopoverControl {
             <foreignObject x="3" y="3" width="18" height="18">
               <div
                 xmlns="http://www.w3.org/1999/xhtml"
-                style="width: 18px; height: 18px; border-radius: 50%; background: conic-gradient(#ff3b30, #ff9500, #ffcc00, #34c759, #00c7be, #007aff, #5856d6, #af52de, #ff2d55, #ff3b30);"
+                style=${`width: 18px; height: 18px; border-radius: 50%; background: ${COLOR_WHEEL_GRADIENT};`}
               ></div>
             </foreignObject>
             <circle

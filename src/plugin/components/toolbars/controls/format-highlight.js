@@ -8,7 +8,6 @@ export class FormatHighlight extends FormatToggle {
     FormatToggle.styles,
     css`
       button {
-        min-width: 64px;
         padding: 0 0.5rem;
       }
 
@@ -27,7 +26,7 @@ export class FormatHighlight extends FormatToggle {
       ?disabled=${this.disabled}
       @click=${() => this.apply()}
     >
-      <mark>Highlight</mark>
+      <mark>Mark</mark>
     </button>`;
   }
 }

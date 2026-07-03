@@ -1,6 +1,6 @@
-import { BlockListGroup } from "../block-list/block-list-group.js";
+import { BlockListGroup } from "../../../plugin/index.js";
 
-export class HeaderButtonBlockGroup extends BlockListGroup {
+export class NavButtonGroup extends BlockListGroup {
   get prefix() {
     return this.getAttribute("prefix") || "nav";
   }
@@ -16,6 +16,14 @@ export class HeaderButtonBlockGroup extends BlockListGroup {
   get defaultDesign() {
     return this.getAttribute("default-design") || "nav";
   }
+
+  createBlockData(id) {
+    return {
+      ...super.createBlockData(id),
+      icon: "home",
+      iconPosition: "start",
+    };
+  }
 }
 
-customElements.define("header-button-block-group", HeaderButtonBlockGroup);
+customElements.define("nav-button-group", NavButtonGroup);

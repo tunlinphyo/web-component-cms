@@ -69,7 +69,7 @@ export const formatTextColorPaletteStyles = css`
   }
 
   .color[aria-pressed="true"] {
-    outline: 3px solid #2684ff;
+    outline: 2px solid #2684ff;
     outline-offset: 2px;
   }
 

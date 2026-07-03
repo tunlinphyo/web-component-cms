@@ -5,12 +5,8 @@
     <title>Migration baseline harness</title>
   </head>
   <body>
-    <rich-text-editor id="fixture-editor">
-      <group-order></group-order>
-    </rich-text-editor>
-    <rich-text-editor id="empty-editor">
-      <group-order></group-order>
-    </rich-text-editor>
+    <rich-text-editor id="fixture-editor"></rich-text-editor>
+    <rich-text-editor id="empty-editor"></rich-text-editor>
     <output id="result">pending</output>
 
     <script type="module">
@@ -19,16 +15,16 @@
       import expected from "./src/assets/data/migration-approved-groups.expected.json";
 
       const fixtureEditor = document.querySelector("#fixture-editor");
-      fixtureEditor.init(fixture);
+      await fixtureEditor.init(fixture);
 
       const emptyEditor = document.querySelector("#empty-editor");
-      emptyEditor.init({ version: 1, groups: [] });
-      const emptyButton = emptyEditor.querySelector("[data-empty-group-picker]");
+      await emptyEditor.init({ version: 1, groups: [] });
+      const emptyButton = emptyEditor.renderRoot.querySelector("[data-empty-group-picker]");
       emptyButton?.click();
 
       await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
 
-      const picker = emptyEditor.querySelector("[data-group-picker-dialog]");
+      const picker = emptyEditor.renderRoot.querySelector("[data-group-picker-dialog]");
       const serialized = fixtureEditor.toJSON();
       const groupList = await verifyGroupList(fixture);
       const pickerOpened = Boolean(picker?.renderRoot?.querySelector("dialog")?.open);

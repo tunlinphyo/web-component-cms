@@ -1,11 +1,10 @@
 import { PickerPopoverControl } from "./picker-popover-control.js";
-import { formatButtonDesignStyles } from "./format-button-design.styles.js";
 import { pickerPopoverControlStyles } from "./picker-popover-control.styles.js";
 import { buttonDesignOptions } from "../../../../customize/config/button-design.js";
 
 export class FormatButtonDesign extends PickerPopoverControl {
   static configKey = "button-design";
-  static styles = [pickerPopoverControlStyles, formatButtonDesignStyles];
+  static styles = pickerPopoverControlStyles;
   static options = buttonDesignOptions;
   static command = "buttonDesign";
   static popoverId = "button-designs";

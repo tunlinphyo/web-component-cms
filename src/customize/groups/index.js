@@ -15,6 +15,12 @@ registerList({
   selector: "news-list-group",
 });
 
+registerList({
+  type: "header-nav",
+  tagName: "nav-button-group",
+  selector: "nav-button-group",
+});
+
 for (const definition of [
   { type: "header", tagName: "header-group", selector: "header-group", label: "header" },
   {

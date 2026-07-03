@@ -1,50 +1,42 @@
 import { html } from "lit";
-import { getListDefinition, GroupBase } from "../../../plugin/index.js";
+import { GroupBase } from "../../../plugin/index.js";
+import "./nav-button-group.js";
 import { headerGroupStyles } from "./header-group.style.js";
-
-const HEADER_NAV_SELECTOR =
-  getListDefinition("header-nav")?.selector ?? "header-button-block-group";
 
 export class HeaderGroup extends GroupBase {
   static styles = [GroupBase.styles, headerGroupStyles];
 
-  init(data = {}) {
-    void this.updateComplete.then(() => {
-      const navBlocks = getNavBlocks(data.blocks);
-      if (Array.isArray(data.blocks)) {
-        this.renderRoot.querySelector(HEADER_NAV_SELECTOR)?.setBlockData(navBlocks);
-      }
-      super.init(data);
-    });
-    return this;
-  }
-
-  toJSON() {
-    const navGroup = this.renderRoot.querySelector(HEADER_NAV_SELECTOR);
-    const navBlocks = navGroup?.blocks ?? [];
-    const navBlockSet = new Set(navBlocks);
-    const blocks = this.blocks.filter((block) => !navBlockSet.has(block));
-
-    return {
-      id: this.groupId,
-      type: this.groupType || this.localName.replace(/-group$/, ""),
-      hashId: this.hashId,
-      sort: this.sort,
-      style: this.getGroupStyle(),
-      blocks: [
-        ...blocks.slice(0, 2).map((block) => block.toJSON()),
-        {
-          id: "navs",
-          type: "navs",
-          children: navBlocks.map((block, sort) => ({
-            ...block.toJSON(),
-            sort,
-          })),
-        },
-        ...blocks.slice(2).map((block) => block.toJSON()),
-      ],
-    };
-  }
+  static defaultJson = {
+    blocks: [
+      {
+        id: "title",
+        type: "p",
+        value: "",
+        textAlign: "left",
+      },
+      {
+        id: "logo",
+        type: "image",
+        src: "",
+        alt: "",
+      },
+      {
+        id: "navs",
+        type: "navs",
+        children: [
+          createDefaultNav("nav-1", 0),
+          createDefaultNav("nav-2", 1),
+          createDefaultNav("nav-3", 2),
+          createDefaultNav("nav-4", 3),
+        ],
+      },
+      {
+        id: "button",
+        type: "button",
+        text: "",
+      },
+    ],
+  };
 
   render() {
     return html`
@@ -57,7 +49,9 @@ export class HeaderGroup extends GroupBase {
         <div class="container">
           <image-block block-id="logo" placeholder="Choose Logo"></image-block>
           <nav>
-            <header-button-block-group
+            <nav-button-group
+              block-id="navs"
+              block-type="navs"
               min="0"
               max="6"
               prefix="nav"
@@ -68,22 +62,27 @@ export class HeaderGroup extends GroupBase {
               <button-block placeholder="Nav 2"></button-block>
               <button-block placeholder="Nav 3"></button-block>
               <button-block placeholder="Nav 4"></button-block>
-            </header-button-block-group>
+            </nav-button-group>
           </nav>
           <button-block block-id="button" placeholder="Hero button"></button-block>
         </div>
       </header>
-      <!-- ${this.renderSortControls()} -->
+      ${this.renderSortControls()}
     `;
   }
 }
 
 customElements.define("header-group", HeaderGroup);
 
-function getNavBlocks(blocks = []) {
-  if (!Array.isArray(blocks)) return [];
-
-  const navs = blocks.find((block) => block.type === "navs");
-  if (!Array.isArray(navs?.children)) return [];
-  return [...navs.children].sort((a, b) => (a.sort ?? 0) - (b.sort ?? 0));
+function createDefaultNav(id, sort) {
+  return {
+    id,
+    type: "button",
+    sort,
+    text: "",
+    design: "nav",
+    icon: "home",
+    iconPosition: "start",
+    link: "",
+  };
 }

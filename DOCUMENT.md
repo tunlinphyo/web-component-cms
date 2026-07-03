@@ -18,7 +18,7 @@ The app starts from `src/main.js`. It imports `src/plugin/index.js`, which regis
 The editor loads a versioned page JSON file and initializes `<rich-text-editor>`.
 
 ```js
-document.querySelector("rich-text-editor")?.init(pageData);
+await document.querySelector("rich-text-editor")?.init(pageData);
 ```
 
 The saved shape is:

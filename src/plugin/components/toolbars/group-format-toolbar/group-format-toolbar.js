@@ -1,5 +1,6 @@
 import { LitElement, html } from "lit";
 import { GROUP_FEATURES } from "../../groups/base/group-base.js";
+import { groupFormatToolbarStyles } from "./group-format-toolbar.styles.js";
 
 const CONTROLS = [
   ["group-background-color", "backgroundColor"],
@@ -33,9 +34,7 @@ export class GroupFormatToolbar extends LitElement {
     this.title = "Section";
   }
 
-  createRenderRoot() {
-    return this;
-  }
+  static styles = groupFormatToolbarStyles;
 
   render() {
     return html`
@@ -90,17 +89,17 @@ export class GroupFormatToolbar extends LitElement {
   }
 
   #setValue(selector, value) {
-    const control = this.querySelector(selector);
+    const control = this.renderRoot.querySelector(selector);
     if (control) control.value = value;
   }
 
   #setDisabled(selector, disabled) {
-    const control = this.querySelector(selector);
+    const control = this.renderRoot.querySelector(selector);
     if (control) control.disabled = disabled;
   }
 
   #setBlockGroupFormat(selector, format) {
-    const control = this.querySelector(selector);
+    const control = this.renderRoot.querySelector(selector);
     if (control) control.setFormat?.(format);
   }
 

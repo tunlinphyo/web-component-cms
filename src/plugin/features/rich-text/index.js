@@ -11,6 +11,7 @@ import "../../components/toolbars/controls/format-highlight.js";
 import "../../components/toolbars/controls/format-italic.js";
 import "../../components/toolbars/controls/format-link.js";
 import "../../components/toolbars/controls/format-link-target.js";
+import "../../components/toolbars/controls/format-mark-style.js";
 import "../../components/toolbars/controls/format-ordered-list.js";
 import "../../components/toolbars/controls/format-text-color-palette.js";
 import "../../components/toolbars/controls/format-text-color.js";
@@ -55,6 +56,7 @@ for (const definition of [
   { command: "insertOrderedList", feature: FEATURES.orderedList },
   { command: "insertUnorderedList", feature: FEATURES.unorderedList },
   { command: "highlight", feature: FEATURES.backgroundColor },
+  { command: "markStyle", feature: FEATURES.backgroundColor },
   { command: "link", feature: FEATURES.link },
   { command: "linkTarget", feature: FEATURES.linkTarget },
   { command: "linkEdit", feature: FEATURES.link },

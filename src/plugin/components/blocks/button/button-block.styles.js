@@ -1,4 +1,5 @@
-import { css } from "lit";
+import { css, unsafeCSS } from "lit";
+import customizableButtonStyles from "../../../../styles/buttons.css?inline";
 
 export const buttonBlockStyles = css`
   :host {
@@ -31,11 +32,6 @@ export const buttonBlockStyles = css`
     .icon-picker-trigger {
       width: 2rem;
       height: 2rem;
-
-      svg {
-        width: 20px;
-        height: 20px;
-      }
     }
   }
 
@@ -43,16 +39,6 @@ export const buttonBlockStyles = css`
   :host([active]) .button {
     outline: 2px solid var(--highlight);
     outline-offset: 2px;
-  }
-
-  .icon {
-    width: 1.5em;
-    height: 1.5em;
-    fill: none;
-    stroke: currentColor;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-width: 2;
   }
 
   :host([icon-position="end"]) .icon-picker-trigger {
@@ -86,51 +72,6 @@ export const buttonBlockStyles = css`
     content: attr(data-placeholder);
   }
 
-  :host([design="primary"]) .button {
-    background: var(--brand-500);
-    color: white;
-  }
-
-  :host([design="dark"]) .button {
-    background: var(--brand-600);
-    color: white;
-  }
-
-  :host([design="outline"]) .button {
-    border-color: var(--brand-500);
-    background: transparent;
-    color: var(--brand-500);
-  }
-
-  :host([design="soft"]) .button {
-    background: var(--brand-50);
-    color: var(--brand-500);
-  }
-
-  :host([design="nav"]) .button {
-    background: transparent;
-    color: var(--brand-900);
-    padding-inline: 0.5rem;
-
-    .icon-picker-trigger {
-      width: 2rem;
-      height: 2rem;
-      background-color: var(--brand-500);
-      color: var(--white);
-
-      svg {
-        width: 20px;
-        height: 20px;
-      }
-    }
-  }
-
-  :host([disabled]) .button {
-    cursor: not-allowed;
-    background-color: var(--gray-400);
-    color: var(--gray-100);
-  }
-
   button {
     border: none;
     background: white;
@@ -138,8 +79,7 @@ export const buttonBlockStyles = css`
     cursor: pointer;
   }
 
-  .icon-picker-trigger,
-  .icon-options button {
+  .icon-picker-trigger {
     display: inline-grid;
     width: 2.25rem;
     height: 2.25rem;
@@ -157,9 +97,7 @@ export const buttonBlockStyles = css`
   }
 
   .icon-picker-trigger:hover,
-  .icon-picker-trigger:focus-visible,
-  [popover] button:hover,
-  [popover] button[aria-pressed="true"] {
+  .icon-picker-trigger:focus-visible {
     outline: 2px solid var(--highlight);
     outline-offset: 1px;
   }
@@ -174,9 +112,5 @@ export const buttonBlockStyles = css`
     box-shadow: rgba(0, 0, 0, 0.16) 0 1px 4px;
   }
 
-  .icon-options {
-    display: grid;
-    grid-template-columns: repeat(4, 2.25rem);
-    gap: 0.25rem;
-  }
+  ${unsafeCSS(customizableButtonStyles)}
 `;

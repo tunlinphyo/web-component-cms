@@ -68,7 +68,7 @@ export const imageBlockStyles = css`
     place-content: center;
     border-radius: 50%;
     border: none;
-    background-color: oklch(from Canvas l c h / 0.5);
+    background-color: var(--gray-50);
     backdrop-filter: blur(2px);
     cursor: pointer;
   }
@@ -79,10 +79,10 @@ export const imageBlockStyles = css`
   }
 
   dialog {
-    border: 1px solid var(--border, #d0d0d0);
+    border: 1px solid var(--gray-200);
     border-radius: 0.5rem;
     max-width: min(48rem, calc(100vw - 2rem));
-    padding: 1rem;
+    padding: 0;
     width: 42rem;
   }
 
@@ -94,7 +94,8 @@ export const imageBlockStyles = css`
     align-items: center;
     display: flex;
     justify-content: space-between;
-    margin-bottom: 1rem;
+    padding: 1rem;
+    border-bottom: 1px solid var(--gray-50);
   }
 
   .image-list {
@@ -103,12 +104,14 @@ export const imageBlockStyles = css`
     grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
     max-height: min(32rem, 70vh);
     overflow: auto;
+    padding: 1rem;
+    background-color: var(--gray-25);
   }
 
   .image-option {
     align-content: start;
     background: transparent;
-    border: 1px solid var(--border, #d0d0d0);
+    border: 1px solid var(--gray-200);
     border-radius: 0.5rem;
     color: inherit;
     cursor: pointer;
@@ -116,6 +119,7 @@ export const imageBlockStyles = css`
     gap: 0.5rem;
     padding: 0.5rem;
     text-align: left;
+    background-color: var(--white);
   }
 
   .image-option img {

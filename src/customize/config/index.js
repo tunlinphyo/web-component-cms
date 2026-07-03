@@ -9,6 +9,7 @@ import { fontFamilyOptions } from "./font-family.js";
 import { fontSizeOptions } from "./font-size.js";
 import { iconOptions } from "./icons.js";
 import { linkTargetOptions } from "./link-target.js";
+import { markStyleOptions } from "./mark-style.js";
 import { objectFitOptions } from "./object-fit.js";
 
 const CONFIG_OPTIONS = {
@@ -23,6 +24,7 @@ const CONFIG_OPTIONS = {
   "font-size": fontSizeOptions,
   icons: iconOptions,
   "link-target": linkTargetOptions,
+  "mark-style": markStyleOptions,
   "object-fit": objectFitOptions,
 };
 

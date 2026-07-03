@@ -1,32 +1,6 @@
 import { LitElement, html } from "lit";
 import { imageBlockStyles } from "./image-block.styles.js";
-import {
-  getCapabilities,
-  toFeatureAttribute,
-} from "../../../registries/formatter-registry.js";
-
-const DEFAULT_IMAGE_RESPONSE = {
-  ok: true,
-  count: 2,
-  images: [
-    {
-      originalName: "img_hero_pc01.jpeg",
-      createdAt: "2026-06-23T03:09:33.395Z",
-      id: "0fcecf4f-6a6a-4a24-9be6-19bffee5d3da",
-      filename: "0fcecf4f-6a6a-4a24-9be6-19bffee5d3da.jpeg",
-      mimeType: "image/jpeg",
-      size: 149369,
-    },
-    {
-      originalName: "img_hero_pc01.jpeg",
-      createdAt: "2026-06-23T03:09:22.889Z",
-      id: "9626e386-74db-4d86-84a1-a66de682e55a",
-      filename: "9626e386-74db-4d86-84a1-a66de682e55a.jpeg",
-      mimeType: "image/jpeg",
-      size: 149369,
-    },
-  ],
-};
+import { getCapabilities, toFeatureAttribute } from "../../../registries/formatter-registry.js";
 
 export class ImageBlock extends LitElement {
   static properties = {
@@ -34,12 +8,7 @@ export class ImageBlock extends LitElement {
     src: { type: String },
     alt: { type: String },
     images: { attribute: false },
-    imageBaseUrl: { type: String, attribute: "image-base-url" },
-    pickerOpen: { type: Boolean, state: true },
-    accept: { type: String },
     placeholder: { type: String },
-    maxSize: { type: Number, attribute: "max-size", reflect: true },
-    maxWidth: { type: String, attribute: "max-width", reflect: true },
     objectFit: { type: String, attribute: "object-fit", reflect: true },
     align: { type: String, reflect: true },
     link: { type: String },
@@ -59,13 +28,8 @@ export class ImageBlock extends LitElement {
     this.blockId = "";
     this.src = "";
     this.alt = "";
-    this.images = DEFAULT_IMAGE_RESPONSE.images;
-    this.imageBaseUrl = "/uploads/";
-    this.pickerOpen = false;
-    this.accept = "image/*";
+    this.images = [];
     this.placeholder = "Choose image";
-    this.maxSize = 0;
-    this.maxWidth = "100%";
     this.objectFit = "none";
     this.align = "left";
     this.link = "";
@@ -85,7 +49,6 @@ export class ImageBlock extends LitElement {
       id = "",
       src = "",
       alt = "",
-      maxWidth = "100%",
       objectFit = "none",
       align = "left",
       link = "",
@@ -102,7 +65,6 @@ export class ImageBlock extends LitElement {
     this.blockId = id;
     this.src = src;
     this.alt = alt;
-    this.maxWidth = maxWidth;
     this.objectFit = normalizeObjectFit(objectFit);
     this.align = align;
     this.link = link;
@@ -125,7 +87,6 @@ export class ImageBlock extends LitElement {
       id: this.blockId,
       src: this.src,
       alt: this.alt,
-      maxWidth: this.maxWidth,
       objectFit: this.objectFit,
       align: this.align,
       link: this.link,
@@ -167,7 +128,7 @@ export class ImageBlock extends LitElement {
         class=${`picker${this.src ? " selected" : ""}`}
         part="picker"
         type="button"
-        style=${`max-width: ${this.maxWidth}; vertical-align: top; background-color: ${this.backgroundColor}; border-width: ${toBorderWidthValue(this.borderWidth, this.borderPosition)}; border-color: ${this.borderColor}; border-style: ${this.borderStyle}; border-radius: ${this.borderRadius};`}
+        style=${`vertical-align: top; background-color: ${this.backgroundColor}; border-width: ${toBorderWidthValue(this.borderWidth, this.borderPosition)}; border-color: ${this.borderColor}; border-style: ${this.borderStyle}; border-radius: ${this.borderRadius};`}
         @click=${this.#handlePickerClick}
       >
         ${this.src
@@ -220,11 +181,19 @@ export class ImageBlock extends LitElement {
             </div>
           `
         : null}
-      <dialog @close=${this.#dialogClose}>
+      <dialog>
         <div class="dialog-header">
           <strong>Choose image</strong>
           <button type="button" aria-label="Close image picker" @click=${this.#closePicker}>
-            &#10005;
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+              <path
+                d="M6 6l12 12M18 6 6 18"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
           </button>
         </div>
         <div class="image-list">
@@ -299,8 +268,8 @@ export class ImageBlock extends LitElement {
     return true;
   }
 
-  setImages(responseOrImages) {
-    this.images = normalizeImages(responseOrImages);
+  setImages(images) {
+    this.images = Array.isArray(images) ? images : [];
     return this;
   }
 
@@ -310,17 +279,13 @@ export class ImageBlock extends LitElement {
         detail: {
           id: this.blockId,
           block: this,
-          setImages: (responseOrImages) => this.setImages(responseOrImages),
-          setImageBaseUrl: (imageBaseUrl) => {
-            this.imageBaseUrl = imageBaseUrl;
-          },
+          setImages: (images) => this.setImages(images),
         },
         bubbles: true,
         composed: true,
       }),
     );
 
-    this.pickerOpen = true;
     void this.updateComplete.then(() => {
       const dialog = this.renderRoot.querySelector("dialog");
       if (!dialog?.open) dialog?.showModal();
@@ -331,25 +296,18 @@ export class ImageBlock extends LitElement {
     this.renderRoot.querySelector("dialog")?.close();
   };
 
-  #dialogClose = () => {
-    this.pickerOpen = false;
-  };
-
   #renderImageOption(image) {
-    const src = resolveImageUrl(image, this.imageBaseUrl);
-    const label = image.originalName || image.filename || image.id || src;
-
     return html`
       <button type="button" class="image-option" @click=${() => this.#selectImage(image)}>
-        <img src=${src} alt=${label} loading="lazy" />
-        <span>${label}</span>
+        <img src=${image.url} alt=${image.name} loading="lazy" />
+        <span>${image.name}</span>
       </button>
     `;
   }
 
   #selectImage(image) {
-    this.src = resolveImageUrl(image, this.imageBaseUrl);
-    this.alt = image.originalName || image.filename || image.id || "";
+    this.src = image.url;
+    this.alt = image.name;
     this.#dispatchImageChange(image);
     this.#closePicker();
   }
@@ -366,20 +324,6 @@ export class ImageBlock extends LitElement {
 }
 
 customElements.define("image-block", ImageBlock);
-
-function normalizeImages(responseOrImages) {
-  if (Array.isArray(responseOrImages)) return responseOrImages;
-  if (Array.isArray(responseOrImages?.images)) return responseOrImages.images;
-  return [];
-}
-
-function resolveImageUrl(image, imageBaseUrl = "") {
-  const path = image.url || image.path || image.src || image.id || image.filename || "";
-  if (!path || path.match(/^(data:|blob:|https?:\/\/|\/)/)) return path;
-  if (!imageBaseUrl) return path;
-
-  return `${imageBaseUrl.replace(/\/$/, "")}/${path}`;
-}
 
 function toBorderWidthValue(width, position) {
   if (!width || !position) return width;

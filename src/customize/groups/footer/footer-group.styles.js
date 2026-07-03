@@ -6,13 +6,14 @@ export const footerGroupStyles = css`
     padding: 2rem;
     color: var(--text-white);
     background-image: url("${unsafeCSS(footerBackground)}");
-    background-size: auto 100%;
+    background-size: auto 90%;
+    background-position: left bottom;
     background-repeat: repeat-x;
 
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    padding-block-start: 6rem;
+    padding-block-start: 7rem;
   }
 
   .logo-groups {

@@ -1,5 +1,6 @@
 import {
   getSelectedAncestor,
+  needsParagraphWrapping,
   rangesMatch,
   selectRange,
   unwrapListsFromParagraphs,
@@ -43,10 +44,12 @@ export function applySelectionCommand({
     applyTextColor(value, editor, range, selection);
   } else if (command === "backgroundColor") {
     applyHighlightBackgroundColor(value, editor, range, selection);
+  } else if (command === "markStyle") {
+    applyMarkStyle(value, editor, range, selection);
   } else if (command === "highlight" || command === "link") {
     applyWrappedSelection(command, value, editor, range, selection);
   } else {
-    executeDocumentCommand(command, value, editor, type);
+    executeDocumentCommand(command, value, editor, type, selection);
   }
 
   return {
@@ -80,6 +83,7 @@ export function describeSelectionFormat({ editor, type, textAlign, range, select
     type,
     collapsed: range.collapsed,
     highlight: Boolean(highlightElement),
+    markClass: highlightElement?.className ?? "",
     backgroundColor:
       highlightStyles?.getPropertyValue("--mark-highlight-color").trim() ||
       highlightStyles?.getPropertyValue("--yellow-200").trim() ||
@@ -89,6 +93,23 @@ export function describeSelectionFormat({ editor, type, textAlign, range, select
     color: document.queryCommandValue("foreColor"),
     colorApplied: Boolean(findSelectedAncestor("font[color], [style*='color']")),
   };
+}
+
+function applyMarkStyle(value, editor, range, selection) {
+  const mark = getSelectedAncestor(editor, range, "mark");
+  if (!mark) return;
+
+  const className = normalizeMarkClass(value);
+  if (className) mark.className = className;
+  else mark.removeAttribute("class");
+
+  range.selectNodeContents(mark);
+  selectRange(selection, range);
+}
+
+export function normalizeMarkClass(value) {
+  const className = String(value ?? "").trim();
+  return /^-?[_a-zA-Z]+[_a-zA-Z0-9-]*$/.test(className) ? className : "";
 }
 
 function applyHighlightBackgroundColor(value, editor, range, selection) {
@@ -210,8 +231,17 @@ function insertWithFontSize(fontSizeElement, fragment, range, value) {
   fontSizeElement.after(selectedFragment, afterElement);
   selectBetweenMarkers(range);
 
-  if (!fontSizeElement.hasChildNodes()) fontSizeElement.remove();
-  if (!afterElement.hasChildNodes()) afterElement.remove();
+  removeEmptyInlineElement(fontSizeElement);
+  removeEmptyInlineElement(afterElement);
+}
+
+export function removeEmptyInlineElement(element) {
+  const hasText = element.textContent.length > 0;
+  const hasRenderedElement = element.querySelector(
+    "audio, br, canvas, embed, hr, iframe, img, input, object, select, svg, textarea, video",
+  );
+
+  if (!hasText && !hasRenderedElement) element.remove();
 }
 
 function applyLinkTarget(value, editor, range, selection) {
@@ -394,10 +424,54 @@ function wrapSelection(command, value, editor, range) {
   range.selectNodeContents(element);
 }
 
-function executeDocumentCommand(command, value, editor, type) {
+function executeDocumentCommand(command, value, editor, type, selection) {
   document.execCommand(command, false, value);
   if (!LIST_COMMANDS.has(command)) return;
 
-  unwrapListsFromParagraphs(editor);
-  if (type === "p") wrapParagraphContent(editor);
+  const needsListRepair = Boolean(editor.querySelector("p > ul, p > ol"));
+  const needsParagraphRepair = type === "p" && needsParagraphWrapping(editor);
+  if (!needsListRepair && !needsParagraphRepair) return;
+
+  mutatePreservingSelection(editor, selection, () => {
+    unwrapListsFromParagraphs(editor);
+    if (type === "p") wrapParagraphContent(editor);
+  });
+}
+
+function mutatePreservingSelection(editor, selection, mutate) {
+  const currentRange = selection?.rangeCount ? selection.getRangeAt(0) : null;
+  if (!currentRange || !editor.contains(currentRange.commonAncestorContainer)) {
+    mutate();
+    return;
+  }
+
+  const collapsed = currentRange.collapsed;
+  const startMarker = document.createComment("selection-start");
+  const startRange = currentRange.cloneRange();
+
+  let endMarker = null;
+  if (!collapsed) {
+    endMarker = document.createComment("selection-end");
+    const endRange = currentRange.cloneRange();
+    endRange.collapse(false);
+    endRange.insertNode(endMarker);
+  }
+
+  startRange.collapse(true);
+  startRange.insertNode(startMarker);
+  mutate();
+
+  if (!startMarker.isConnected || (!collapsed && !endMarker?.isConnected)) return;
+
+  const restoredRange = document.createRange();
+  restoredRange.setStartAfter(startMarker);
+  if (collapsed) {
+    restoredRange.collapse(true);
+  } else {
+    restoredRange.setEndBefore(endMarker);
+  }
+
+  startMarker.remove();
+  endMarker?.remove();
+  selectRange(selection, restoredRange);
 }

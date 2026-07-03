@@ -1,5 +1,4 @@
 export const borderWidthOptions = [
-  { value: "", label: "base" },
   { value: "1px", label: "xs" },
   { value: "2px", label: "sm" },
   { value: "4px", label: "base" },

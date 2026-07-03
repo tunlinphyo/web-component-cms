@@ -13,7 +13,6 @@ export class FooterGroup extends GroupBase {
         id: "logo",
         src: "",
         alt: "Hero Image",
-        maxWidth: "",
         align: "start",
         borderRadius: "",
         objectFit: "contain",
@@ -23,7 +22,6 @@ export class FooterGroup extends GroupBase {
         id: "logo2",
         src: "",
         alt: "Hero Image",
-        maxWidth: "",
         align: "start",
         borderRadius: "",
         objectFit: "contain",
@@ -33,7 +31,6 @@ export class FooterGroup extends GroupBase {
         id: "logo3",
         src: "",
         alt: "Hero Image",
-        maxWidth: "",
         align: "start",
         borderRadius: "",
         objectFit: "contain",
@@ -81,7 +78,7 @@ export class FooterGroup extends GroupBase {
           features="fontFamily, fontSize, color, bold, italic"
         ></rich-text-block>
       </footer>
-      <!-- ${this.renderSortControls()} -->
+      ${this.renderSortControls()}
     `;
   }
 }

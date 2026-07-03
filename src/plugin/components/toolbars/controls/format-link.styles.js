@@ -22,6 +22,10 @@ export const formatLinkStyles = css`
     min-width: 32px;
   }
 
+  button:disabled {
+    opacity: 0.5;
+  }
+
   svg {
     display: block;
     fill: none;

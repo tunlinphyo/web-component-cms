@@ -49,11 +49,15 @@ export class BlockBorderStyle extends BlockStyleSelector {
   property = "borderStyle";
 
   renderTriggerLabel(option) {
-    return option?.value ? option.label : "None";
+    return option?.value ? this.#renderStyle(option) : "None";
   }
 
   renderOptionLabel(option) {
-    return option.value ? option.label : "None";
+    return option.value ? this.#renderStyle(option) : "None";
+  }
+
+  #renderStyle(option) {
+    return html`<span class="border-style-preview" style="--border-style: ${option.value}"></span>`
   }
 }
 

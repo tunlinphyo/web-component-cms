@@ -1,5 +1,10 @@
 import { LitElement, html } from "lit";
+import {
+  DEFAULT_BACKGROUND_COLOR,
+  DEFAULT_TEXT_COLOR,
+} from "../../../utils/colors.js";
 import { FEATURES, isFeatureEnabled } from "../../../registries/formatter-registry.js";
+import { formatToolbarStyles } from "./format-toolbar.styles.js";
 
 const FORMATTERS = [
   "element-type-selector",
@@ -15,6 +20,7 @@ const FORMATTERS = [
   "format-align-right",
   "format-align-justify",
   "format-highlight",
+  "format-mark-style",
   "format-link",
   "format-link-target",
   "format-text-color",
@@ -53,6 +59,7 @@ const TEXT_FORMATTERS = [
   "format-ordered-list",
   "format-unordered-list",
   "format-highlight",
+  "format-mark-style",
   "format-link",
   "format-link-target",
   "format-text-color",
@@ -84,6 +91,7 @@ const FORMATTER_FEATURES = {
   "format-align-right": FEATURES.align,
   "format-align-justify": FEATURES.align,
   "format-highlight": FEATURES.backgroundColor,
+  "format-mark-style": FEATURES.backgroundColor,
   "format-link": FEATURES.link,
   "format-link-target": FEATURES.linkTarget,
   "format-text-color": FEATURES.color,
@@ -122,9 +130,7 @@ export class FormatToolbar extends LitElement {
     this.title = "Text";
   }
 
-  createRenderRoot() {
-    return this;
-  }
+  static styles = formatToolbarStyles;
 
   render() {
     return html`
@@ -151,8 +157,9 @@ export class FormatToolbar extends LitElement {
           <format-link></format-link>
           <format-link-target></format-link-target>
         </div>
-        <div class="format-group">
+        <div class="format-highlight-group">
           <format-highlight></format-highlight>
+          <format-mark-style></format-mark-style>
           <format-icon-background-color></format-icon-background-color>
         </div>
       </div>
@@ -226,13 +233,12 @@ export class FormatToolbar extends LitElement {
     const nonTextSelected = imageSelected || buttonSelected || iconSelected || tableSelected;
     const backgroundColorSelected = iconSelected || format?.highlight;
 
-    this.querySelector("#text")?.toggleAttribute(
-      "hidden",
-      buttonSelected || imageSelected || tableSelected,
-    );
-    this.querySelector("#button")?.toggleAttribute("hidden", !buttonSelected);
-    this.querySelector("#image")?.toggleAttribute("hidden", !imageSelected);
-    this.querySelector("#table")?.toggleAttribute("hidden", !tableSelected);
+    this.renderRoot
+      .querySelector("#text")
+      ?.toggleAttribute("hidden", buttonSelected || imageSelected || tableSelected);
+    this.renderRoot.querySelector("#button")?.toggleAttribute("hidden", !buttonSelected);
+    this.renderRoot.querySelector("#image")?.toggleAttribute("hidden", !imageSelected);
+    this.renderRoot.querySelector("#table")?.toggleAttribute("hidden", !tableSelected);
 
     this.#setValue("element-type-selector", nonTextSelected ? "p" : (format?.type ?? "p"));
     this.#setValue(
@@ -250,6 +256,7 @@ export class FormatToolbar extends LitElement {
     this.#setApplied("format-align-right", format?.align === "right");
     this.#setApplied("format-align-justify", format?.align === "justify");
     this.#setApplied("format-highlight", format?.highlight ?? false);
+    this.#setValue("format-mark-style", format?.markClass ?? "");
     this.#setApplied("format-link", Boolean(format?.link));
     this.#setValue("format-link", format?.link ?? "");
     this.#setValue("format-link-target", format?.target ?? "_self");
@@ -262,9 +269,12 @@ export class FormatToolbar extends LitElement {
     this.#setApplied("format-image-link", imageSelected && Boolean(format?.link));
     this.#setValue("format-image-link", imageSelected ? (format?.link ?? "") : "");
     this.#setValue("format-image-link-target", format?.target ?? "_self");
-    this.#setValue("format-text-color", toHex(format?.color, "#000000"));
-    this.#setValue("format-text-color-palette", toHex(format?.color, "#000000"));
-    this.#setValue("format-icon-background-color", toHex(format?.backgroundColor, "#ffffff"));
+    this.#setValue("format-text-color", toHex(format?.color, DEFAULT_TEXT_COLOR));
+    this.#setValue("format-text-color-palette", toHex(format?.color, DEFAULT_TEXT_COLOR));
+    this.#setValue(
+      "format-icon-background-color",
+      toHex(format?.backgroundColor, DEFAULT_BACKGROUND_COLOR),
+    );
     this.#setValue("image-background-color", format?.backgroundColor ?? "");
     this.#setValue("image-border-width", format?.borderWidth ?? "");
     this.#setValue("image-border-color", format?.borderColor ?? "");
@@ -306,6 +316,7 @@ export class FormatToolbar extends LitElement {
       !format || nonTextSelected || format.collapsed !== false,
     );
     this.#setDisabled("format-icon-background-color", !backgroundColorSelected);
+    this.#setDisabled("format-mark-style", !format || nonTextSelected || !format.highlight);
     this.#setDisabled("format-link-target", nonTextSelected || !format?.link);
     this.#setDisabled("image-background-color", !imageSelected);
     this.#setDisabled("image-border-width", !imageSelected);
@@ -346,23 +357,27 @@ export class FormatToolbar extends LitElement {
   };
 
   #setApplied(selector, applied) {
-    for (const formatter of this.querySelectorAll(selector)) formatter.applied = applied;
+    for (const formatter of this.renderRoot.querySelectorAll(selector)) formatter.applied = applied;
   }
 
   #setValue(selector, value) {
-    for (const formatter of this.querySelectorAll(selector)) formatter.value = value;
+    for (const formatter of this.renderRoot.querySelectorAll(selector)) formatter.value = value;
   }
 
   #setProperty(selector, property, value) {
-    for (const formatter of this.querySelectorAll(selector)) formatter[property] = value;
+    for (const formatter of this.renderRoot.querySelectorAll(selector)) {
+      formatter[property] = value;
+    }
   }
 
   #setDisabled(selector, disabled) {
-    for (const formatter of this.querySelectorAll(selector)) formatter.disabled = disabled;
+    for (const formatter of this.renderRoot.querySelectorAll(selector)) {
+      formatter.disabled = disabled;
+    }
   }
 
   #setHidden(selector, hidden) {
-    for (const formatter of this.querySelectorAll(selector)) formatter.hidden = hidden;
+    for (const formatter of this.renderRoot.querySelectorAll(selector)) formatter.hidden = hidden;
   }
 
   #applyCapabilities(format) {

@@ -1,4 +1,6 @@
-import { css } from "lit";
+import { css, unsafeCSS } from "lit";
+
+const hasSelector = unsafeCSS(":has(+ [popover]:popover-open)");
 
 export const pickerPopoverControlStyles = css`
   :host {
@@ -29,7 +31,11 @@ export const pickerPopoverControlStyles = css`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 0.25rem;
     font-size: 0.75rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .trigger::after {
@@ -41,14 +47,14 @@ export const pickerPopoverControlStyles = css`
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 5'%3E%3Cpath d='M0 0h10L5 5z'/%3E%3C/svg%3E");
   }
 
-  .trigger:has(+ [popover]:popover-open)::after {
+  .trigger${hasSelector}::after {
     rotate: 180deg;
   }
 
   [popover] {
     position-anchor: --picker-trigger;
     position-area: bottom;
-    width: anchor-size(width);
+    min-width: anchor-size(width);
     margin: 4px;
     padding: 4px;
     border: none;
@@ -59,12 +65,26 @@ export const pickerPopoverControlStyles = css`
 
   .options {
     display: grid;
-    gap: 4px;
+    gap: 0.1rem;
+  }
+
+  .options button {
+    border-color: var(--gray-50);
   }
 
   .options button:hover,
   .options button[aria-pressed="true"] {
     background: var(--highlight);
     color: white;
+  }
+
+
+  .border-style-preview {
+    display: block;
+    flex: 1 1 auto;
+    width: 100%;
+    height: 0;
+    margin-block: 0.35rem;
+    border-top: 3px var(--border-style, solid) currentColor;
   }
 `;

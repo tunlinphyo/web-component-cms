@@ -3,7 +3,7 @@ import { CURRENT_PAGE_VERSION, normalizePageGroups } from "../schema/page-normal
 
 export function deserializeEditor(editor, pageData = {}) {
   const groupsData = normalizePageGroups(pageData);
-  const groupOrder = editor.querySelector("group-order");
+  const groupOrder = editor.renderRoot.querySelector("group-order");
 
   groupOrder?.init(groupsData);
   removeGroupsOutsideSnapshot(groupOrder, groupsData);
@@ -32,14 +32,14 @@ export function serializeEditor(editor) {
 }
 
 function getContentBlocks(editor) {
-  const ungroupedBlocks = [...editor.querySelectorAll(CONTENT_BLOCK_SELECTOR)];
+  const ungroupedBlocks = [...editor.renderRoot.querySelectorAll(CONTENT_BLOCK_SELECTOR)];
   const groupedBlocks = getPageGroups(editor).flatMap((group) => group.blocks);
 
   return [...ungroupedBlocks, ...groupedBlocks];
 }
 
 function getPageGroups(editor) {
-  const groupOrder = editor.querySelector("group-order");
+  const groupOrder = editor.renderRoot.querySelector("group-order");
   if (!groupOrder) return [];
 
   return [...groupOrder.children].filter((group) => group.matches(GROUP_SELECTOR));

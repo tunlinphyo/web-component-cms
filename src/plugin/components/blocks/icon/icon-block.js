@@ -1,10 +1,11 @@
 import { LitElement, html } from "lit";
-import { iconOptions } from "../../../../customize/config/icons.js";
-import { iconBlockStyles } from "./icon-block.styles.js";
 import {
-  getCapabilities,
-  toFeatureAttribute,
-} from "../../../registries/formatter-registry.js";
+  materialSymbolStyles,
+  renderMaterialIcon,
+  toMaterialIconName,
+} from "../../icon-picker/material-icon-picker.js";
+import { iconBlockStyles } from "./icon-block.styles.js";
+import { getCapabilities, toFeatureAttribute } from "../../../registries/formatter-registry.js";
 
 export class IconBlock extends LitElement {
   static properties = {
@@ -19,12 +20,12 @@ export class IconBlock extends LitElement {
     features: { type: String, reflect: true },
   };
 
-  static styles = iconBlockStyles;
+  static styles = [materialSymbolStyles, iconBlockStyles];
 
   constructor() {
     super();
     this.blockId = "";
-    this.icon = "plus";
+    this.icon = "add";
     this.fontSize = "";
     this.color = "";
     this.backgroundColor = "";
@@ -37,7 +38,7 @@ export class IconBlock extends LitElement {
   init(options = {}) {
     const {
       id = "",
-      icon = "plus",
+      icon = "add",
       fontSize = "",
       color = "",
       backgroundColor = "",
@@ -106,31 +107,19 @@ export class IconBlock extends LitElement {
         style=${`font-size: ${this.fontSize}; color: ${this.color}; background-color: ${this.backgroundColor};`}
         @click=${this.#openPicker}
       >
-        ${iconOptions.find(({ value }) => value === this.icon)?.svg}
+        ${renderMaterialIcon(toMaterialIconName(this.icon))}
       </a>
       <div id="icon-picker" popover>
-        <div class="options">
-          ${iconOptions.map(
-            ({ value, label, svg }) => html`
-              <button
-                type="button"
-                title=${label}
-                aria-label=${label}
-                aria-pressed=${this.icon === value}
-                data-value=${value}
-                @click=${this.#change}
-              >
-                ${svg}
-              </button>
-            `,
-          )}
-        </div>
+        <material-icon-picker
+          .value=${toMaterialIconName(this.icon)}
+          @icon-select=${this.#change}
+        ></material-icon-picker>
       </div>
     `;
   }
 
   #change = (event) => {
-    this.icon = event.currentTarget.dataset.value;
+    this.icon = event.detail.icon;
     this.renderRoot.querySelector("[popover]")?.hidePopover();
     this.dispatchEvent(
       new CustomEvent("icon-change", {

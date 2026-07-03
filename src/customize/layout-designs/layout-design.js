@@ -56,7 +56,7 @@ function renderDesign(type) {
 
   if (type === "home-news") {
     return html`
-      <span class="title center"></span>
+      <span class="title"></span>
       ${Array.from(
         { length: 2 },
         () => html`<div class="card" style="min-height: 0;">
@@ -74,16 +74,12 @@ function renderDesign(type) {
 
   if (type === "about") {
     return html`
-      <div class="split">
-        <div class="stack">
-          <span class="line"></span>
-          <span class="line"></span>
-          <span class="line"></span>
-          <span class="line"></span>
-          <span class="line"></span>
-          <span class="line medium"></span>
-        </div>
-        <span class="media"></span>
+      <div class="stack">
+        <span class="title"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line medium"></span>
       </div>
     `;
   }

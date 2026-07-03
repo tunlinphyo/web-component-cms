@@ -20,7 +20,7 @@ export class FormatTableHeaders extends LitElement {
   render() {
     return html`
       <fieldset ?disabled=${this.disabled}>
-        <legend>Headers</legend>
+        <!-- <legend>Headers</legend> -->
         <label>
           <span>Header row</span>
           <input

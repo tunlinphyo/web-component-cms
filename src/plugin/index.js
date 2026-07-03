@@ -2,6 +2,7 @@ export { GroupBase, GROUP_FEATURES } from "./components/groups/base/group-base.j
 export { EmptyGroupPickerButton } from "./components/groups/base/empty-group-picker-button.js";
 export { GroupOrder } from "./components/groups/base/group-order.js";
 export { GroupListBase } from "./components/lists/base/group-list-base.js";
+export { BlockListGroup } from "./components/lists/block-list/block-list-group.js";
 export { GroupPickerBase } from "./components/group-pickers/base/group-picker-base.js";
 export {
   getGroupDefinition,

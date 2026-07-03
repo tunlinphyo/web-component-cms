@@ -11,11 +11,6 @@ export const tableGroupStyles = css`
     padding: 3rem 2rem;
   }
 
-  rich-text-block[block-id="title"] {
-    font-size: 2rem;
-    font-weight: 700;
-  }
-
   rich-text-block[block-id="description"] {
     line-height: 1.7;
   }

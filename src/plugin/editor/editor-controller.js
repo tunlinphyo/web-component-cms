@@ -2,7 +2,7 @@ import { applyFormatCommand } from "./editor-commands.js";
 import { FORMATTABLE_MEDIA_SELECTOR, NON_TEXT_BLOCK_SELECTOR } from "./editor-selectors.js";
 import { EditorHistory } from "./editor-history.js";
 import { deserializeEditor, serializeEditor } from "./editor-serializer.js";
-import { findSelectionTargets } from "./editor-selection.js";
+import { findSelectionTargets, isComposedDescendant } from "./editor-selection.js";
 
 const PRESERVE_SELECTION_CONTROLS = new Set([
   "format-bold",
@@ -208,7 +208,7 @@ export class EditorController {
   };
 
   #notifyToolbar(format) {
-    this.editor.querySelector("format-toolbar")?.dispatchEvent(
+    this.editor.renderRoot.querySelector("format-toolbar")?.dispatchEvent(
       new CustomEvent("selection-format-change", {
         detail: format,
       }),
@@ -234,6 +234,10 @@ export class EditorController {
       return;
     }
 
+    if (this.activeBlock && !isComposedDescendant(group, this.activeBlock)) {
+      this.#clearActiveBlockFocus();
+    }
+
     this.activeGroup?.removeAttribute("active");
     this.activeGroup = group;
     this.activeBlockGroup = blockGroup;
@@ -241,8 +245,20 @@ export class EditorController {
     this.#notifyGroupToolbar(group.getGroupFormat(), blockGroup, block);
   }
 
+  #clearActiveBlockFocus() {
+    const block = this.activeBlock;
+    if (!block) return;
+
+    block.clearSelection?.();
+    blurComposedDescendant(block);
+    clearComposedSelection(block);
+    block.removeAttribute("active");
+    this.activeBlock = null;
+    this.#notifyToolbar(null);
+  }
+
   #notifyGroupToolbar(format, blockGroup = null, block = null) {
-    this.editor.querySelector("group-format-toolbar")?.dispatchEvent(
+    this.editor.renderRoot.querySelector("group-format-toolbar")?.dispatchEvent(
       new CustomEvent("group-format-change", {
         detail: format ? { ...format, blockGroup: blockGroup?.getFormat?.(block) ?? null } : null,
       }),
@@ -259,5 +275,26 @@ export class EditorController {
     deserializeEditor(this.editor, snapshot);
     this.#notifyToolbar(null);
     this.#notifyGroupToolbar(null);
+  }
+}
+
+function blurComposedDescendant(block) {
+  let activeElement = document.activeElement;
+
+  while (activeElement?.shadowRoot?.activeElement) {
+    activeElement = activeElement.shadowRoot.activeElement;
+  }
+
+  if (activeElement && isComposedDescendant(block, activeElement)) activeElement.blur();
+}
+
+function clearComposedSelection(block) {
+  const selection = block.renderRoot?.getSelection?.() ?? document.getSelection();
+  if (
+    selection &&
+    (isComposedDescendant(block, selection.anchorNode) ||
+      isComposedDescendant(block, selection.focusNode))
+  ) {
+    selection.removeAllRanges();
   }
 }

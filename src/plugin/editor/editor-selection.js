@@ -19,3 +19,22 @@ export function findSelectionTargets(event) {
 export function findInPath(path, selector) {
   return path.find((element) => element.matches?.(selector)) ?? null;
 }
+
+export function isComposedDescendant(ancestor, node) {
+  let current = node;
+
+  while (current) {
+    if (current === ancestor) return true;
+
+    const parent = current.parentNode;
+    if (parent) {
+      current = parent;
+      continue;
+    }
+
+    const root = current.getRootNode?.();
+    current = root?.host ?? null;
+  }
+
+  return false;
+}

@@ -10,7 +10,7 @@ export const decoratedTitleStyles = css`
   }
 
   rich-text-block[block-id="title"] {
-    font-size: 2rem;
+    font-size: 1.5rem;
     line-height: 1;
     text-align: center;
   }
