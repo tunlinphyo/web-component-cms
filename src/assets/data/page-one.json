@@ -111,7 +111,7 @@
             "hashId": "",
             "sort": 1,
             "style": {
-                "backgroundColor": "#ffffff",
+                "backgroundColor": "#fef0f4",
                 "borderWidth": "",
                 "borderColor": "",
                 "borderStyle": "",
@@ -121,7 +121,7 @@
             "blocks": [
                 {
                     "id": "title",
-                    "value": "Website Description",
+                    "value": "<font color=\"#d6295a\">Website Description</font>",
                     "textAlign": "left",
                     "fontWeight": "",
                     "fontSize": "40px",
