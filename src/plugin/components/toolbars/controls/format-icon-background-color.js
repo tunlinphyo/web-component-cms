@@ -51,6 +51,13 @@ export class FormatIconBackgroundColor extends PopoverControl {
         </svg>
       </button>
       <div id="colors" popover @toggle=${this.handlePopoverToggle}>
+        <button
+          class="unset"
+          type="button"
+          title="Unset color"
+          aria-label="Unset color"
+          @click=${() => this.#apply("")}
+        ></button>
         ${EDITOR_COLOR_SWATCHES.map((color) =>
           color.spacer
             ? html`<span class="spacer" aria-hidden="true"></span>`

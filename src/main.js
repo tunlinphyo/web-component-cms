@@ -1,7 +1,7 @@
 import "./style.css";
 
 import "./plugin/index.js";
-import pageOne from "./assets/data/page-one.json";
+import pageOne from "./assets/data/page-two.json";
 
 const images = [
   { name: "logo-h.png", url: "/images/logo-h.png" },

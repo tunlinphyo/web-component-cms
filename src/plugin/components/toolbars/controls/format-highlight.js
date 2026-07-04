@@ -1,4 +1,5 @@
-import { css, html } from "lit";
+import { css, html, unsafeCSS } from "lit";
+import markStyles from "../../../../styles/mark.css?inline";
 import { FormatToggle } from "./format-toggle";
 
 export class FormatHighlight extends FormatToggle {
@@ -6,6 +7,7 @@ export class FormatHighlight extends FormatToggle {
 
   static styles = [
     FormatToggle.styles,
+    unsafeCSS(markStyles),
     css`
       button {
         padding: 0 0.5rem;

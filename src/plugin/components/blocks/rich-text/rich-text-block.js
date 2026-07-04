@@ -1,5 +1,6 @@
-import { LitElement } from "lit";
+import { LitElement, unsafeCSS } from "lit";
 import { html, unsafeStatic } from "lit/static-html.js";
+import markStyles from "../../../../styles/mark.css?inline";
 import {
   convertBlockTypeContent,
   getSelectedAncestor,
@@ -150,7 +151,7 @@ export class RichTextBlock extends LitElement {
     };
   }
 
-  static styles = richTextBlockStyles;
+  static styles = [richTextBlockStyles, unsafeCSS(markStyles)];
 
   render() {
     const tag = unsafeStatic(this.type === "p" ? "div" : normalizeBlockType(this.type));

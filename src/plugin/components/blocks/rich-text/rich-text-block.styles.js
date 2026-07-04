@@ -41,16 +41,6 @@ export const richTextBlockStyles = css`
     pointer-events: none;
   }
 
-  mark {
-    --mark-highlight-color: var(--yellow-200);
-
-    background-color: transparent;
-    background-image: linear-gradient(var(--mark-highlight-color), var(--mark-highlight-color));
-    background-position: bottom;
-    background-repeat: no-repeat;
-    background-size: 100% 40%;
-  }
-
   [data-link-selection] {
     text-decoration: underline;
   }

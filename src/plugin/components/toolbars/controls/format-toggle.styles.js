@@ -22,12 +22,4 @@ export const formatToggleStyles = css`
     background: var(--highlight);
     color: white;
   }
-
-  mark {
-    background-color: transparent;
-    background-image: linear-gradient(var(--yellow-200), var(--yellow-200));
-    background-position: bottom;
-    background-repeat: no-repeat;
-    background-size: 100% 40%;
-  }
 `;

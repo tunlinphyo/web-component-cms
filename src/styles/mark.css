@@ -1,0 +1,19 @@
+mark {
+  --mark-highlight-color: var(--mark);
+  --mark-background-size: 100% 40%;
+
+  color: inherit;
+  background-color: transparent;
+  background-image: linear-gradient(var(--mark-highlight-color), var(--mark-highlight-color));
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: var(--mark-background-size);
+}
+
+mark.mark-primary {
+  --mark-background-size: 100% 70%;
+}
+
+mark.mark-secondary {
+  --mark-background-size: 100% 100%;
+}
