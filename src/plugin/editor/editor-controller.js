@@ -23,6 +23,7 @@ export class EditorController {
     this.activeBlock = null;
     this.activeGroup = null;
     this.activeBlockGroup = null;
+    this.copiedGroupStyles = null;
     this.history = new EditorHistory({
       capture: () => serializeEditor(this.editor),
       restore: (snapshot) => this.#restoreSnapshot(snapshot),
@@ -123,6 +124,29 @@ export class EditorController {
 
   #blockGroupCommand = (event) => {
     if (!this.activeBlockGroup) return;
+    if (event.detail.action === "copy-styles") {
+      const selectionTarget = this.activeBlock ?? this.activeGroup;
+      const item = this.activeBlockGroup.getItemForBlock?.(selectionTarget);
+      const styles = this.activeBlockGroup.copyItemStyles?.(selectionTarget);
+      if (!item || !styles) return;
+
+      this.copiedGroupStyles = {
+        list: this.activeBlockGroup,
+        item,
+        styles,
+      };
+      this.#showToast("Styles copied");
+      this.#notifyGroupToolbar(
+        this.activeGroup?.getGroupFormat(),
+        this.activeBlockGroup,
+        this.activeBlock,
+      );
+      return;
+    }
+    if (event.detail.action === "paste-styles") {
+      void this.#pasteGroupStyles();
+      return;
+    }
     if (event.detail.action === "sort") {
       if (!this.activeBlockGroup.reorderBlocks?.(event.detail.ids, this.activeBlock)) return;
       this.#notifyGroupToolbar(
@@ -258,11 +282,51 @@ export class EditorController {
   }
 
   #notifyGroupToolbar(format, blockGroup = null, block = null) {
+    const selectionTarget = block ?? this.activeGroup;
+    const blockGroupFormat = blockGroup?.getFormat?.(selectionTarget) ?? null;
+    const activeItem = blockGroup?.getItemForBlock?.(selectionTarget);
+    if (blockGroupFormat && activeItem) {
+      blockGroupFormat.styleAction =
+        this.copiedGroupStyles?.list === blockGroup &&
+        this.copiedGroupStyles.item !== activeItem
+          ? "paste"
+          : "copy";
+    }
+
     this.editor.renderRoot.querySelector("group-format-toolbar")?.dispatchEvent(
       new CustomEvent("group-format-change", {
-        detail: format ? { ...format, blockGroup: blockGroup?.getFormat?.(block) ?? null } : null,
+        detail: format ? { ...format, blockGroup: blockGroupFormat } : null,
       }),
     );
+  }
+
+  async #pasteGroupStyles() {
+    const copied = this.copiedGroupStyles;
+    const selectionTarget = this.activeBlock ?? this.activeGroup;
+    const targetItem = this.activeBlockGroup?.getItemForBlock?.(selectionTarget);
+    if (
+      !copied ||
+      copied.list !== this.activeBlockGroup ||
+      !targetItem ||
+      targetItem === copied.item
+    ) {
+      return;
+    }
+    if (!(await this.activeBlockGroup.pasteItemStyles?.(targetItem, copied.styles))) return;
+
+    this.copiedGroupStyles = null;
+    this.#showToast("Styles pasted");
+    this.#notifyToolbar(this.activeBlock?.getSelectionFormat?.() ?? null);
+    this.#notifyGroupToolbar(
+      this.activeGroup?.getGroupFormat(),
+      this.activeBlockGroup,
+      this.activeBlock,
+    );
+    this.history.capture();
+  }
+
+  #showToast(message) {
+    void this.editor.renderRoot.querySelector("editor-toast")?.showToast(message);
   }
 
   #restoreSnapshot(snapshot) {

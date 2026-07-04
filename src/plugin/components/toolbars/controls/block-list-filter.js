@@ -11,6 +11,7 @@ export class BlockGroupFilter extends LitElement {
     count: { type: Number },
     min: { type: Number },
     max: { type: Number },
+    styleAction: { type: String, attribute: "style-action" },
   };
 
   static styles = [
@@ -34,6 +35,7 @@ export class BlockGroupFilter extends LitElement {
     this.count = 0;
     this.min = 0;
     this.max = 0;
+    this.styleAction = "";
   }
 
   render() {
@@ -68,6 +70,39 @@ export class BlockGroupFilter extends LitElement {
         </svg>
       </button>
       <block-group-sort></block-group-sort>
+      <button
+        type="button"
+        title=${this.styleAction === "paste" ? "Paste styles" : "Copy styles"}
+        aria-label=${this.styleAction === "paste" ? "Paste styles" : "Copy styles"}
+        ?disabled=${this.disabled || !this.styleAction}
+        @click=${() => this.#apply(`${this.styleAction}-styles`)}
+      >
+        ${this.styleAction === "paste"
+          ? html`
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                <path
+                  d="M9 5h6m-5-2h4l1 2h3v16H6V5h3l1-2Zm0 8h6m-6 4h6"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            `
+          : html`
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                <path
+                  d="M8 8h11v13H8V8Zm-3 8H3V3h11v2"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            `}
+      </button>
     `;
   }
 
@@ -85,6 +120,7 @@ export class BlockGroupFilter extends LitElement {
     this.count = format?.count ?? 0;
     this.min = format?.min ?? 0;
     this.max = format?.max ?? 0;
+    this.styleAction = format?.styleAction ?? "";
   }
 
   #apply(action) {

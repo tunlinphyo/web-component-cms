@@ -129,6 +129,7 @@ export function serializeHtml(html, trimTrailingBreaks = true) {
   if (!trimTrailingBreaks) return serialized;
 
   serialized = serialized.replace(/(?:<br>)+$/, "");
+  serialized = serialized.replace(/(?:<br>)+(?=<\/p>\s*$)/i, "");
   return removeTrailingEmptyParagraphs(serialized);
 }
 
@@ -263,5 +264,84 @@ export function insertPlainText(selection, text) {
   range.setStartAfter(node);
   range.collapse(true);
   selectRange(selection, range);
+  return true;
+}
+
+export function insertPlainTextAsParagraphs(editor, selection, text) {
+  const normalizedText = text.replace(/<br\s*\/?>/gi, "\n").replace(/\r\n?|\n/g, "\n");
+  if (!selection?.rangeCount) return false;
+
+  const range = selection.getRangeAt(0);
+  const startElement =
+    range.startContainer.nodeType === ELEMENT_NODE
+      ? range.startContainer
+      : range.startContainer.parentElement;
+  const paragraph = startElement?.closest("p");
+
+  if (!paragraph || !editor.contains(paragraph)) {
+    if (editor.textContent.trim()) return insertPlainText(selection, normalizedText);
+
+    editor.replaceChildren();
+    const lines = normalizedText.split("\n");
+    let caretContainer;
+
+    for (const line of lines) {
+      const nextParagraph = document.createElement("p");
+      if (line) {
+        caretContainer = document.createTextNode(line);
+        nextParagraph.append(caretContainer);
+      } else {
+        caretContainer = nextParagraph;
+      }
+      editor.append(nextParagraph);
+    }
+
+    const caretRange = document.createRange();
+    if (caretContainer.nodeType === ELEMENT_NODE) {
+      caretRange.setStart(caretContainer, 0);
+    } else {
+      caretRange.setStartAfter(caretContainer);
+    }
+    caretRange.collapse(true);
+    selectRange(selection, caretRange);
+    return true;
+  }
+
+  if (!normalizedText.includes("\n")) return insertPlainText(selection, normalizedText);
+
+  range.deleteContents();
+  const trailingRange = document.createRange();
+  trailingRange.setStart(range.startContainer, range.startOffset);
+  trailingRange.setEnd(paragraph, paragraph.childNodes.length);
+  const trailingContent = trailingRange.extractContents();
+
+  const lines = normalizedText.split("\n");
+  const firstLine = document.createTextNode(lines.shift());
+  range.insertNode(firstLine);
+
+  let currentParagraph = paragraph;
+  let caretContainer = firstLine;
+  for (const line of lines) {
+    const nextParagraph = document.createElement("p");
+    currentParagraph.after(nextParagraph);
+    currentParagraph = nextParagraph;
+
+    if (line) {
+      caretContainer = document.createTextNode(line);
+      currentParagraph.append(caretContainer);
+    } else {
+      caretContainer = currentParagraph;
+    }
+  }
+
+  const caretRange = document.createRange();
+  if (caretContainer.nodeType === ELEMENT_NODE) {
+    caretRange.setStart(caretContainer, 0);
+  } else {
+    caretRange.setStartAfter(caretContainer);
+  }
+  caretRange.collapse(true);
+  currentParagraph.append(trailingContent);
+  selectRange(selection, caretRange);
   return true;
 }

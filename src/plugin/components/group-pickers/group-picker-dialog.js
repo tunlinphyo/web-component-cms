@@ -15,13 +15,18 @@ export class GroupPickerDialog extends GroupPickerBase {
 
   get groups() {
     const groupTypes = this.constructor.groupTypes;
-
-    return listGroupDefinitions().filter(
+    const allowedTypes = groupTypes ? new Set(groupTypes) : null;
+    const groups = listGroupDefinitions().filter(
       (definition) =>
         definition.addable !== false &&
-        (!groupTypes || groupTypes.has(definition.type)) &&
+        (!allowedTypes || allowedTypes.has(definition.type)) &&
         matchesPicker(definition, this.picker),
     );
+
+    if (!groupTypes) return groups;
+
+    const groupsByType = new Map(groups.map((group) => [group.type, group]));
+    return Array.from(groupTypes, (type) => groupsByType.get(type)).filter(Boolean);
   }
 
   render() {
@@ -73,9 +78,9 @@ export function registerGroupPicker(tagName, groupTypes) {
   const existing = customElements.get(tagName);
   if (existing) return existing;
 
-  const allowedTypes = new Set(groupTypes);
+  const configuredGroupTypes = [...groupTypes];
   class ConfiguredGroupPickerDialog extends GroupPickerDialog {
-    static groupTypes = allowedTypes;
+    static groupTypes = configuredGroupTypes;
   }
 
   return ConfiguredGroupPickerDialog.define(tagName);

@@ -7,13 +7,14 @@ export const richTextEditorStyles = css`
     min-height: calc(100vh - var(--header-height));
     display: grid;
     grid-template-columns: 1fr 240px;
+    grid-template-rows: 1fr;
     align-items: start;
     background-color: var(--gray-50);
+    box-sizing: border-box;
   }
 
   section {
     width: 100%;
-    min-height: calc(100vh - var(--header-height));
     align-self: stretch;
     display: flex;
     flex-direction: column;
@@ -31,6 +32,7 @@ export const richTextEditorStyles = css`
     max-width: 68rem;
     padding: 1rem;
     gap: 0.5rem;
+    box-sizing: border-box;
   }
 
   group-order > empty-group-picker-button {

@@ -9,11 +9,13 @@ import {
   initializeEditor,
   placeCaretInEmptyEditor,
   setDefaultParagraphSeparator,
+  updateEditorEmptyState,
   updateEditorPlaceholder,
 } from "./text-editor-dom.js";
 import { applySelectionCommand, describeSelectionFormat } from "./text-formatting.js";
 import {
   insertPlainText,
+  insertPlainTextAsParagraphs,
   isSelectionInside,
   removeLinkSelectionPreview,
   selectRange,
@@ -327,7 +329,11 @@ export class TextBlockBase extends LitElement {
     const selection = this.editorSelection;
     placeCaretInEmptyEditor(event.currentTarget, selection);
     const text = event.clipboardData?.getData("text/plain") ?? "";
-    if (!insertPlainText(selection, text)) return;
+    const inserted = this.paragraphMode
+      ? insertPlainTextAsParagraphs(event.currentTarget, selection, text)
+      : insertPlainText(selection, text);
+    if (!inserted) return;
+    updateEditorEmptyState(event.currentTarget, this.paragraphMode);
     this.notifySelection();
   };
 

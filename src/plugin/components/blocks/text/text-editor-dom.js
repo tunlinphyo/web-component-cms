@@ -46,6 +46,7 @@ export function initializeEditor(
     fontSize,
     fontFamily,
   });
+  updateEditorEmptyState(editor, paragraphMode);
   setDefaultParagraphSeparator();
 }
 
@@ -76,6 +77,7 @@ export function restoreEditorState(
     fontSize,
     fontFamily,
   });
+  updateEditorEmptyState(editor, paragraphMode);
   restoreSelectionMarkers(editor);
 }
 
@@ -95,11 +97,17 @@ export function syncEditorFromProperties(
     fontSize,
     fontFamily,
   });
+  updateEditorEmptyState(editor, paragraphMode);
 }
 
 export function updateEditorPlaceholder(editor, placeholder) {
   const escapedPlaceholder = (placeholder || "").replace(/"/g, '\\"');
   editor.style.setProperty("--placeholder", `"${escapedPlaceholder}"`);
+}
+
+export function updateEditorEmptyState(editor, paragraphMode) {
+  editor.toggleAttribute("data-empty", isEmptyHtml(editor.innerHTML));
+  editor.toggleAttribute("data-paragraph-mode", Boolean(paragraphMode));
 }
 
 export function normalizeEditorParagraphs(editor, paragraphMode) {
@@ -112,6 +120,7 @@ export function normalizeEditorParagraphs(editor, paragraphMode) {
 
 export function normalizeEditorInput(editor, paragraphMode) {
   const html = editor.innerHTML;
+  updateEditorEmptyState(editor, paragraphMode);
   if (isEmptyHtml(html)) {
     if (!paragraphMode) return false;
 

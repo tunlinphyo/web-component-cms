@@ -201,6 +201,28 @@ export class GroupListBase extends HTMLElement {
     return htmlToText(value) || this.placeholder;
   }
 
+  copyItemStyles(block) {
+    const item = this.getItemForBlock(block);
+    return item?.toJSON ? createStyleSnapshot(item.toJSON()) : null;
+  }
+
+  async pasteItemStyles(block, snapshot) {
+    const item = this.getItemForBlock(block);
+    if (!item?.toJSON || !snapshot) return false;
+
+    const itemData = item.toJSON();
+    item.init?.({
+      ...itemData,
+      style: cloneData(snapshot.style),
+      blocks: mergeBlockStyles(itemData.blocks, snapshot.blocks),
+    });
+
+    await item.updateComplete;
+    await Promise.resolve();
+    await Promise.all(item.blocks.map((child) => child.updateComplete).filter(Boolean));
+    return true;
+  }
+
   ensureMinimumItems() {
     while (this.blocks.length < Math.min(this.min, this.max)) {
       const item = this.createItem(this.createId());
@@ -291,4 +313,49 @@ function cloneData(value) {
   if (Array.isArray(value)) return value.map(cloneData);
   if (!value || typeof value !== "object") return value;
   return Object.fromEntries(Object.entries(value).map(([key, child]) => [key, cloneData(child)]));
+}
+
+const STYLE_FIELDS = [
+  "align",
+  "backgroundColor",
+  "bodyBackgroundColor",
+  "borderColor",
+  "borderPosition",
+  "borderRadius",
+  "borderStyle",
+  "borderWidth",
+  "color",
+  "design",
+  "elementType",
+  "fontFamily",
+  "fontSize",
+  "fontWeight",
+  "headerBackgroundColor",
+  "iconPosition",
+  "objectFit",
+  "predefinedMargin",
+  "textAlign",
+];
+
+function createStyleSnapshot(itemData) {
+  return {
+    style: cloneData(itemData.style ?? {}),
+    blocks: (itemData.blocks ?? []).map((block) => ({
+      id: block.id,
+      style: Object.fromEntries(
+        STYLE_FIELDS.filter((field) => Object.hasOwn(block, field)).map((field) => [
+          field,
+          cloneData(block[field]),
+        ]),
+      ),
+    })),
+  };
+}
+
+function mergeBlockStyles(targetBlocks = [], sourceBlocks = []) {
+  const sourceById = new Map(sourceBlocks.map((block) => [block.id, block.style]));
+  return targetBlocks.map((block) => ({
+    ...block,
+    ...cloneData(sourceById.get(block.id) ?? {}),
+  }));
 }

@@ -61,4 +61,4 @@ export class NewsGroup extends GroupBase {
   }
 }
 
-NewsGroup.define("news-group");
+NewsGroup.define("news-group", { addable: false });

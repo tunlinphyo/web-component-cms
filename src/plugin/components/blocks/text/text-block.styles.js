@@ -29,16 +29,21 @@ export const textBlockStyles = css`
     outline-offset: 2px;
   }
 
-  .editor:empty::after {
+  .editor[data-empty]:not([data-paragraph-mode])::after {
     content: attr(data-placeholder);
     color: #888;
     pointer-events: none;
   }
 
-  .editor > p:only-child:empty::after {
+  .editor[data-empty][data-paragraph-mode] > p:only-child::after {
     content: var(--placeholder);
     color: #888;
     pointer-events: none;
+  }
+
+  .editor[data-empty] > br:only-child,
+  .editor[data-empty][data-paragraph-mode] > p:only-child > br:only-child {
+    display: none;
   }
 
   [data-link-selection] {

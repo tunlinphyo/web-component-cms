@@ -26,4 +26,4 @@ export class HeroGroup extends GroupBase {
   }
 }
 
-HeroGroup.define("hero-group", { addable: false });
+HeroGroup.define("hero-group");

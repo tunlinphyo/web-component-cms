@@ -1,4 +1,5 @@
 import { LitElement, html, nothing } from "lit";
+import "../components/feedback/editor-toast.js";
 import { EditorController } from "./editor-controller.js";
 import { richTextEditorStyles } from "./rich-text-editor.styles.js";
 
@@ -25,6 +26,7 @@ export class RichTextEditor extends LitElement {
         <group-format-toolbar title="Section"></group-format-toolbar>
         <format-toolbar title="Text"></format-toolbar>
       </nav>
+      <editor-toast></editor-toast>
     `;
   }
 

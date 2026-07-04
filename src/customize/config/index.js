@@ -8,7 +8,7 @@ import colors from "./colors.js";
 import { elementTypeOptions } from "./element-type.js";
 import { fontFamilyOptions } from "./font-family.js";
 import { fontSizeOptions } from "./font-size.js";
-import { iconOptions } from "./icons.js";
+// import { iconOptions } from "./icons.js";
 import { linkTargetOptions } from "./link-target.js";
 import { markStyleOptions } from "./mark-style.js";
 import materialIconNames from "./material-icons.js";
@@ -26,7 +26,7 @@ const CONFIG_OPTIONS = {
   "element-type": elementTypeOptions,
   "font-family": fontFamilyOptions,
   "font-size": fontSizeOptions,
-  icons: iconOptions,
+  // icons: iconOptions,
   "link-target": linkTargetOptions,
   "mark-style": markStyleOptions,
   "material-icons": materialIconNames,

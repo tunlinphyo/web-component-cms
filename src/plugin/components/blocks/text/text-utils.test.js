@@ -18,3 +18,9 @@ test("preserves intentional blank lines", () => {
 
   expect(serializeHtml(value)).toBe(value);
 });
+
+test("removes trailing breaks from the final paragraph", () => {
+  const value = "<p>First</p><p>Second<br></p>";
+
+  expect(serializeHtml(value)).toBe("<p>First</p><p>Second</p>");
+});
