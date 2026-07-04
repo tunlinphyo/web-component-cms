@@ -1,4 +1,4 @@
-import { PAGE_BLOCK_TYPES } from "./page.schema.js";
+import { INLINE_TEXT_ELEMENT_TYPES, PAGE_BLOCK_TYPES } from "./page.schema.js";
 
 export function assertValidPage(page) {
   const errors = validatePage(page);
@@ -60,6 +60,9 @@ function validateBlock(block, path, errors) {
     errors.push(`${path}.type is not registered: ${block.type}`);
   }
 
+  if (block.type === "inline-text" && !INLINE_TEXT_ELEMENT_TYPES.has(block.elementType)) {
+    errors.push(`${path}.elementType must be p, h1, h2, or h3`);
+  }
   if (block.type === "navs") validateNavsBlock(block, path, errors);
 }
 

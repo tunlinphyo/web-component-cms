@@ -1,6 +1,21 @@
 import { randomHash } from "../../../utils/ids.js";
+import { registerList } from "../../../registries/list-registry.js";
 
 export class BlockListGroup extends HTMLElement {
+  static define(tagName, definition = {}) {
+    const type = definition.type ?? tagName.replace(/-group$/, "");
+
+    customElements.define(tagName, this);
+    registerList({
+      ...definition,
+      type,
+      tagName,
+      selector: definition.selector ?? tagName,
+    });
+
+    return this;
+  }
+
   constructor() {
     super();
   }
@@ -235,4 +250,4 @@ function numberAttribute(element, name, fallback) {
   return Number.isFinite(value) ? value : fallback;
 }
 
-customElements.define("block-list-group", BlockListGroup);
+BlockListGroup.define("block-list-group");

@@ -17,13 +17,14 @@
             "blocks": [
                 {
                     "id": "title",
-                    "value": "<p><b><span style=\"font-size: 14px;\"><font color=\"#d6295a\">Test website for Testing</font><font color=\"#0c430d\"></font></span></b></p>",
+                    "value": "<b><span style=\"font-size: 14px;\"><font color=\"#d6295a\">Test website for Testing</font><font color=\"#0c430d\"></font></span></b>",
+                    "type": "inline-text",
+                    "elementType": "p",
                     "textAlign": "left",
                     "fontWeight": "",
                     "fontSize": "",
                     "fontFamily": "var(--font-body)",
-                    "predefinedMargin": "0",
-                    "type": "p"
+                    "predefinedMargin": "0"
                 },
                 {
                     "id": "logo",
@@ -122,22 +123,23 @@
                 {
                     "id": "title",
                     "value": "<font color=\"#d6295a\">Website Description</font>",
+                    "type": "inline-text",
+                    "elementType": "h1",
                     "textAlign": "left",
                     "fontWeight": "",
                     "fontSize": "40px",
                     "fontFamily": "var(--font-heading)",
-                    "predefinedMargin": "0.5rem",
-                    "type": "h1"
+                    "predefinedMargin": "0.5rem"
                 },
                 {
                     "id": "description",
                     "value": "<p><span style=\"font-size: 24px;\"><b>Pulvinar vivamus fringilla lacus nec metus bibendum egestas.</b></span></p>",
+                    "type": "p",
                     "textAlign": "left",
                     "fontWeight": "",
                     "fontSize": "",
                     "fontFamily": "var(--font-body)",
-                    "predefinedMargin": "0.5rem",
-                    "type": "p"
+                    "predefinedMargin": "0.5rem"
                 },
                 {
                     "id": "icon-1",
@@ -205,12 +207,13 @@
                 {
                     "id": "title",
                     "value": "<font color=\"#d6295a\">News</font>",
+                    "type": "inline-text",
+                    "elementType": "h2",
                     "textAlign": "left",
                     "fontWeight": "",
                     "fontSize": "",
                     "fontFamily": "var(--font-heading)",
-                    "predefinedMargin": "0",
-                    "type": "h2"
+                    "predefinedMargin": "0"
                 },
                 {
                     "id": "news",
@@ -233,32 +236,34 @@
                                 {
                                     "id": "date",
                                     "value": "<font color=\"#d6295a\">January 2 </font>",
+                                    "type": "inline-text",
+                                    "elementType": "h2",
                                     "textAlign": "left",
                                     "fontWeight": "normal",
                                     "fontSize": "24px",
                                     "fontFamily": "var(--font-shiokaze)",
-                                    "predefinedMargin": "0.5rem",
-                                    "type": "h2"
+                                    "predefinedMargin": "0.5rem"
                                 },
                                 {
                                     "id": "title",
                                     "value": "<font color=\"#d6295a\">Google News</font>",
+                                    "type": "inline-text",
+                                    "elementType": "h2",
                                     "textAlign": "left",
                                     "fontWeight": "",
                                     "fontSize": "20px",
                                     "fontFamily": "var(--font-body)",
-                                    "predefinedMargin": "0.5rem",
-                                    "type": "h2"
+                                    "predefinedMargin": "0.5rem"
                                 },
                                 {
                                     "id": "description",
                                     "value": "<p>Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p>",
+                                    "type": "p",
                                     "textAlign": "left",
                                     "fontWeight": "",
                                     "fontSize": "",
                                     "fontFamily": "var(--font-body)",
-                                    "predefinedMargin": "0.5rem",
-                                    "type": "p"
+                                    "predefinedMargin": "0.5rem"
                                 }
                             ]
                         },
@@ -279,32 +284,34 @@
                                 {
                                     "id": "date",
                                     "value": "<font color=\"#d6295a\">March 28</font>",
+                                    "type": "inline-text",
+                                    "elementType": "h2",
                                     "textAlign": "left",
                                     "fontWeight": "normal",
                                     "fontSize": "24px",
                                     "fontFamily": "var(--font-shiokaze)",
-                                    "predefinedMargin": "0.5rem",
-                                    "type": "h2"
+                                    "predefinedMargin": "0.5rem"
                                 },
                                 {
                                     "id": "title",
                                     "value": "<font color=\"#d6295a\">Apple News</font>",
+                                    "type": "inline-text",
+                                    "elementType": "h2",
                                     "textAlign": "left",
                                     "fontWeight": "",
                                     "fontSize": "20px",
                                     "fontFamily": "var(--font-body)",
-                                    "predefinedMargin": "0.5rem",
-                                    "type": "h2"
+                                    "predefinedMargin": "0.5rem"
                                 },
                                 {
                                     "id": "description",
                                     "value": "<p><font color=\"#0c430d\"></font>Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.<font color=\"#0c430d\"></font></p>",
+                                    "type": "p",
                                     "textAlign": "left",
                                     "fontWeight": "",
                                     "fontSize": "",
                                     "fontFamily": "var(--font-body)",
-                                    "predefinedMargin": "0.5rem",
-                                    "type": "p"
+                                    "predefinedMargin": "0.5rem"
                                 }
                             ]
                         }
@@ -362,22 +369,23 @@
                 {
                     "id": "title",
                     "value": "<font color=\"#d6295a\">Table</font>",
+                    "type": "inline-text",
+                    "elementType": "h2",
                     "textAlign": "center",
                     "fontWeight": "",
                     "fontSize": "",
                     "fontFamily": "var(--font-heading)",
-                    "predefinedMargin": "0",
-                    "type": "h2"
+                    "predefinedMargin": "0"
                 },
                 {
                     "id": "description",
                     "value": "<p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. </p><p>Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p>",
+                    "type": "p",
                     "textAlign": "left",
                     "fontWeight": "",
                     "fontSize": "",
                     "fontFamily": "var(--font-body)",
-                    "predefinedMargin": "0.5rem",
-                    "type": "p"
+                    "predefinedMargin": "0.5rem"
                 },
                 {
                     "id": "table",
@@ -482,22 +490,23 @@
                 {
                     "id": "title",
                     "value": "<font color=\"#d6295a\">Paragraph</font>",
+                    "type": "inline-text",
+                    "elementType": "h2",
                     "textAlign": "left",
                     "fontWeight": "",
                     "fontSize": "",
                     "fontFamily": "var(--font-heading)",
-                    "predefinedMargin": "0",
-                    "type": "h2"
+                    "predefinedMargin": "0"
                 },
                 {
                     "id": "description",
-                    "value": "<p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.<br><br>Lorem ipsum dolor sit amet consectetur adipiscing elit. <mark style=\"--mark-highlight-color: #FFC107;\">Quisque faucibus ex sapien vitae pellentesque sem placerat.</mark> In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.<br><br>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p>",
+                    "value": "<p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p><p>Lorem ipsum dolor sit amet consectetur adipiscing elit. <mark style=\"--mark-highlight-color: #FFC107;\">Quisque faucibus ex sapien vitae pellentesque sem placerat.</mark> In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p><p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p>",
+                    "type": "p",
                     "textAlign": "left",
                     "fontWeight": "",
                     "fontSize": "",
                     "fontFamily": "var(--font-body)",
-                    "predefinedMargin": "0.5rem",
-                    "type": "p"
+                    "predefinedMargin": "0.5rem"
                 }
             ]
         },
@@ -569,12 +578,12 @@
                 {
                     "id": "copyright",
                     "value": "<p><span style=\"font-size: 14px;\"><font color=\"#d6295a\">copyright@ 2026</font></span></p>",
+                    "type": "p",
                     "textAlign": "left",
                     "fontWeight": "",
                     "fontSize": "",
                     "fontFamily": "var(--font-body)",
-                    "predefinedMargin": "0",
-                    "type": "p"
+                    "predefinedMargin": "0"
                 }
             ]
         }

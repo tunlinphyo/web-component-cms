@@ -1,5 +1,5 @@
 import { html } from "lit";
-import { GroupBase } from "../../../plugin/index.js";
+import { GroupBase } from "@/ui-editor";
 import { groupStyles } from "./about-group.style.js";
 import { decoratedTitleStyles, renderDecoratedTitle } from "../shared/decorated-title.js";
 
@@ -10,7 +10,8 @@ export class AboutGroup extends GroupBase {
     blocks: [
       {
         id: "title",
-        type: "h2",
+        type: "inline-text",
+        elementType: "h2",
         value: "",
         textAlign: "left",
         fontWeight: "",
@@ -37,4 +38,4 @@ export class AboutGroup extends GroupBase {
   }
 }
 
-customElements.define("about-group", AboutGroup);
+AboutGroup.define("about-group");

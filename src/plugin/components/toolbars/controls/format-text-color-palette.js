@@ -3,7 +3,7 @@ import { PopoverControl } from "./popover-control.js";
 import {
   COLOR_WHEEL_GRADIENT,
   DEFAULT_TEXT_COLOR,
-  EDITOR_COLOR_SWATCHES_WITH_UNSET,
+  getEditorColorSwatches,
 } from "../../../utils/colors.js";
 import { formatTextColorPaletteStyles } from "./format-text-color-palette.styles.js";
 
@@ -66,7 +66,7 @@ export class FormatTextColorPalette extends PopoverControl {
           @mousedown=${(event) => event.preventDefault()}
           @click=${() => this.#apply("")}
         ></button>
-        ${EDITOR_COLOR_SWATCHES_WITH_UNSET.map((color) =>
+        ${getEditorColorSwatches().map((color) =>
           color.spacer
             ? html`<span class="spacer" aria-hidden="true"></span>`
             : html`

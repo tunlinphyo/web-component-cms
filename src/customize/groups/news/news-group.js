@@ -1,5 +1,5 @@
 import { html } from "lit";
-import { GroupBase } from "../../../plugin/index.js";
+import { GroupBase } from "@/ui-editor";
 import { hostGroupStyles } from "./news-group.style.js";
 
 export class NewsGroup extends GroupBase {
@@ -19,14 +19,16 @@ export class NewsGroup extends GroupBase {
         id: "date",
         fontFamily: "var(--font-shiokaze)",
         textAlign: "left",
-        type: "h2",
+        type: "inline-text",
+        elementType: "h2",
         value: "",
         fontWeight: "normal",
         fontSize: "24px",
       },
       {
         id: "title",
-        type: "h2",
+        type: "inline-text",
+        elementType: "h2",
         value: "",
         textAlign: "left",
         fontFamily: "var(--font-body)",
@@ -44,15 +46,9 @@ export class NewsGroup extends GroupBase {
   render() {
     return html`
       <div data-group-box>
-        <rich-text-block
-          block-id="date"
-          type="p"
-          placeholder="News date"
-          features="type,fontFamily,fontSize,color,bold,italic,underline"
-        >
-        </rich-text-block>
+        <inline-text block-id="date" type="h2" placeholder="News date"> </inline-text>
         <div class="news-detail">
-          <rich-text-block block-id="title" type="h2" placeholder="News title"></rich-text-block>
+          <inline-text block-id="title" type="h2" placeholder="News title"></inline-text>
           <rich-text-block
             block-id="description"
             type="p"
@@ -65,4 +61,4 @@ export class NewsGroup extends GroupBase {
   }
 }
 
-customElements.define("news-group", NewsGroup);
+NewsGroup.define("news-group");

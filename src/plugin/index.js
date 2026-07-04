@@ -4,6 +4,12 @@ export { GroupOrder } from "./components/groups/base/group-order.js";
 export { GroupListBase } from "./components/lists/base/group-list-base.js";
 export { BlockListGroup } from "./components/lists/block-list/block-list-group.js";
 export { GroupPickerBase } from "./components/group-pickers/base/group-picker-base.js";
+export { Layout } from "./components/layouts/base/layout.js";
+export {
+  GroupPickerDialog,
+  registerGroupPicker,
+} from "./components/group-pickers/group-picker-dialog.js";
+export { registerConfig, resolveConfigOptions } from "./registries/config-registry.js";
 export {
   getGroupDefinition,
   getGroupSelector,

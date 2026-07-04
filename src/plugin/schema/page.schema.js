@@ -33,12 +33,15 @@ export const PAGE_BLOCK_TYPES = new Set([
   "navs",
   "news",
   "table",
+  "inline-text",
   "p",
   "h1",
   "h2",
   "h3",
 ]);
 
+export const INLINE_TEXT_ELEMENT_TYPES = new Set(["p", "h1", "h2", "h3"]);
+
 export function isRichTextType(type) {
-  return ["p", "h1", "h2", "h3"].includes(type);
+  return ["inline-text", "p", "h1", "h2", "h3"].includes(type);
 }

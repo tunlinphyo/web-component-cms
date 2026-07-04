@@ -1,6 +1,21 @@
 import { randomHash } from "../../../utils/ids.js";
+import { registerList } from "../../../registries/list-registry.js";
 
 export class GroupListBase extends HTMLElement {
+  static define(tagName, definition = {}) {
+    const type = definition.type ?? tagName.replace(/-group$/, "");
+
+    customElements.define(tagName, this);
+    registerList({
+      ...definition,
+      type,
+      tagName,
+      selector: definition.selector ?? tagName,
+    });
+
+    return this;
+  }
+
   static itemTag = "";
   static itemType = "";
   static itemClass = null;

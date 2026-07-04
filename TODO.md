@@ -24,8 +24,9 @@ behaviors and formatter capabilities.
 - Add a separate `inline-text` component that supports `element-type-selector` with `p`, `h1`,
   `h2`, and `h3`.
 - This component must support only these formatter capabilities:
-  element type, bold, italic, underline, link, and alignment (left, center, right, and justify).
-  All other rich-text formatters must be unavailable when this component is selected.
+  element type, font family, font size, bold, italic, underline, link, and alignment (left,
+  center, right, and justify). All other rich-text formatters must be unavailable when this
+  component is selected.
 - In this component, `p` must use the same editing and content model as `h1`, `h2`, and `h3`.
   It must be a flat, single text element and must not use the current rich-text `p` behavior that
   creates or normalizes nested paragraph blocks.

@@ -302,7 +302,8 @@ export class FormatToolbar extends LitElement {
 
     for (const [selector, property] of INLINE_FORMATTERS) {
       const appliesToBlock =
-        (selector === "format-bold" || selector === "format-font-size") && format?.type !== "p";
+        (selector === "format-bold" || selector === "format-font-size") &&
+        (format?.type !== "p" || format?.contentModel === "inline");
       this.#setDisabled(
         selector,
         !format ||

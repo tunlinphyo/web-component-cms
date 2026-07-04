@@ -1,6 +1,6 @@
 import { expect, test } from "vite-plus/test";
-import { normalizeMarkClass, removeEmptyInlineElement } from "./rich-text-formatting.js";
-import { needsParagraphWrapping } from "./utils.js";
+import { normalizeMarkClass, removeEmptyInlineElement } from "./text-formatting.js";
+import { needsParagraphWrapping } from "./text-utils.js";
 
 function createElement({ text = "", renderedElement = null } = {}) {
   let removed = false;

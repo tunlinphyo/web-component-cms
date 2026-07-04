@@ -1,9 +1,9 @@
-const BLOCK_TYPES = ["h1", "h2", "h3", "p"];
+const TEXT_ELEMENT_TYPES = ["h1", "h2", "h3", "p"];
 const PARAGRAPH_CONTENT_TAGS = ["P", "UL", "OL"];
 const ELEMENT_NODE = 1;
 
 export function normalizeBlockType(type) {
-  return BLOCK_TYPES.includes(type) ? type : "p";
+  return TEXT_ELEMENT_TYPES.includes(type) ? type : "p";
 }
 
 export function convertBlockTypeContent(value, previousType, nextType) {
@@ -124,8 +124,26 @@ export function isEmptyHtml(html) {
 }
 
 export function serializeHtml(html, trimTrailingBreaks = true) {
-  const serialized = html.replace(/\r\n?|\n/g, "<br>");
-  return trimTrailingBreaks ? serialized.replace(/(?:<br>)+$/, "") : serialized;
+  let serialized = html.replace(/\r\n?|\n/g, "<br>");
+  serialized = removeEmptyParagraphsAdjacentToLists(serialized);
+  if (!trimTrailingBreaks) return serialized;
+
+  serialized = serialized.replace(/(?:<br>)+$/, "");
+  return removeTrailingEmptyParagraphs(serialized);
+}
+
+const EMPTY_PARAGRAPH_PATTERN = String.raw`<p(?:\s[^>]*)?>\s*</p>`;
+
+function removeEmptyParagraphsAdjacentToLists(html) {
+  const beforeList = new RegExp(`${EMPTY_PARAGRAPH_PATTERN}(?=\\s*<(?:ol|ul)\\b)`, "gi");
+  const afterList = new RegExp(`(</(?:ol|ul)>)\\s*${EMPTY_PARAGRAPH_PATTERN}`, "gi");
+
+  return html.replace(beforeList, "").replace(afterList, "$1");
+}
+
+function removeTrailingEmptyParagraphs(html) {
+  const trailingParagraphs = new RegExp(`(?:${EMPTY_PARAGRAPH_PATTERN}\\s*)+$`, "gi");
+  return html.replace(trailingParagraphs, "");
 }
 
 export function isSelectionInside(editor, selection) {

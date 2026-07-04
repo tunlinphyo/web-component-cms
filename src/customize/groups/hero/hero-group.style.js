@@ -11,6 +11,7 @@ export const groupStyles = css`
   .detail {
     display: grid;
     place-content: center;
+    gap: 0.5rem;
   }
 
   .media {

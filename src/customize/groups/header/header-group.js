@@ -1,5 +1,5 @@
 import { html } from "lit";
-import { GroupBase } from "../../../plugin/index.js";
+import { GroupBase } from "@/ui-editor";
 import "./nav-button-group.js";
 import { headerGroupStyles } from "./header-group.style.js";
 
@@ -10,7 +10,8 @@ export class HeaderGroup extends GroupBase {
     blocks: [
       {
         id: "title",
-        type: "p",
+        type: "inline-text",
+        elementType: "p",
         value: "",
         textAlign: "left",
       },
@@ -41,11 +42,7 @@ export class HeaderGroup extends GroupBase {
   render() {
     return html`
       <header data-group-box>
-        <rich-text-block
-          block-id="title"
-          placeholder="Title"
-          predefined-margin="0"
-        ></rich-text-block>
+        <inline-text block-id="title" placeholder="Title" predefined-margin="0"></inline-text>
         <div class="container">
           <image-block block-id="logo" placeholder="Choose Logo"></image-block>
           <nav>
@@ -72,7 +69,7 @@ export class HeaderGroup extends GroupBase {
   }
 }
 
-customElements.define("header-group", HeaderGroup);
+HeaderGroup.define("header-group");
 
 function createDefaultNav(id, sort) {
   return {

@@ -1,5 +1,5 @@
 import { html } from "lit";
-import { GroupBase } from "../../../plugin/index.js";
+import { GroupBase } from "@/ui-editor";
 
 export class ParagraphGroup extends GroupBase {
   render() {
@@ -12,4 +12,4 @@ export class ParagraphGroup extends GroupBase {
   }
 }
 
-customElements.define("paragraph-group", ParagraphGroup);
+ParagraphGroup.define("paragraph-group");

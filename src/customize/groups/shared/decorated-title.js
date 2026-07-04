@@ -9,7 +9,7 @@ export const decoratedTitleStyles = css`
     gap: 0;
   }
 
-  rich-text-block[block-id="title"] {
+  inline-text[block-id="title"] {
     font-size: 1.5rem;
     line-height: 1;
     text-align: center;
@@ -19,12 +19,12 @@ export const decoratedTitleStyles = css`
 export function renderDecoratedTitle(placeholder = "Title") {
   return html`
     <div class="title">
-      <rich-text-block
+      <inline-text
         block-id="title"
+        type="h2"
         placeholder=${placeholder}
         predefined-margin="0"
-        features="color,align"
-      ></rich-text-block>
+      ></inline-text>
       <svg width="90" viewBox="0 0 112 43" fill="none">
         <path
           d="M110.027 13.4575C94.0458 9.3945 79.9741 20.8726 77.0704 35.877C76.6958 37.2917 77.0128 38.574 78.7348 38.6019C82.3014 38.7483 85.94 38.351 89.384 37.5078L89.557 37.466C98.0879 35.3125 103.974 31.1102 109.141 25.3607C111.943 22.35 108.751 22.0294 106.122 20.7611C105.524 20.4684 105.365 20.1199 105.372 19.876C105.394 18.7331 109.371 17.7783 111.475 15.7921C111.648 15.6318 111.951 15.3182 111.929 14.9349C111.886 14.1474 110.524 13.5829 110.034 13.4575H110.027Z"

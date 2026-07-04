@@ -1,12 +1,7 @@
-import { listGroupDefinitions } from "../../plugin/index.js";
-import { GroupPickerDialog } from "./group-picker-dialog.js";
-
-const ALLOWED_GROUP_TYPES = new Set(["header", "footer"]);
+import { GroupPickerDialog } from "@/ui-editor";
 
 export class HeaderFooterGroupPickerDialog extends GroupPickerDialog {
-  get groups() {
-    return listGroupDefinitions().filter((definition) => ALLOWED_GROUP_TYPES.has(definition.type));
-  }
+  static groupTypes = new Set(["header", "footer"]);
 }
 
-customElements.define("header-footer-group-picker-dialog", HeaderFooterGroupPickerDialog);
+HeaderFooterGroupPickerDialog.define("header-footer-group-picker-dialog");

@@ -1,7 +1,4 @@
 import { html } from "lit";
-import { borderPositionOptions } from "../../../../customize/config/border-position.js";
-import { borderStyleOptions } from "../../../../customize/config/border-style.js";
-import { borderWidthOptions } from "../../../../customize/config/border-width.js";
 import { groupStyleSelectorStyles } from "../group-format-toolbar/group-style-selector.styles.js";
 import { PickerPopoverControl } from "./picker-popover-control.js";
 
@@ -34,7 +31,6 @@ export class BlockStyleSelector extends PickerPopoverControl {
 
 export class BlockBorderWidth extends BlockStyleSelector {
   static configKey = "border-width";
-  static options = borderWidthOptions;
   static title = "Border width";
 
   property = "borderWidth";
@@ -42,7 +38,6 @@ export class BlockBorderWidth extends BlockStyleSelector {
 
 export class BlockBorderStyle extends BlockStyleSelector {
   static configKey = "border-style";
-  static options = borderStyleOptions;
   static title = "Border style";
   static fallbackLabel = "None";
 
@@ -68,7 +63,6 @@ class ImageBorderStyle extends BlockBorderStyle {}
 class ImageBorderPosition extends BlockStyleSelector {
   static configKey = "border-position";
   static includeCurrentOption = false;
-  static options = borderPositionOptions;
   static styles = groupStyleSelectorStyles;
 
   label = "Border Position";

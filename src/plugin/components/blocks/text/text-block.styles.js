@@ -1,6 +1,6 @@
 import { css } from "lit";
 
-export const richTextBlockStyles = css`
+export const textBlockStyles = css`
   :host {
     display: block;
   }

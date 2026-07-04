@@ -1,4 +1,4 @@
-import { CONTENT_BLOCK_SELECTOR, GROUP_SELECTOR } from "./editor-selectors.js";
+import { CONTENT_BLOCK_SELECTOR, getPageGroupSelector } from "./editor-selectors.js";
 import { CURRENT_PAGE_VERSION, normalizePageGroups } from "../schema/page-normalize.js";
 
 export function deserializeEditor(editor, pageData = {}) {
@@ -42,7 +42,10 @@ function getPageGroups(editor) {
   const groupOrder = editor.renderRoot.querySelector("group-order");
   if (!groupOrder) return [];
 
-  return [...groupOrder.children].filter((group) => group.matches(GROUP_SELECTOR));
+  const selector = getPageGroupSelector();
+  if (!selector) return [];
+
+  return [...groupOrder.children].filter((group) => group.matches(selector));
 }
 
 function removeGroupsOutsideSnapshot(groupOrder, groupsData) {

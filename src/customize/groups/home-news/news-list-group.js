@@ -1,4 +1,4 @@
-import { GroupListBase } from "../../../plugin/index.js";
+import { GroupListBase } from "@/ui-editor";
 import { NewsGroup } from "../news/news-group.js";
 
 export class NewsListGroup extends GroupListBase {
@@ -12,4 +12,4 @@ export class NewsListGroup extends GroupListBase {
   static defaultSortLabelBlock = "title";
 }
 
-customElements.define("news-list-group", NewsListGroup);
+NewsListGroup.define("news-list-group");

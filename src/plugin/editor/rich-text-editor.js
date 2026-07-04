@@ -1,19 +1,24 @@
-import { LitElement, html } from "lit";
+import { LitElement, html, nothing } from "lit";
 import { EditorController } from "./editor-controller.js";
 import { richTextEditorStyles } from "./rich-text-editor.styles.js";
 
 export class RichTextEditor extends LitElement {
+  static properties = {
+    pickerDialog: { type: String, attribute: "picker-dialog" },
+  };
+
   static styles = richTextEditorStyles;
 
   constructor() {
     super();
+    this.pickerDialog = "";
     this.controller = new EditorController(this);
   }
 
   render() {
     return html`
       <section>
-        <group-order picker-dialog="custom-group-picker-dialog"></group-order>
+        <group-order picker-dialog=${this.pickerDialog || nothing}></group-order>
       </section>
 
       <nav>

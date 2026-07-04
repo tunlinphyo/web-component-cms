@@ -1,4 +1,5 @@
 import "../../components/blocks/rich-text/rich-text-block.js";
+import "../../components/blocks/inline-text/inline-text-block.js";
 import "../../components/toolbars/controls/element-type-selector.js";
 import "../../components/toolbars/controls/format-align-center.js";
 import "../../components/toolbars/controls/format-align-justify.js";
@@ -20,6 +21,8 @@ import "../../components/toolbars/controls/format-unordered-list.js";
 import { registerBlock } from "../../registries/block-registry.js";
 import { registerCommand } from "../../registries/command-registry.js";
 import { FEATURES } from "../../registries/formatter-registry.js";
+import { INLINE_TEXT_FEATURES } from "../../components/blocks/inline-text/inline-text-capabilities.js";
+import { PARAGRAPH_RICH_TEXT_FEATURES } from "../../components/blocks/rich-text/rich-text-capabilities.js";
 
 registerBlock({
   type: "text",
@@ -27,22 +30,18 @@ registerBlock({
   selector: "rich-text-block",
   text: true,
   formattable: true,
-  schemaTypes: ["p", "h1", "h2", "h3"],
-  capabilities: [
-    FEATURES.type,
-    FEATURES.fontFamily,
-    FEATURES.fontSize,
-    FEATURES.color,
-    FEATURES.bold,
-    FEATURES.italic,
-    FEATURES.underline,
-    FEATURES.orderedList,
-    FEATURES.unorderedList,
-    FEATURES.align,
-    FEATURES.backgroundColor,
-    FEATURES.link,
-    FEATURES.linkTarget,
-  ],
+  schemaTypes: ["p"],
+  capabilities: PARAGRAPH_RICH_TEXT_FEATURES,
+});
+
+registerBlock({
+  type: "inline-text",
+  tagName: "inline-text",
+  selector: "inline-text",
+  text: true,
+  formattable: true,
+  schemaTypes: ["inline-text"],
+  capabilities: INLINE_TEXT_FEATURES,
 });
 
 for (const definition of [

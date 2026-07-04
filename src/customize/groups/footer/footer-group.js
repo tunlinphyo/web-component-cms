@@ -1,5 +1,5 @@
 import { html } from "lit";
-import { GroupBase } from "../../../plugin/index.js";
+import { GroupBase } from "@/ui-editor";
 import { footerGroupStyles } from "./footer-group.styles.js";
 
 export class FooterGroup extends GroupBase {
@@ -83,4 +83,4 @@ export class FooterGroup extends GroupBase {
   }
 }
 
-customElements.define("footer-group", FooterGroup);
+FooterGroup.define("footer-group");

@@ -1,5 +1,5 @@
 import { css, html, LitElement } from "lit";
-import { materialIconNames } from "../../../customize/config/material-icons.js";
+import { resolveConfigOptions } from "../../registries/config-registry.js";
 
 // loadMaterialSymbols();
 
@@ -62,7 +62,7 @@ export class MaterialIconPicker extends LitElement {
   }
 
   render() {
-    return materialIconNames.map(
+    return getMaterialIconNames().map(
       (name) => html`
         <button
           type="button"
@@ -111,6 +111,10 @@ export function toMaterialIconName(name) {
   );
 }
 
+export function getMaterialIconNames() {
+  return resolveConfigOptions("material-icons");
+}
+
 function toIconLabel(name) {
   return name
     .split("_")
@@ -122,6 +126,7 @@ function loadMaterialSymbols() {
   if (typeof document === "undefined") return;
   if (document.querySelector("link[data-material-symbols]")) return;
 
+  const materialIconNames = getMaterialIconNames();
   const query = new URLSearchParams({
     family: "Material Symbols Outlined",
     icon_names: [...materialIconNames].sort().join(","),

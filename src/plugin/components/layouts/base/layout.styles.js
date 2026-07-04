@@ -1,6 +1,6 @@
 import { css } from "lit";
 
-export const layoutDesignStyles = css`
+export const layoutStyles = css`
   :host {
     display: block;
     width: 100%;
@@ -129,10 +129,10 @@ export const layoutDesignStyles = css`
 
   .card {
     min-height: 3.4rem;
+    padding: 0.5rem;
     border: 1px solid #aaa;
     border-radius: 0.3rem;
     background: #dedede;
-    padding: 0.5rem;
   }
 
   .table-preview {
@@ -186,14 +186,14 @@ export const layoutDesignStyles = css`
 
   .nav-button {
     display: flex;
-    justify-content: center;
-    align-items: center;
     gap: 0.1rem;
+    align-items: center;
+    justify-content: center;
 
     &::before,
     &::after {
-      content: "";
       display: block;
+      content: "";
     }
 
     &::before {
@@ -202,15 +202,12 @@ export const layoutDesignStyles = css`
       border-radius: 100%;
       background-color: #b8b8b8;
     }
+
     &::after {
       width: 2rem;
       height: 0.3rem;
       border-radius: 0.2rem;
       background-color: #b8b8b8;
     }
-  }
-
-  .spacer {
-    flex: 1;
   }
 `;

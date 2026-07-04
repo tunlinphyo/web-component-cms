@@ -5,7 +5,7 @@ import {
   selectRange,
   unwrapListsFromParagraphs,
   wrapParagraphContent,
-} from "./utils.js";
+} from "./text-utils.js";
 
 const INLINE_COMMAND_SELECTORS = new Map([
   ["bold", "strong, b"],
@@ -19,6 +19,7 @@ export function applySelectionCommand({
   value,
   editor,
   type,
+  paragraphMode = type === "p",
   range,
   selection,
   onFontWeightChange,
@@ -26,7 +27,7 @@ export function applySelectionCommand({
 }) {
   selectRange(selection, range);
 
-  if (command === "bold" && type !== "p") {
+  if (command === "bold" && !paragraphMode) {
     toggleBlockBold(editor, onFontWeightChange);
   } else if (INLINE_COMMAND_SELECTORS.has(command)) {
     toggleInlineCommand(command, value, editor, range, selection);
@@ -35,7 +36,7 @@ export function applySelectionCommand({
   } else if (command === "linkTarget") {
     applyLinkTarget(value, editor, range, selection);
   } else if (command === "fontSize") {
-    if (type === "p") {
+    if (paragraphMode) {
       applyFontSize(value, editor, range, selection);
     } else {
       applyBlockFontSize(value, editor, onFontSizeChange);
@@ -49,7 +50,7 @@ export function applySelectionCommand({
   } else if (command === "highlight" || command === "link") {
     applyWrappedSelection(command, value, editor, range, selection);
   } else {
-    executeDocumentCommand(command, value, editor, type, selection);
+    executeDocumentCommand(command, value, editor, paragraphMode, selection);
   }
 
   return {
@@ -58,7 +59,14 @@ export function applySelectionCommand({
   };
 }
 
-export function describeSelectionFormat({ editor, type, textAlign, range, selection }) {
+export function describeSelectionFormat({
+  editor,
+  type,
+  paragraphMode = type === "p",
+  textAlign,
+  range,
+  selection,
+}) {
   const align = editor?.style.textAlign || textAlign || "left";
   if (!range || !selection) return { align, type };
 
@@ -66,7 +74,7 @@ export function describeSelectionFormat({ editor, type, textAlign, range, select
   if (!rangesMatch(currentRange, range)) selectRange(selection, range);
 
   const findSelectedAncestor = (selector) => getSelectedAncestor(editor, range, selector);
-  const fontSizeElement = type === "p" ? findSelectedAncestor("[style*='font-size']") : editor;
+  const fontSizeElement = paragraphMode ? findSelectedAncestor("[style*='font-size']") : editor;
   const highlightElement = findSelectedAncestor("mark");
   const highlightStyles = highlightElement ? getComputedStyle(highlightElement) : null;
 
@@ -424,17 +432,17 @@ function wrapSelection(command, value, editor, range) {
   range.selectNodeContents(element);
 }
 
-function executeDocumentCommand(command, value, editor, type, selection) {
+function executeDocumentCommand(command, value, editor, paragraphMode, selection) {
   document.execCommand(command, false, value);
   if (!LIST_COMMANDS.has(command)) return;
 
   const needsListRepair = Boolean(editor.querySelector("p > ul, p > ol"));
-  const needsParagraphRepair = type === "p" && needsParagraphWrapping(editor);
+  const needsParagraphRepair = paragraphMode && needsParagraphWrapping(editor);
   if (!needsListRepair && !needsParagraphRepair) return;
 
   mutatePreservingSelection(editor, selection, () => {
     unwrapListsFromParagraphs(editor);
-    if (type === "p") wrapParagraphContent(editor);
+    if (paragraphMode) wrapParagraphContent(editor);
   });
 }
 

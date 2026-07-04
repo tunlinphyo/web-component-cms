@@ -1,52 +1,18 @@
 import "./about/about-group.js";
+import "./about/about-layout-design.js";
 import "./footer/footer-group.js";
+import "./footer/footer-layout-design.js";
 import "./header/header-group.js";
+import "./header/header-layout-design.js";
 import "./hero/hero-group.js";
+import "./hero/hero-layout-design.js";
 import "./home-news/home-news-group.js";
+import "./home-news/home-news-layout-design.js";
 import "./image/image-group.js";
+import "./image/image-layout-design.js";
 import "./news/news-group.js";
+import "./news/news-layout-design.js";
 import "./paragraph/paragraph-group.js";
+import "./paragraph/paragraph-layout-design.js";
 import "./table/table-group.js";
-import { registerGroup, registerList } from "../../plugin/index.js";
-
-registerList({
-  type: "news-list",
-  tagName: "news-list-group",
-  selector: "news-list-group",
-});
-
-registerList({
-  type: "header-nav",
-  tagName: "nav-button-group",
-  selector: "nav-button-group",
-});
-
-for (const definition of [
-  { type: "header", tagName: "header-group", selector: "header-group", label: "header" },
-  {
-    type: "home-news",
-    tagName: "home-news-group",
-    selector: "home-news-group",
-    label: "home-news",
-  },
-  {
-    type: "hero",
-    tagName: "hero-group",
-    selector: "hero-group",
-    label: "hero",
-    addable: false,
-  },
-  { type: "about", tagName: "about-group", selector: "about-group", label: "about" },
-  { type: "image", tagName: "image-group", selector: "image-group", label: "image" },
-  { type: "news", tagName: "news-group", selector: "news-group", label: "news" },
-  {
-    type: "paragraph",
-    tagName: "paragraph-group",
-    selector: "paragraph-group",
-    label: "paragraph",
-  },
-  { type: "table", tagName: "table-group", selector: "table-group", label: "table" },
-  { type: "footer", tagName: "footer-group", selector: "footer-group", label: "footer" },
-]) {
-  registerGroup(definition);
-}
+import "./table/table-layout-design.js";

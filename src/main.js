@@ -1,6 +1,7 @@
 import "./style.css";
 
-import "./plugin/index.js";
+import "@/ui-editor";
+import "./customize/index.js";
 import pageOne from "./assets/data/page-two.json";
 
 const images = [

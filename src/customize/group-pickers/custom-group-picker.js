@@ -1,12 +1,7 @@
-import { listGroupDefinitions } from "../../plugin/index.js";
-import { GroupPickerDialog } from "./group-picker-dialog.js";
-
-const ALLOWED_GROUP_TYPES = new Set(["header", "hero", "home-news", "about", "image", "table", "footer"]);
+import { GroupPickerDialog } from "@/ui-editor";
 
 export class CustomGroupPicker extends GroupPickerDialog {
-  get groups() {
-    return listGroupDefinitions().filter((definition) => ALLOWED_GROUP_TYPES.has(definition.type));
-  }
+  static groupTypes = new Set(["header", "hero", "home-news", "about", "image", "table", "footer"]);
 }
 
-customElements.define("custom-group-picker-dialog", CustomGroupPicker);
+CustomGroupPicker.define("custom-group-picker-dialog");

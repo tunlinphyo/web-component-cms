@@ -1,11 +1,9 @@
 import { LitElement, html } from "lit";
-import { borderRadiusOptions } from "../../../../customize/config/border-radius.js";
 import { borderRadiusControlStyles } from "./border-radius-control.styles.js";
 import { PickerPopoverControl } from "./picker-popover-control.js";
 
 class BorderRadiusPicker extends PickerPopoverControl {
   static configKey = "border-radius";
-  static options = borderRadiusOptions;
   static popoverId = "border-radius-options";
   static title = "Border radius";
   static fallbackLabel = "None";

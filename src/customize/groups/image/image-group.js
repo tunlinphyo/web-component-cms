@@ -1,5 +1,5 @@
 import { html } from "lit";
-import { GroupBase } from "../../../plugin/index.js";
+import { GroupBase } from "@/ui-editor";
 import { groupStyles } from "./image-group.style.js";
 
 export class ImageGroup extends GroupBase {
@@ -15,4 +15,4 @@ export class ImageGroup extends GroupBase {
   }
 }
 
-customElements.define("image-group", ImageGroup);
+ImageGroup.define("image-group");

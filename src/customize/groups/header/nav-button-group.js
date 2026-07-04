@@ -1,4 +1,4 @@
-import { BlockListGroup } from "../../../plugin/index.js";
+import { BlockListGroup } from "@/ui-editor";
 
 export class NavButtonGroup extends BlockListGroup {
   get prefix() {
@@ -26,4 +26,4 @@ export class NavButtonGroup extends BlockListGroup {
   }
 }
 
-customElements.define("nav-button-group", NavButtonGroup);
+NavButtonGroup.define("nav-button-group", { type: "header-nav" });

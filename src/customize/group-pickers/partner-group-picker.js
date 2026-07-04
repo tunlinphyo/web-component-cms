@@ -1,12 +1,7 @@
-import { listGroupDefinitions } from "../../plugin/index.js";
-import { GroupPickerDialog } from "./group-picker-dialog.js";
-
-const ALLOWED_GROUP_TYPES = new Set(["home-news", "table"]);
+import { GroupPickerDialog } from "@/ui-editor";
 
 export class PartnerGroupPicker extends GroupPickerDialog {
-  get groups() {
-    return listGroupDefinitions().filter((definition) => ALLOWED_GROUP_TYPES.has(definition.type));
-  }
+  static groupTypes = new Set(["home-news", "table"]);
 }
 
-customElements.define("partner-group-picker-dialog", PartnerGroupPicker);
+PartnerGroupPicker.define("partner-group-picker-dialog");

@@ -1,5 +1,5 @@
 import { html } from "lit";
-import { GroupBase } from "../../../plugin/index.js";
+import { GroupBase } from "@/ui-editor";
 import { groupStyles } from "./hero-group.style.js";
 
 export class HeroGroup extends GroupBase {
@@ -9,7 +9,7 @@ export class HeroGroup extends GroupBase {
     return html`
       <div data-group-box>
         <div class="detail">
-          <rich-text-block block-id="title" placeholder="Hero title"></rich-text-block>
+          <inline-text block-id="title" placeholder="Hero title" type="h1"></inline-text>
           <rich-text-block block-id="description" placeholder="Hero description"></rich-text-block>
           <div class="flex-box">
             <icon-block block-id="icon-1"></icon-block>
@@ -26,4 +26,4 @@ export class HeroGroup extends GroupBase {
   }
 }
 
-customElements.define("hero-group", HeroGroup);
+HeroGroup.define("hero-group", { addable: false });

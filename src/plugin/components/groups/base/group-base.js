@@ -1,6 +1,7 @@
 import { LitElement, html } from "lit";
 import { groupBaseStyles } from "./group-base.styles.js";
 import { getBlockSelector } from "../../../registries/block-registry.js";
+import { registerGroup } from "../../../registries/group-registry.js";
 import { getListSelector } from "../../../registries/list-registry.js";
 import { FEATURES, parseFeatures } from "../../../registries/formatter-registry.js";
 
@@ -14,6 +15,21 @@ export const GROUP_FEATURES = {
 const DEFAULT_GROUP_FEATURES = Object.values(GROUP_FEATURES);
 
 export class GroupBase extends LitElement {
+  static define(tagName, definition = {}) {
+    const type = definition.type ?? tagName.replace(/-group$/, "");
+
+    customElements.define(tagName, this);
+    registerGroup({
+      ...definition,
+      type,
+      tagName,
+      selector: definition.selector ?? tagName,
+      label: definition.label ?? type,
+    });
+
+    return this;
+  }
+
   static properties = {
     groupId: { type: String, attribute: "group-id", reflect: true },
     groupType: { type: String, attribute: "group-type", reflect: true },

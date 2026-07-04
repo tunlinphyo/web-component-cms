@@ -1,6 +1,6 @@
 import { LitElement, html } from "lit";
-import { materialIconNames } from "../../../../customize/config/material-icons.js";
 import {
+  getMaterialIconNames,
   materialSymbolStyles,
   renderMaterialIcon,
   toMaterialIconName,
@@ -110,7 +110,7 @@ export class ButtonBlock extends LitElement {
     }
     if (!["start", "end"].includes(placement)) return false;
 
-    this.icon ||= materialIconNames[0];
+    this.icon ||= getMaterialIconNames()[0] ?? "";
     this.iconPosition = placement;
     return true;
   }

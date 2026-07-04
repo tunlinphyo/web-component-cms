@@ -1,9 +1,6 @@
 import { html, nothing } from "lit";
 import { PopoverControl } from "../controls/popover-control.js";
-import {
-  COLOR_WHEEL_GRADIENT,
-  EDITOR_COLOR_SWATCHES_WITH_UNSET,
-} from "../../../utils/colors.js";
+import { COLOR_WHEEL_GRADIENT, getEditorColorSwatches } from "../../../utils/colors.js";
 import { groupStyleColorStyles } from "./group-style-color.styles.js";
 
 class GroupStyleColor extends PopoverControl {
@@ -63,7 +60,7 @@ class GroupStyleColor extends PopoverControl {
           aria-label="Unset color"
           @click=${() => this.#applyValue("")}
         ></button>
-        ${EDITOR_COLOR_SWATCHES_WITH_UNSET.map((color) =>
+        ${getEditorColorSwatches().map((color) =>
           color.spacer
             ? html`<span class="spacer" aria-hidden="true"></span>`
             : html`

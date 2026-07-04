@@ -1,15 +1,26 @@
 import { html } from "lit";
 import { html as staticHtml, unsafeStatic } from "lit/static-html.js";
-import { GroupPickerBase, listGroupDefinitions } from "../../plugin/index.js";
-import "../layout-designs/index.js";
+import { listGroupDefinitions } from "../../registries/group-registry.js";
+import { GroupPickerBase } from "./base/group-picker-base.js";
 import { groupPickerDialogStyles } from "./group-picker-dialog.styles.js";
 
 export class GroupPickerDialog extends GroupPickerBase {
+  static groupTypes = null;
   static styles = groupPickerDialogStyles;
 
+  static define(tagName) {
+    customElements.define(tagName, this);
+    return this;
+  }
+
   get groups() {
+    const groupTypes = this.constructor.groupTypes;
+
     return listGroupDefinitions().filter(
-      (definition) => definition.addable !== false && matchesPicker(definition, this.picker),
+      (definition) =>
+        definition.addable !== false &&
+        (!groupTypes || groupTypes.has(definition.type)) &&
+        matchesPicker(definition, this.picker),
     );
   }
 
@@ -49,7 +60,26 @@ export class GroupPickerDialog extends GroupPickerBase {
   }
 }
 
-customElements.define("group-picker-dialog", GroupPickerDialog);
+GroupPickerDialog.define("group-picker-dialog");
+
+export function registerGroupPicker(tagName, groupTypes) {
+  if (!tagName?.includes("-")) {
+    throw new TypeError("Group picker tag name must contain a hyphen");
+  }
+  if (!Array.isArray(groupTypes)) {
+    throw new TypeError("Group picker types must be an array");
+  }
+
+  const existing = customElements.get(tagName);
+  if (existing) return existing;
+
+  const allowedTypes = new Set(groupTypes);
+  class ConfiguredGroupPickerDialog extends GroupPickerDialog {
+    static groupTypes = allowedTypes;
+  }
+
+  return ConfiguredGroupPickerDialog.define(tagName);
+}
 
 const DEFAULT_PICKER = "content";
 

@@ -1,5 +1,5 @@
 import { LitElement, html } from "lit";
-import "../rich-text/rich-text-block.js";
+import "../inline-text/inline-text-block.js";
 import { getCapabilities } from "../../../registries/formatter-registry.js";
 import {
   clampIndex,
@@ -331,7 +331,7 @@ export class TableBlock extends LitElement {
               </button>
             `
           : null}
-        <rich-text-block
+        <inline-text
           class="cell-editor"
           block-id=${`cell-${rowIndex}-${columnIndex}`}
           type="p"
@@ -343,8 +343,8 @@ export class TableBlock extends LitElement {
           .fontFamily=${cell.fontFamily}
           ?disabled=${this.disabled}
           predefined-margin="0"
-          features="fontFamily,fontSize,color,bold,italic,underline,align,link"
-        ></rich-text-block>
+          features="fontFamily,fontSize,bold,italic,underline,align,link"
+        ></inline-text>
       </div>
     `;
 

@@ -1,7 +1,7 @@
 import { html } from "lit";
 import "./news-list-group.js";
 import { NewsGroup } from "../news/news-group.js";
-import { GroupBase } from "../../../plugin/index.js";
+import { GroupBase } from "@/ui-editor";
 import { decoratedTitleStyles, renderDecoratedTitle } from "../shared/decorated-title.js";
 import { hostGroupStyles } from "./home-news-group.style.js";
 
@@ -22,17 +22,15 @@ export class HomeNewsGroup extends GroupBase {
     blocks: [
       {
         id: "title",
-        type: "h2",
+        type: "inline-text",
+        elementType: "h2",
         value: "",
         textAlign: "left",
       },
       {
         id: "news",
         type: "news",
-        children: [
-          createDefaultNewsItem("news-1"),
-          createDefaultNewsItem("news-2"),
-        ],
+        children: [createDefaultNewsItem("news-1"), createDefaultNewsItem("news-2")],
       },
     ],
   };
@@ -59,4 +57,4 @@ export class HomeNewsGroup extends GroupBase {
   }
 }
 
-customElements.define("home-news-group", HomeNewsGroup);
+HomeNewsGroup.define("home-news-group");

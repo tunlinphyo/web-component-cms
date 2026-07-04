@@ -3,7 +3,7 @@ import { PopoverControl } from "./popover-control.js";
 import {
   COLOR_WHEEL_GRADIENT,
   DEFAULT_BACKGROUND_COLOR,
-  EDITOR_COLOR_SWATCHES,
+  getEditorColorSwatches,
 } from "../../../utils/colors.js";
 import { formatTextColorPaletteStyles } from "./format-text-color-palette.styles.js";
 
@@ -58,7 +58,7 @@ export class FormatIconBackgroundColor extends PopoverControl {
           aria-label="Unset color"
           @click=${() => this.#apply("")}
         ></button>
-        ${EDITOR_COLOR_SWATCHES.map((color) =>
+        ${getEditorColorSwatches().map((color) =>
           color.spacer
             ? html`<span class="spacer" aria-hidden="true"></span>`
             : html`
