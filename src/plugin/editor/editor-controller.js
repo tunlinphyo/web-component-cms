@@ -1,5 +1,9 @@
 import { applyFormatCommand } from "./editor-commands.js";
-import { FORMATTABLE_MEDIA_SELECTOR, NON_TEXT_BLOCK_SELECTOR } from "./editor-selectors.js";
+import {
+  FORMATTABLE_MEDIA_SELECTOR,
+  NON_TEXT_BLOCK_SELECTOR,
+  getPageGroupSelector,
+} from "./editor-selectors.js";
 import { EditorHistory } from "./editor-history.js";
 import { deserializeEditor, serializeEditor } from "./editor-serializer.js";
 import { findSelectionTargets, isComposedDescendant } from "./editor-selection.js";
@@ -159,23 +163,29 @@ export class EditorController {
     }
 
     const adding = event.detail.action === "add";
+    const selectionTarget = this.activeBlock ?? this.activeGroup;
     const nextBlock = adding
-      ? this.activeBlockGroup.addBlock(this.activeBlock)
-      : this.activeBlockGroup.deleteBlock(this.activeBlock);
+      ? this.activeBlockGroup.addBlock(selectionTarget)
+      : this.activeBlockGroup.deleteBlock(selectionTarget);
 
     if (!nextBlock && adding) return;
-    this.#setActiveBlock(nextBlock);
+    this.#setActiveBlockGroupItem(nextBlock);
     this.#notifyToolbar(nextBlock?.getSelectionFormat?.() ?? null);
     this.#notifyGroupToolbar(this.activeGroup?.getGroupFormat(), this.activeBlockGroup, nextBlock);
     this.history.capture();
     requestAnimationFrame(() => {
+      if (isPageGroup(nextBlock)) {
+        void nextBlock.focusFirstBlock?.();
+        return;
+      }
+
       nextBlock?.renderRoot.querySelector(".text")?.focus({ preventScroll: true });
     });
   };
 
   #blockGroupChange = (event) => {
     this.activeBlockGroup = event.detail.group;
-    if (event.detail.activeBlock) this.#setActiveBlock(event.detail.activeBlock);
+    if (event.detail.activeBlock) this.#setActiveBlockGroupItem(event.detail.activeBlock);
     this.#notifyGroupToolbar(
       this.activeGroup?.getGroupFormat(),
       this.activeBlockGroup,
@@ -249,6 +259,15 @@ export class EditorController {
     this.activeBlock?.removeAttribute("active");
     this.activeBlock = block;
     this.activeBlock?.setAttribute("active", "");
+  }
+
+  #setActiveBlockGroupItem(item) {
+    if (isPageGroup(item)) {
+      this.#setActiveGroup(item, this.activeBlockGroup);
+      return;
+    }
+
+    this.#setActiveBlock(item);
   }
 
   #setActiveGroup(group, blockGroup = null, block = null) {
@@ -361,4 +380,9 @@ function clearComposedSelection(block) {
   ) {
     selection.removeAllRanges();
   }
+}
+
+function isPageGroup(element) {
+  const selector = getPageGroupSelector();
+  return Boolean(selector && element?.matches?.(selector));
 }

@@ -1,10 +1,12 @@
 import { css, html } from "lit";
+import { materialSymbolStyles } from "../../icon-picker/material-icon-picker.js";
 import { FormatToggle } from "./format-toggle";
 import { formatToggleStyles } from "./format-toggle.styles.js";
 
 export class FormatAlign extends FormatToggle {
   static styles = [
     formatToggleStyles,
+    materialSymbolStyles,
     css`
       button {
         width: 100%;

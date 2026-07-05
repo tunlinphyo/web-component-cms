@@ -1,4 +1,8 @@
 import { LitElement, html } from "lit";
+import {
+  materialSymbolStyles,
+  renderMaterialIcon,
+} from "../../icon-picker/material-icon-picker.js";
 import { formatToggleStyles } from "./format-toggle.styles.js";
 import { sortListControlStyles } from "./sort-list-control.style.js";
 
@@ -10,7 +14,7 @@ export class BlockGroupSort extends LitElement {
     draggingId: { state: true },
   };
 
-  static styles = [formatToggleStyles, sortListControlStyles];
+  static styles = [formatToggleStyles, sortListControlStyles, materialSymbolStyles];
 
   constructor() {
     super();
@@ -24,44 +28,19 @@ export class BlockGroupSort extends LitElement {
     return html`
       <button
         type="button"
+        class="sort-button"
         title=${`Sort ${this.label}`}
         aria-label=${`Sort ${this.label}`}
         ?disabled=${this.disabled}
         @click=${this.#open}
       >
-        <svg
-          viewBox="0 0 24 24"
-          width="16"
-          height="16"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          aria-hidden="true"
-        >
-          <path d="m3 16 4 4 4-4" />
-          <path d="M7 20V4" />
-          <path d="m21 8-4-4-4 4" />
-          <path d="M17 4v16" />
-        </svg>
+        ${renderMaterialIcon("swap_vert")}
       </button>
       <dialog @close=${this.#resetDrag}>
         <form method="dialog">
           <header>
             <strong>Sort ${this.label}</strong>
-            <button type="submit" aria-label="Close">
-              <svg
-                viewBox="0 0 24 24"
-                width="16"
-                height="16"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                aria-hidden="true"
-              >
-                <path d="M18 6 6 18" />
-                <path d="m6 6 12 12" />
-              </svg>
-            </button>
+            <button type="submit" aria-label="Close">${renderMaterialIcon("close")}</button>
           </header>
           <ol>
             ${this.items.map(
@@ -84,9 +63,7 @@ export class BlockGroupSort extends LitElement {
                     ?disabled=${index === 0}
                     @click=${() => this.#move(index, -1)}
                   >
-                    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-                      <path d="m18 15-6-6-6 6" fill="none" stroke="currentColor" stroke-width="2" />
-                    </svg>
+                    ${renderMaterialIcon("keyboard_arrow_up")}
                   </button>
                   <button
                     type="button"
@@ -95,9 +72,7 @@ export class BlockGroupSort extends LitElement {
                     ?disabled=${index === this.items.length - 1}
                     @click=${() => this.#move(index, 1)}
                   >
-                    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-                      <path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" />
-                    </svg>
+                    ${renderMaterialIcon("keyboard_arrow_down")}
                   </button>
                 </li>
               `,

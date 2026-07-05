@@ -7,6 +7,7 @@ export const decoratedTitleStyles = css`
     justify-content: center;
     align-items: center;
     gap: 0;
+    padding-bottom: 1rem;
   }
 
   inline-text[block-id="title"] {

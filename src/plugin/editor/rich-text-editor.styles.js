@@ -36,8 +36,10 @@ export const richTextEditorStyles = css`
   }
 
   group-order > empty-group-picker-button {
-    display: grid;
-    place-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
     min-height: 12rem;
     border: 2px dashed var(--gray-300);
     border-radius: 0.75rem;
@@ -54,7 +56,7 @@ export const richTextEditorStyles = css`
   nav {
     position: sticky;
     top: var(--header-height);
-    padding: 1rem;
+    padding: 0.5rem 1rem;
     max-height: calc(100vh - var(--header-height));
     overflow-y: auto;
   }

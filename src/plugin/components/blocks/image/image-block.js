@@ -1,4 +1,8 @@
 import { LitElement, html } from "lit";
+import {
+  materialSymbolStyles,
+  renderMaterialIcon,
+} from "../../icon-picker/material-icon-picker.js";
 import { imageBlockStyles } from "./image-block.styles.js";
 import { getCapabilities, toFeatureAttribute } from "../../../registries/formatter-registry.js";
 
@@ -120,7 +124,7 @@ export class ImageBlock extends LitElement {
     };
   }
 
-  static styles = imageBlockStyles;
+  static styles = [imageBlockStyles, materialSymbolStyles];
 
   render() {
     return html`
@@ -150,16 +154,7 @@ export class ImageBlock extends LitElement {
                 title="Edit image"
                 @click=${this.#openPicker}
               >
-                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-                  <path
-                    d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
+                ${renderMaterialIcon("edit")}
               </button>
               <button
                 type="button"
@@ -167,16 +162,7 @@ export class ImageBlock extends LitElement {
                 title="Delete image"
                 @click=${this.#deleteImage}
               >
-                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-                  <path
-                    d="M4 7h16M10 11v6m4-6v6M9 7l1-3h4l1 3m3 0-1 13H7L6 7"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
+                ${renderMaterialIcon("delete")}
               </button>
             </div>
           `
@@ -185,15 +171,7 @@ export class ImageBlock extends LitElement {
         <div class="dialog-header">
           <strong>Choose image</strong>
           <button type="button" aria-label="Close image picker" @click=${this.#closePicker}>
-            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-              <path
-                d="M6 6l12 12M18 6 6 18"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-              />
-            </svg>
+            ${renderMaterialIcon("close")}
           </button>
         </div>
         <div class="image-list">

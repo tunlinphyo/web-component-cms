@@ -62,13 +62,13 @@ export const imageBlockStyles = css`
   }
 
   button:not(.picker):not(.image-option) {
-    width: 2rem;
-    height: 2rem;
+    width: 1.75rem;
+    height: 1.75rem;
     display: grid;
     place-content: center;
     border-radius: 50%;
     border: none;
-    background-color: var(--gray-50);
+    background-color: oklch(from var(--gray-50) l c h / 0.5);
     backdrop-filter: blur(2px);
     cursor: pointer;
   }
@@ -106,6 +106,7 @@ export const imageBlockStyles = css`
     overflow: auto;
     padding: 1rem;
     background-color: var(--gray-25);
+    overscroll-behavior: none;
   }
 
   .image-option {

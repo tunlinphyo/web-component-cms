@@ -1,4 +1,8 @@
 import { LitElement, html } from "lit";
+import {
+  materialSymbolStyles,
+  renderMaterialIcon,
+} from "../../icon-picker/material-icon-picker.js";
 import "../inline-text/inline-text-block.js";
 import { getCapabilities } from "../../../registries/formatter-registry.js";
 import {
@@ -38,7 +42,7 @@ export class TableBlock extends LitElement {
     selectedIndex: { state: true },
   };
 
-  static styles = tableBlockStyles;
+  static styles = [tableBlockStyles, materialSymbolStyles];
 
   constructor() {
     super();
@@ -251,10 +255,7 @@ export class TableBlock extends LitElement {
                 aria-pressed=${this.selectedAxis === "table"}
                 @click=${this.#selectTable}
               >
-                <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
-                  <rect x="3" y="3" width="18" height="18" rx="1"></rect>
-                  <path d="M3 9h18M3 15h18M9 3v18M15 3v18"></path>
-                </svg>
+                ${renderMaterialIcon("table_view")}
               </button>
             `
           : null}

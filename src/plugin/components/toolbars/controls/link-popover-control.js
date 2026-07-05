@@ -1,4 +1,5 @@
 import { html } from "lit";
+import { renderMaterialIcon } from "../../icon-picker/material-icon-picker.js";
 import { PopoverControl } from "./popover-control.js";
 
 export class LinkPopoverControl extends PopoverControl {
@@ -28,10 +29,7 @@ export class LinkPopoverControl extends PopoverControl {
         popovertarget="link-editor"
         ?disabled=${this.disabled}
       >
-        <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16">
-          <path d="M10 13a5 5 0 0 0 7.1 0l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1" />
-          <path d="M14 11a5 5 0 0 0-7.1 0l-2 2a5 5 0 0 0 7.1 7.1l1.1-1.1" />
-        </svg>
+        ${renderMaterialIcon("link")}
       </button>
       <div id="link-editor" popover @toggle=${this.handlePopoverToggle}>
         <form @submit=${this.handleSave}>
@@ -44,9 +42,7 @@ export class LinkPopoverControl extends PopoverControl {
             required
           />
           <button class="btn-save" type="submit" title="Save" aria-label="Save">
-            <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16">
-              <path d="M20 6 9 17l-5-5" />
-            </svg>
+            ${renderMaterialIcon("check")}
           </button>
           <button
             class="btn-remove"
@@ -55,13 +51,7 @@ export class LinkPopoverControl extends PopoverControl {
             aria-label="Remove link"
             @click=${this.handleRemove}
           >
-            <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16">
-              <path d="M3 6h18" />
-              <path d="M8 6V4h8v2" />
-              <path d="M19 6 18 20H6L5 6" />
-              <path d="M10 11v5" />
-              <path d="M14 11v5" />
-            </svg>
+            ${renderMaterialIcon("delete")}
           </button>
         </form>
       </div>
@@ -80,6 +70,15 @@ export class LinkPopoverControl extends PopoverControl {
   handleRemove = () => {
     this.dispatchValue("");
     this.closePopover();
+  };
+
+  handlePopoverToggle = (event) => {
+    if (event.newState === "open") {
+      this.renderRoot.querySelector("input")?.focus();
+      return;
+    }
+
+    this.onPopoverClosed();
   };
 
   dispatchValue(value) {

@@ -1,4 +1,8 @@
 import { html } from "lit";
+import {
+  materialSymbolStyles,
+  renderMaterialIcon,
+} from "../../icon-picker/material-icon-picker.js";
 import { PopoverControl } from "./popover-control.js";
 import { formatLinkStyles } from "./format-link.styles.js";
 
@@ -10,7 +14,7 @@ export class FormatLink extends PopoverControl {
     value: { type: String },
   };
 
-  static styles = formatLinkStyles;
+  static styles = [formatLinkStyles, materialSymbolStyles];
 
   constructor() {
     super();
@@ -26,8 +30,13 @@ export class FormatLink extends PopoverControl {
 
     const popover = this.popover;
     if (!popover) return;
-    if (this.open && !popover.matches(":popover-open")) popover.showPopover();
-    if (!this.open) this.closePopover();
+    if (this.open) {
+      if (!popover.matches(":popover-open")) popover.showPopover();
+      this.renderRoot.querySelector("input")?.focus();
+      return;
+    }
+
+    this.closePopover();
   }
 
   #toggle = () => {
@@ -106,18 +115,13 @@ export class FormatLink extends PopoverControl {
         @click=${this.#toggle}
         aria-label=${this.applied ? "Edit link" : "Add link"}
       >
-        <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16">
-          <path d="M10 13a5 5 0 0 0 7.1 0l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1" />
-          <path d="M14 11a5 5 0 0 0-7.1 0l-2 2a5 5 0 0 0 7.1 7.1l1.1-1.1" />
-        </svg>
+        ${renderMaterialIcon("link")}
       </button>
       <div popover @toggle=${this.#togglePopover}>
         <form @mousedown=${(event) => event.stopPropagation()} @submit=${this.#save}>
           <input type="url" placeholder="https://example.com" .value=${this.value} required />
           <button class="btn-save" type="submit" title="Save" aria-label="Save">
-            <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16">
-              <path d="M20 6 9 17l-5-5" />
-            </svg>
+            ${renderMaterialIcon("check")}
           </button>
           <button
             class="btn-remove"
@@ -126,13 +130,7 @@ export class FormatLink extends PopoverControl {
             aria-label="Remove link"
             @click=${this.#remove}
           >
-            <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16">
-              <path d="M3 6h18" />
-              <path d="M8 6V4h8v2" />
-              <path d="M19 6 18 20H6L5 6" />
-              <path d="M10 11v5" />
-              <path d="M14 11v5" />
-            </svg>
+            ${renderMaterialIcon("delete")}
           </button>
         </form>
       </div>

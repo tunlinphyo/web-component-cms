@@ -25,12 +25,31 @@ export const sortListControlStyles = css`
     gap: 1rem;
   }
 
-  header button {
-    width: 2rem;
-    height: 2rem;
-    min-width: 2rem;
+  button {
+    width: 1.75rem;
+    height: 1.75rem;
+    min-width: 1.75rem;
     font-size: 1rem;
     border-radius: 100%;
+  }
+
+  header button {
+    background-color: var(--gray-50);
+    border: 0;
+  }
+
+  button .material-symbol {
+    font-size: 1.25rem;
+  }
+
+  .sort-button {
+    border-radius: 0.5rem;
+    height: 26px;
+    min-width: 32px;
+  }
+
+  .sort-button .material-symbol {
+    font-size: 1rem;
   }
 
   ol {
@@ -72,12 +91,15 @@ export const sortListControlStyles = css`
   }
 
   li button {
-    width: auto;
-    padding-inline: 0.5rem;
+    border: 0;
   }
 
   button:not(:disabled):is(:hover, :focus-visible) {
     outline: 2px solid var(--highlight);
     outline-offset: 1px;
+  }
+
+  li button:not(:disabled):is(:hover, :focus-visible) {
+    outline-offset: -2px;
   }
 `;

@@ -1,5 +1,6 @@
 import { LitElement, html, nothing } from "lit";
 import "../components/feedback/editor-toast.js";
+import { materialSymbolStyles } from "../components/icon-picker/material-icon-picker.js";
 import { EditorController } from "./editor-controller.js";
 import { richTextEditorStyles } from "./rich-text-editor.styles.js";
 
@@ -8,7 +9,7 @@ export class RichTextEditor extends LitElement {
     pickerDialog: { type: String, attribute: "picker-dialog" },
   };
 
-  static styles = richTextEditorStyles;
+  static styles = [richTextEditorStyles, materialSymbolStyles];
 
   constructor() {
     super();

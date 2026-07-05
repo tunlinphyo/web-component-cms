@@ -1,8 +1,9 @@
 import "./style.css";
 
 import "@/ui-editor";
+import "./components/json-diaplay.js";
 import "./customize/index.js";
-import pageOne from "./assets/data/page-two.json";
+import pageOne from "./assets/data/page-one.json";
 
 const images = [
   { name: "logo-h.png", url: "/images/logo-h.png" },
@@ -27,11 +28,12 @@ const images = [
 
 const editor = document.querySelector("rich-text-editor");
 const logDataButton = document.querySelector("#log-data");
+const jsonDisplay = document.querySelector("json-display");
 
 editor.addEventListener("image-picker-open", (event) => {
   event.detail.setImages(images);
 });
 logDataButton.addEventListener("click", () => {
-  console.log("Editor data:", editor.toJSON());
+  void jsonDisplay.open(editor.toJSON());
 });
 await editor.init(pageOne);

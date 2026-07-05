@@ -15,5 +15,7 @@ mark.mark-primary {
 }
 
 mark.mark-secondary {
+  padding: 0 0.25rem;
+  border-radius: 0.2rem;
   --mark-background-size: 100% 100%;
 }

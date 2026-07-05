@@ -7,7 +7,7 @@ export const tableGroupStyles = css`
 
   [data-group-box] {
     display: grid;
-    gap: 1rem;
+    gap: 0;
     padding: 3rem 2rem;
   }
 

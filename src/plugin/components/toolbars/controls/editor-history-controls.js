@@ -1,4 +1,8 @@
 import { LitElement, css, html } from "lit";
+import {
+  materialSymbolStyles,
+  renderMaterialIcon,
+} from "../../icon-picker/material-icon-picker.js";
 
 const buttonStyles = css`
   :host {
@@ -34,7 +38,7 @@ class EditorHistoryButton extends LitElement {
     disabled: { state: true },
   };
 
-  static styles = buttonStyles;
+  static styles = [buttonStyles, materialSymbolStyles];
 
   constructor() {
     super();
@@ -92,15 +96,7 @@ export class EditorUndoButton extends EditorHistoryButton {
         ?disabled=${this.disabled}
         @click=${this.runCommand}
       >
-        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none">
-          <path
-            d="M9 14 4 9l5-5M4 9h10.5a5.5 5.5 0 0 1 0 11H11"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ></path>
-        </svg>
+        ${renderMaterialIcon("undo")}
       </button>
     `;
   }
@@ -122,15 +118,7 @@ export class EditorRedoButton extends EditorHistoryButton {
         ?disabled=${this.disabled}
         @click=${this.runCommand}
       >
-        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none">
-          <path
-            d="m15 14 5-5-5-5m5 5H9.5a5.5 5.5 0 0 0 0 11H13"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ></path>
-        </svg>
+        ${renderMaterialIcon("redo")}
       </button>
     `;
   }

@@ -5,6 +5,45 @@ import { groupStyles } from "./hero-group.style.js";
 export class HeroGroup extends GroupBase {
   static styles = [GroupBase.styles, groupStyles];
 
+  static defaultJson = {
+    blocks: [
+      {
+        id: "title",
+        type: "inline-text",
+        elementType: "h1",
+        value: "",
+        textAlign: "left",
+      },
+      {
+        id: "description",
+        type: "p",
+        value: "",
+        textAlign: "left",
+      },
+      {
+        id: "icon-1",
+        type: "icon",
+        icon: "",
+      },
+      {
+        id: "icon-2",
+        type: "icon",
+        icon: "",
+      },
+      {
+        id: "icon-3",
+        type: "icon",
+        icon: "",
+      },
+      {
+        id: "image",
+        type: "image",
+        src: "",
+        alt: "",
+      },
+    ],
+  };
+
   render() {
     return html`
       <div data-group-box>

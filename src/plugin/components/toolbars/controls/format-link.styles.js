@@ -13,6 +13,13 @@ export const formatLinkStyles = css`
 
   input {
     min-width: 15rem;
+    border-radius: 0.2rem;
+    padding-inline: 0.5rem;
+  }
+
+  input:focus-visible {
+    outline: 1px solid var(--highlight);
+    border-color: var(--highlight);
   }
 
   button {
@@ -20,6 +27,10 @@ export const formatLinkStyles = css`
     border-radius: 0.5rem;
     cursor: pointer;
     min-width: 32px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   button:disabled {
@@ -58,13 +69,19 @@ export const formatLinkStyles = css`
   form {
     display: grid;
     grid-template-columns: 1fr auto auto;
-    gap: 4px;
+    gap: 0.25rem;
+  }
+
+  form button .material-symbol {
+    font-size: 1.1rem;
   }
 
   .btn-save {
-    color: var(--highlight);
+    color: green;
+    border-radius: 0.5rem 0.2rem 0.2rem 0.5rem;
   }
   .btn-remove {
     color: var(--brand-600);
+    border-radius: 0.2rem 0.5rem 0.5rem 0.2rem;
   }
 `;

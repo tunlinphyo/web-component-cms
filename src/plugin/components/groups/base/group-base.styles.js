@@ -17,6 +17,10 @@ export const groupBaseStyles = css`
     outline-offset: 2px;
   }
 
+  form label {
+    font-size: 0.75rem;
+  }
+
   .hash-id-label {
     position: absolute;
     z-index: 5;
@@ -37,7 +41,7 @@ export const groupBaseStyles = css`
     justify-content: center;
     pointer-events: none;
     position: relative;
-    height: 1.5rem;
+    height: 1.25rem;
   }
 
   .button-group {
@@ -50,15 +54,15 @@ export const groupBaseStyles = css`
     justify-content: center;
     align-items: center;
     gap: 0.25rem;
-    padding: 0.5rem;
+    padding: 0.25rem;
     background-color: oklch(from var(--gray-200) l c h / 0.5);
     backdrop-filter: blur(3px);
     border-radius: 100vh;
   }
 
   .button-group button {
-    width: 2rem;
-    height: 2rem;
+    width: 1.75rem;
+    height: 1.75rem;
     display: grid;
     place-content: center;
     border-radius: 50%;
@@ -114,6 +118,11 @@ export const groupBaseStyles = css`
     padding: 0.5rem 0;
     border: 0;
     outline: 0;
+  }
+
+  .hash-input:focus-within {
+    outline: 1px solid var(--highlight);
+    border-color: var(--highlight);
   }
 
   .hash-dialog menu {

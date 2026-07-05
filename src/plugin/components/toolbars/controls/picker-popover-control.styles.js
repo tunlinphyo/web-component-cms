@@ -70,6 +70,14 @@ export const pickerPopoverControlStyles = css`
 
   .options button {
     border-color: var(--gray-50);
+    border-radius: 0.2rem;
+  }
+
+  .options button:first-child {
+    border-radius: 0.35rem 0.35rem 0.2rem 0.2rem;
+  }
+  .options button:last-child {
+    border-radius: 0.2rem 0.2rem 0.35rem 0.35rem;
   }
 
   .options button:hover,
@@ -77,7 +85,6 @@ export const pickerPopoverControlStyles = css`
     background: var(--highlight);
     color: white;
   }
-
 
   .border-style-preview {
     display: block;

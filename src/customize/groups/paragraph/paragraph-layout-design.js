@@ -9,6 +9,7 @@ export class ParagraphLayoutDesign extends Layout {
       <span class="title"></span>
       <span class="line"></span>
       <span class="line"></span>
+      <span class="line"></span>
       <span class="line medium"></span>
     `;
   }

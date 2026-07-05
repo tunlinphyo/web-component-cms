@@ -1,4 +1,5 @@
 import { LitElement } from "lit";
+import { materialSymbolStyles } from "../../icon-picker/material-icon-picker.js";
 import { formatToggleStyles } from "./format-toggle.styles.js";
 
 export class FormatToggle extends LitElement {
@@ -7,7 +8,7 @@ export class FormatToggle extends LitElement {
     disabled: { type: Boolean },
   };
 
-  static styles = formatToggleStyles;
+  static styles = [formatToggleStyles, materialSymbolStyles];
 
   constructor() {
     super();

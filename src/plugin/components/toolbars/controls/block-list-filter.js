@@ -1,4 +1,8 @@
 import { LitElement, css, html } from "lit";
+import {
+  materialSymbolStyles,
+  renderMaterialIcon,
+} from "../../icon-picker/material-icon-picker.js";
 import { formatToggleStyles } from "./format-toggle.styles.js";
 import "./sort-list-control.js";
 
@@ -16,6 +20,7 @@ export class BlockGroupFilter extends LitElement {
 
   static styles = [
     formatToggleStyles,
+    materialSymbolStyles,
     css`
       :host {
         display: flex;
@@ -47,9 +52,7 @@ export class BlockGroupFilter extends LitElement {
         ?disabled=${this.disabled || !this.canAdd}
         @click=${() => this.#apply("add")}
       >
-        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-          <path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" />
-        </svg>
+        ${renderMaterialIcon("add")}
       </button>
       <button
         type="button"
@@ -58,16 +61,7 @@ export class BlockGroupFilter extends LitElement {
         ?disabled=${this.disabled || !this.canDelete}
         @click=${() => this.#apply("delete")}
       >
-        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-          <path
-            d="M4 7h16M10 11v6m4-6v6M9 7l1-3h4l1 3m3 0-1 13H7L6 7"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
+        ${renderMaterialIcon("delete")}
       </button>
       <block-group-sort></block-group-sort>
       <button
@@ -78,30 +72,8 @@ export class BlockGroupFilter extends LitElement {
         @click=${() => this.#apply(`${this.styleAction}-styles`)}
       >
         ${this.styleAction === "paste"
-          ? html`
-              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-                <path
-                  d="M9 5h6m-5-2h4l1 2h3v16H6V5h3l1-2Zm0 8h6m-6 4h6"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            `
-          : html`
-              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-                <path
-                  d="M8 8h11v13H8V8Zm-3 8H3V3h11v2"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            `}
+          ? renderMaterialIcon("content_paste")
+          : renderMaterialIcon("content_copy")}
       </button>
     `;
   }

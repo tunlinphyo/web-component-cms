@@ -1,10 +1,8 @@
 import { css } from "lit";
 
 export const headerGroupStyles = css`
-
   header {
     padding-inline: 1rem;
-    margin-bottom: 0.5rem;
   }
 
   /* rich-text-block[block-id="title"] {

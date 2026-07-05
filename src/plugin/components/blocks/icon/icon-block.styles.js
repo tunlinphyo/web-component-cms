@@ -58,6 +58,13 @@ export const iconBlockStyles = css`
     width: 1em;
     height: 1em;
     padding: 0.25em;
+    border: 1px solid transparent;
+    vertical-align: top;
+  }
+
+  .input[data-empty] {
+    border-color: var(--gray-300);
+    border-style: dashed;
   }
 
   .input .material-symbol {

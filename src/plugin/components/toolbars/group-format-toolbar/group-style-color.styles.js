@@ -18,7 +18,7 @@ export const groupStyleColorStyles = css`
     width: auto;
     height: 26px;
     border: none;
-    border-radius: 4px;
+    border-radius: 0.2rem;
     background: white;
     cursor: pointer;
   }
@@ -69,7 +69,7 @@ export const groupStyleColorStyles = css`
     border-radius: 4px;
     grid-template-columns: repeat(10, 32px);
     gap: 4px;
-    margin: 4px 0 0;
+    margin: 4px;
     max-height: min(70vh, 360px);
     overflow: auto;
     padding: 4px;

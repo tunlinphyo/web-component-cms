@@ -97,23 +97,23 @@ export class IconBlock extends LitElement {
   }
 
   render() {
+    const icon = toMaterialIconName(this.icon);
+
     return html`
       <a
         class="input"
         href=${this.link || ""}
         title="Choose icon"
         aria-label="Choose icon"
+        ?data-empty=${!icon}
         part="container"
         style=${`font-size: ${this.fontSize}; color: ${this.color}; background-color: ${this.backgroundColor};`}
         @click=${this.#openPicker}
       >
-        ${renderMaterialIcon(toMaterialIconName(this.icon))}
+        ${renderMaterialIcon(icon)}
       </a>
       <div id="icon-picker" popover>
-        <material-icon-picker
-          .value=${toMaterialIconName(this.icon)}
-          @icon-select=${this.#change}
-        ></material-icon-picker>
+        <material-icon-picker .value=${icon} @icon-select=${this.#change}></material-icon-picker>
       </div>
     `;
   }

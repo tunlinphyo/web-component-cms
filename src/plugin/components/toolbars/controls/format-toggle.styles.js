@@ -14,6 +14,10 @@ export const formatToggleStyles = css`
     padding: 0;
   }
 
+  button .material-symbol {
+    font-size: 1rem;
+  }
+
   button:disabled {
     opacity: 0.5;
   }

@@ -1,4 +1,8 @@
 import { LitElement, html } from "lit";
+import {
+  materialSymbolStyles,
+  renderMaterialIcon,
+} from "../../icon-picker/material-icon-picker.js";
 import { groupBaseStyles } from "./group-base.styles.js";
 import { getBlockSelector } from "../../../registries/block-registry.js";
 import { registerGroup } from "../../../registries/group-registry.js";
@@ -61,7 +65,7 @@ export class GroupBase extends LitElement {
     this.borderRadius = "";
   }
 
-  static styles = groupBaseStyles;
+  static styles = [groupBaseStyles, materialSymbolStyles];
 
   get blocks() {
     return [...this.renderRoot.querySelectorAll(getBlockSelector())];
@@ -81,9 +85,7 @@ export class GroupBase extends LitElement {
             ?disabled=${groups[0] === this}
             @click=${() => this.#requestMove(-1)}
           >
-            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-              <path d="m18 15-6-6-6 6" fill="none" stroke="currentColor" stroke-width="2" />
-            </svg>
+            ${renderMaterialIcon("keyboard_arrow_up")}
           </button>
           <button
             type="button"
@@ -92,9 +94,7 @@ export class GroupBase extends LitElement {
             ?disabled=${groups.at(-1) === this}
             @click=${() => this.#requestMove(1)}
           >
-            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-              <path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" />
-            </svg>
+            ${renderMaterialIcon("keyboard_arrow_down")}
           </button>
           <button
             type="button"
@@ -102,9 +102,7 @@ export class GroupBase extends LitElement {
             title="Add group below"
             @click=${this.#requestGroupBelow}
           >
-            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-              <path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" />
-            </svg>
+            ${renderMaterialIcon("add")}
           </button>
           <button
             type="button"
@@ -112,15 +110,7 @@ export class GroupBase extends LitElement {
             title="Set hash link"
             @click=${this.#openHashDialog}
           >
-            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-              <path
-                d="M10 3 8 21M16 3l-2 18M4 9h16M3 15h16"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-              />
-            </svg>
+            ${renderMaterialIcon("tag")}
           </button>
           <button
             type="button"
@@ -128,33 +118,26 @@ export class GroupBase extends LitElement {
             title="Delete group"
             @click=${this.#requestDelete}
           >
-            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-              <path
-                d="M4 7h16M10 11v6m4-6v6M9 7l1-3h4l1 3m3 0-1 13H7L6 7"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
+            ${renderMaterialIcon("delete")}
           </button>
         </div>
       </div>
       <dialog class="hash-dialog" @click=${this.#closeHashDialogFromBackdrop}>
         <form @submit=${this.#saveHashId}>
           <h2>Set hash link</h2>
-          <label for="group-hash-id">Group ID</label>
-          <div class="hash-input">
-            <span aria-hidden="true">#</span>
-            <input
-              id="group-hash-id"
-              name="hashId"
-              type="text"
-              autocomplete="off"
-              placeholder="section-name"
-              .value=${this.hashId}
-            />
+          <div style="margin-top: -0.5rem">
+            <label for="group-hash-id">Group ID</label>
+            <div class="hash-input">
+              <span aria-hidden="true">#</span>
+              <input
+                id="group-hash-id"
+                name="hashId"
+                type="text"
+                autocomplete="off"
+                placeholder="section-name"
+                .value=${this.hashId}
+              />
+            </div>
           </div>
           <menu>
             <button type="button" @click=${this.#closeHashDialog}>Cancel</button>

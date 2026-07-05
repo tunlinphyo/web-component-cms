@@ -190,7 +190,11 @@ export class GroupOrder extends HTMLElement {
     if (this.querySelector(":scope > [data-empty-group-picker]")) return;
 
     const button = document.createElement("empty-group-picker-button");
-    button.textContent = "Add Section";
+    const icon = document.createElement("span");
+    icon.className = "material-symbol";
+    icon.setAttribute("aria-hidden", "true");
+    icon.textContent = "add";
+    button.append(icon, "Add Section");
     button.setAttribute("data-empty-group-picker", "");
     button.addEventListener("click", this.#openEmptyPicker);
     this.insertBefore(button, this.#getPicker());
