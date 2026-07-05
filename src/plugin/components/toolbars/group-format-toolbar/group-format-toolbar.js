@@ -79,6 +79,9 @@ export class GroupFormatToolbar extends LitElement {
       this.#setValue(selector, format?.[property] ?? "");
       this.#setDisabled(selector, !format);
     }
+    const borderDetailsDisabled = !format?.borderStyle;
+    this.#setDisabled("group-border-color", borderDetailsDisabled);
+    this.#setDisabled("group-border-width", borderDetailsDisabled);
     this.#setDisabled("group-border-position", !hasBorder(format));
 
     for (const selector of BLOCK_GROUP_CONTROLS) {

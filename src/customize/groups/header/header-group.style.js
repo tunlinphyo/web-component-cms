@@ -1,4 +1,5 @@
-import { css } from "lit";
+import { css, unsafeCSS } from "lit";
+import buttonStyles from "../../../styles/buttons.css?inline";
 
 export const headerGroupStyles = css`
   header {
@@ -46,4 +47,6 @@ export const headerGroupStyles = css`
     width: auto;
     height: 100%;
   }
+
+  ${unsafeCSS(buttonStyles)}
 `;

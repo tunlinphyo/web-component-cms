@@ -38,6 +38,11 @@ export class JsonDisplay extends LitElement {
         font-size: 1.125rem;
       }
 
+      .actions {
+        display: flex;
+        gap: 1.5rem;
+      }
+
       button {
         display: grid;
         width: 1.75rem;
@@ -58,6 +63,7 @@ export class JsonDisplay extends LitElement {
         margin: 0;
         padding: 1rem;
         overflow: auto;
+        overscroll-behavior: none;
         background: var(--gray-50);
         font-size: 0.875rem;
         line-height: 1.5;
@@ -77,9 +83,14 @@ export class JsonDisplay extends LitElement {
       <dialog @click=${this.#closeFromBackdrop}>
         <header>
           <h2>Editor data</h2>
-          <button type="button" aria-label="Close" @click=${this.close}>
-            ${renderMaterialIcon("close")}
-          </button>
+          <div class="actions">
+            <button type="button" title="Copy JSON" aria-label="Copy JSON" @click=${this.#copyJson}>
+              ${renderMaterialIcon("content_copy")}
+            </button>
+            <button type="button" aria-label="Close" @click=${this.close}>
+              ${renderMaterialIcon("close")}
+            </button>
+          </div>
         </header>
         <pre><code>${JSON.stringify(this.data, null, 2)}</code></pre>
       </dialog>
@@ -94,6 +105,16 @@ export class JsonDisplay extends LitElement {
 
   close = () => {
     this.renderRoot.querySelector("dialog")?.close();
+  };
+
+  #copyJson = async () => {
+    await navigator.clipboard.writeText(JSON.stringify(this.data, null, 2));
+    this.dispatchEvent(
+      new CustomEvent("json-copy-success", {
+        bubbles: true,
+        composed: true,
+      }),
+    );
   };
 
   #closeFromBackdrop = (event) => {

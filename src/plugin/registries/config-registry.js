@@ -1,3 +1,5 @@
+import { defaultConfigOptions } from "../default/configs/index.js";
+
 const configOptions = new Map();
 
 export function registerConfig(config) {
@@ -7,5 +9,5 @@ export function registerConfig(config) {
 }
 
 export function resolveConfigOptions(key, fallback = []) {
-  return configOptions.get(key) ?? fallback;
+  return configOptions.get(key) ?? defaultConfigOptions[key] ?? fallback;
 }

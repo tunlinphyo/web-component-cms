@@ -143,6 +143,17 @@ export const tableBlockStyles = css`
     color: var(--brand-800);
   }
 
+  th {
+    background: var(--table-header-background);
+    color: var(--white);
+    font-weight: 700;
+    text-align: start;
+  }
+
+  :where(table[data-striped] tbody tr:nth-child(even)) > :is(th, td) {
+    background: var(--table-stripe-background);
+  }
+
   table[data-border-position="both"] :is(th, td) {
     border-width: var(--table-border-width);
   }
@@ -159,13 +170,6 @@ export const tableBlockStyles = css`
   td.selected {
     background: #89dcf8;
     box-shadow: inset 0 0 0 2px var(--highlight);
-  }
-
-  th {
-    background: var(--table-header-background);
-    color: var(--white);
-    font-weight: 700;
-    text-align: start;
   }
 
   .cell-content {

@@ -97,6 +97,11 @@ export class EditorController {
     return this.history.canRedo;
   }
 
+  async showToast(message, duration = 2000) {
+    await this.editor.updateComplete;
+    return this.editor.renderRoot.querySelector("editor-toast")?.showToast(message, duration);
+  }
+
   #selectionFormatChange = (event) => {
     const { group, blockGroup, textBlock: block } = findSelectionTargets(event);
     if (!block) return;
@@ -139,7 +144,7 @@ export class EditorController {
         item,
         styles,
       };
-      this.#showToast("Styles copied");
+      void this.showToast("Styles copied");
       this.#notifyGroupToolbar(
         this.activeGroup?.getGroupFormat(),
         this.activeBlockGroup,
@@ -306,8 +311,7 @@ export class EditorController {
     const activeItem = blockGroup?.getItemForBlock?.(selectionTarget);
     if (blockGroupFormat && activeItem) {
       blockGroupFormat.styleAction =
-        this.copiedGroupStyles?.list === blockGroup &&
-        this.copiedGroupStyles.item !== activeItem
+        this.copiedGroupStyles?.list === blockGroup && this.copiedGroupStyles.item !== activeItem
           ? "paste"
           : "copy";
     }
@@ -334,7 +338,7 @@ export class EditorController {
     if (!(await this.activeBlockGroup.pasteItemStyles?.(targetItem, copied.styles))) return;
 
     this.copiedGroupStyles = null;
-    this.#showToast("Styles pasted");
+    void this.showToast("Styles pasted");
     this.#notifyToolbar(this.activeBlock?.getSelectionFormat?.() ?? null);
     this.#notifyGroupToolbar(
       this.activeGroup?.getGroupFormat(),
@@ -342,10 +346,6 @@ export class EditorController {
       this.activeBlock,
     );
     this.history.capture();
-  }
-
-  #showToast(message) {
-    void this.editor.renderRoot.querySelector("editor-toast")?.showToast(message);
   }
 
   #restoreSnapshot(snapshot) {

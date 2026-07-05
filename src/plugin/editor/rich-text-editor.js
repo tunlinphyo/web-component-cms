@@ -58,6 +58,10 @@ export class RichTextEditor extends LitElement {
     return this.controller.redo();
   }
 
+  showToast(message, duration = 2000) {
+    return this.controller.showToast(message, duration);
+  }
+
   get canUndo() {
     return this.controller.canUndo;
   }

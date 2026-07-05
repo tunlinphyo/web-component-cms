@@ -25,10 +25,28 @@ export function deserializeEditor(editor, pageData = {}) {
 }
 
 export function serializeEditor(editor) {
-  return {
+  return removeEmptyValues({
     version: CURRENT_PAGE_VERSION,
     groups: getPageGroups(editor).map((group) => group.toJSON()),
-  };
+  });
+}
+
+function removeEmptyValues(value) {
+  if (Array.isArray(value)) {
+    return value.filter(hasValue).map(removeEmptyValues);
+  }
+  if (!value || typeof value !== "object") return value;
+
+  return Object.fromEntries(
+    Object.entries(value)
+      .filter(([key, child]) => hasValue(child, key))
+      .map(([key, child]) => [key, removeEmptyValues(child)]),
+  );
+}
+
+function hasValue(value, key) {
+  if (key === "value" && value === "") return true;
+  return value !== "" && value !== null && value !== undefined;
 }
 
 function getContentBlocks(editor) {

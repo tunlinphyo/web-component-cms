@@ -45,6 +45,10 @@ export const formatTextColorPaletteStyles = css`
     flex: 0 0 auto;
   }
 
+  .trigger:disabled .color-wheel-icon {
+    filter: grayscale(1);
+  }
+
   [popover] {
     position-anchor: --color-trigger;
     position-area: bottom;

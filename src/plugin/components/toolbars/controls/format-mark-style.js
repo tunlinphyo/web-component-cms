@@ -1,5 +1,5 @@
-import { css, html, unsafeCSS } from "lit";
-import markStyles from "../../../../styles/mark.css?inline";
+import { css, html } from "lit";
+import { markStyles } from "../../blocks/text/mark.styles.js";
 import { PickerPopoverControl } from "./picker-popover-control.js";
 
 export class FormatMarkStyle extends PickerPopoverControl {
@@ -10,7 +10,7 @@ export class FormatMarkStyle extends PickerPopoverControl {
   static fallbackLabel = "Default";
   static styles = [
     PickerPopoverControl.styles,
-    unsafeCSS(markStyles),
+    markStyles,
     css`
       mark {
         font-size: 0.75rem;

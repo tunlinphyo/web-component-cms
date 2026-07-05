@@ -1,0 +1,28 @@
+@layer ui-editor-defaults {
+  button-block[design="primary"]::part(button) {
+    background: var(--brand-500);
+    color: white;
+  }
+
+  button-block[design="dark"]::part(button) {
+    background: var(--brand-600);
+    color: white;
+  }
+
+  button-block[design="outline"]::part(button) {
+    border-color: var(--brand-500);
+    background: transparent;
+    color: var(--brand-500);
+  }
+
+  button-block[design="soft"]::part(button) {
+    background: var(--brand-50);
+    color: var(--brand-500);
+  }
+
+  button-block[disabled]::part(button) {
+    cursor: not-allowed;
+    background-color: var(--gray-400);
+    color: var(--gray-100);
+  }
+}

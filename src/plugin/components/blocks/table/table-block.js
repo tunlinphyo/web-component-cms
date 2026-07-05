@@ -33,6 +33,12 @@ export class TableBlock extends LitElement {
       attribute: "body-background-color",
       reflect: true,
     },
+    stripedRows: { type: Boolean, attribute: "striped-rows", reflect: true },
+    stripeBackgroundColor: {
+      type: String,
+      attribute: "stripe-background-color",
+      reflect: true,
+    },
     borderWidth: { type: String, attribute: "border-width", reflect: true },
     borderColor: { type: String, attribute: "border-color", reflect: true },
     borderStyle: { type: String, attribute: "border-style", reflect: true },
@@ -52,6 +58,8 @@ export class TableBlock extends LitElement {
     this.headerColumn = false;
     this.headerBackgroundColor = "";
     this.bodyBackgroundColor = "";
+    this.stripedRows = false;
+    this.stripeBackgroundColor = null;
     this.borderWidth = "1px";
     this.borderColor = "";
     this.borderStyle = "solid";
@@ -69,6 +77,8 @@ export class TableBlock extends LitElement {
       headerColumn = false,
       headerBackgroundColor = "",
       bodyBackgroundColor = "",
+      stripedRows = false,
+      stripeBackgroundColor = "",
       borderWidth = "1px",
       borderColor = "",
       borderStyle = "solid",
@@ -82,6 +92,8 @@ export class TableBlock extends LitElement {
     this.headerColumn = Boolean(headerColumn);
     this.headerBackgroundColor = String(headerBackgroundColor || "");
     this.bodyBackgroundColor = String(bodyBackgroundColor || "");
+    this.stripedRows = Boolean(stripedRows);
+    this.stripeBackgroundColor = this.stripedRows ? String(stripeBackgroundColor || "") : null;
     this.borderWidth = String(borderWidth || "");
     this.borderColor = String(borderColor || "");
     this.borderStyle = String(borderStyle || "");
@@ -101,6 +113,8 @@ export class TableBlock extends LitElement {
       headerColumn: this.headerColumn,
       headerBackgroundColor: this.headerBackgroundColor,
       bodyBackgroundColor: this.bodyBackgroundColor,
+      stripedRows: this.stripedRows,
+      stripeBackgroundColor: this.stripeBackgroundColor,
       borderWidth: this.borderWidth,
       borderColor: this.borderColor,
       borderStyle: this.borderStyle,
@@ -116,6 +130,8 @@ export class TableBlock extends LitElement {
       headerColumn: this.headerColumn,
       headerBackgroundColor: this.headerBackgroundColor,
       bodyBackgroundColor: this.bodyBackgroundColor,
+      stripedRows: this.stripedRows,
+      stripeBackgroundColor: this.stripeBackgroundColor,
       borderWidth: this.borderWidth,
       borderColor: this.borderColor,
       borderStyle: this.borderStyle,
@@ -190,11 +206,20 @@ export class TableBlock extends LitElement {
     return true;
   }
 
+  setStripedRows(enabled) {
+    this.cells = this.#readCells();
+    this.stripedRows = Boolean(enabled);
+    this.stripeBackgroundColor = this.stripedRows ? (this.stripeBackgroundColor ?? "") : null;
+    this.#notifyChange();
+    return true;
+  }
+
   setBlockStyle(property, value) {
     if (
       ![
         "headerBackgroundColor",
         "bodyBackgroundColor",
+        "stripeBackgroundColor",
         "borderWidth",
         "borderColor",
         "borderStyle",
@@ -261,9 +286,11 @@ export class TableBlock extends LitElement {
           : null}
         <table
           data-border-position=${this.borderPosition || "both"}
+          ?data-striped=${this.stripedRows}
           style=${`
             --table-header-background: ${this.headerBackgroundColor};
             --table-body-background: ${this.bodyBackgroundColor};
+            --table-stripe-background: ${this.stripeBackgroundColor || this.bodyBackgroundColor};
             --table-border-width: ${this.borderWidth || "0"};
             --table-border-color: ${this.borderColor};
             --table-border-style: ${this.borderStyle || "none"};

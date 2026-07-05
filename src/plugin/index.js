@@ -23,5 +23,6 @@ export {
   registerList,
 } from "./registries/list-registry.js";
 
+import "./default/styles/index.css";
 import "./features/index.js";
 import "./editor/rich-text-editor.js";

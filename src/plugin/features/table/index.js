@@ -17,3 +17,4 @@ registerBlock({
 
 registerCommand({ command: "tableHeaderRow", feature: FEATURES.tableHeaders });
 registerCommand({ command: "tableHeaderColumn", feature: FEATURES.tableHeaders });
+registerCommand({ command: "tableStripedRows", feature: FEATURES.backgroundColor });

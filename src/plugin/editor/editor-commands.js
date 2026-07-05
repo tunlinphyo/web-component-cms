@@ -95,6 +95,12 @@ export function applyFormatCommand(activeBlock, detail, notifyToolbar) {
     return;
   }
 
+  if (detail.command === "tableStripedRows") {
+    if (!activeBlock?.setStripedRows?.(detail.value)) return;
+    notifyBlockFormat(activeBlock, notifyToolbar);
+    return;
+  }
+
   if (!activeBlock?.formatSelection?.(detail.command, detail.value)) return;
   if (activeBlock.matches(FORMATTABLE_MEDIA_SELECTOR))
     notifyBlockFormat(activeBlock, notifyToolbar);

@@ -1,4 +1,5 @@
-import { css } from "lit";
+import { css, unsafeCSS } from "lit";
+import defaultButtonStyles from "../../../default/styles/buttons.css?inline";
 
 export const groupBaseStyles = css`
   :host {
@@ -168,4 +169,6 @@ export const groupBaseStyles = css`
       opacity: 1;
       pointer-events: auto;
     } */
+
+  ${unsafeCSS(defaultButtonStyles)}
 `;

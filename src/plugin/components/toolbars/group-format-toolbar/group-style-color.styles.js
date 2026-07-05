@@ -62,6 +62,10 @@ export const groupStyleColorStyles = css`
     flex: 0 0 auto;
   }
 
+  .trigger:disabled .color-wheel-icon {
+    filter: grayscale(1);
+  }
+
   [popover] {
     position-anchor: --group-color-trigger;
     position-area: bottom;

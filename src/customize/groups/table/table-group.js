@@ -35,6 +35,8 @@ export class TableGroup extends GroupBase {
         headerColumn: false,
         headerBackgroundColor: "#b3b3b3",
         bodyBackgroundColor: "#f0f0f0",
+        stripedRows: false,
+        stripeBackgroundColor: null,
         borderWidth: "1px",
         borderColor: "#FFFFFF",
         borderStyle: "solid",

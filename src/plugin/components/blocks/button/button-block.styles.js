@@ -1,5 +1,4 @@
-import { css, unsafeCSS } from "lit";
-import customizableButtonStyles from "../../../../styles/buttons.css?inline";
+import { css } from "lit";
 
 export const buttonBlockStyles = css`
   :host {
@@ -111,6 +110,4 @@ export const buttonBlockStyles = css`
     border-radius: 0.5rem;
     box-shadow: rgba(0, 0, 0, 0.16) 0 1px 4px;
   }
-
-  ${unsafeCSS(customizableButtonStyles)}
 `;

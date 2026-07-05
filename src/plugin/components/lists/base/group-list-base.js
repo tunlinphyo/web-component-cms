@@ -319,6 +319,8 @@ const STYLE_FIELDS = [
   "align",
   "backgroundColor",
   "bodyBackgroundColor",
+  "stripeBackgroundColor",
+  "stripedRows",
   "borderColor",
   "borderPosition",
   "borderRadius",

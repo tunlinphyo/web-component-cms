@@ -1,7 +1,7 @@
-import { LitElement, unsafeCSS } from "lit";
+import { LitElement } from "lit";
 import { html, unsafeStatic } from "lit/static-html.js";
-import markStyles from "../../../../styles/mark.css?inline";
 import { getCapabilities, toFeatureAttribute } from "../../../registries/formatter-registry.js";
+import { markStyles } from "./mark.styles.js";
 import { textBlockStyles } from "./text-block.styles.js";
 import {
   getEditorElement,
@@ -38,7 +38,7 @@ export class TextBlockBase extends LitElement {
     features: { type: String, reflect: true },
   };
 
-  static styles = [textBlockStyles, unsafeCSS(markStyles)];
+  static styles = [textBlockStyles, markStyles];
 
   constructor() {
     super();

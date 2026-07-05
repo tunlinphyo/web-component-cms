@@ -1,38 +1,17 @@
-:host([design="primary"]) .button {
-  background: var(--brand-500);
-  color: white;
-}
-
-:host([design="dark"]) .button {
-  background: var(--brand-600);
-  color: white;
-}
-
-:host([design="outline"]) .button {
-  border-color: var(--brand-500);
-  background: transparent;
-  color: var(--brand-500);
-}
-
-:host([design="soft"]) .button {
-  background: var(--brand-50);
-  color: var(--brand-500);
-}
-
-:host([design="nav"]) .button {
+button-block[design="nav"]::part(button) {
   padding-inline: 0.5rem;
   background: transparent;
   color: var(--brand-900);
 }
 
-:host([design="nav"]) .icon-picker-trigger {
+button-block[design="nav"]::part(icon-picker-trigger) {
   width: 2rem;
   height: 2rem;
   background-color: var(--brand-500);
   color: var(--white);
 }
 
-:host([disabled]) .button {
+button-block[disabled]::part(button) {
   cursor: not-allowed;
   background-color: var(--gray-400);
   color: var(--gray-100);

@@ -10,6 +10,11 @@ export class TableBodyBackgroundColor extends BlockStyleColor {
   property = "bodyBackgroundColor";
 }
 
+export class TableStripeBackgroundColor extends BlockStyleColor {
+  label = "Stripe Background";
+  property = "stripeBackgroundColor";
+}
+
 export class TableBorderColor extends BlockStyleColor {
   label = "Border Color";
   property = "borderColor";
@@ -22,4 +27,5 @@ export class TableBorderColor extends BlockStyleColor {
 
 customElements.define("table-header-background-color", TableHeaderBackgroundColor);
 customElements.define("table-body-background-color", TableBodyBackgroundColor);
+customElements.define("table-stripe-background-color", TableStripeBackgroundColor);
 customElements.define("table-border-color", TableBorderColor);

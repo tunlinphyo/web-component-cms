@@ -4,15 +4,9 @@
         {
             "id": "e3c337fb-dd4b-4d88-8bc3-4b856e058a86",
             "type": "header",
-            "hashId": "",
             "sort": 0,
             "style": {
-                "backgroundColor": "#fef0f4",
-                "borderWidth": "",
-                "borderColor": "",
-                "borderStyle": "",
-                "borderPosition": "",
-                "borderRadius": ""
+                "backgroundColor": "#fef0f4"
             },
             "blocks": [
                 {
@@ -21,8 +15,6 @@
                     "type": "inline-text",
                     "elementType": "p",
                     "textAlign": "left",
-                    "fontWeight": "",
-                    "fontSize": "",
                     "fontFamily": "var(--font-body)",
                     "predefinedMargin": "0"
                 },
@@ -32,14 +24,7 @@
                     "alt": "logo-h.png",
                     "objectFit": "contain",
                     "align": "left",
-                    "link": "",
                     "target": "_self",
-                    "backgroundColor": "",
-                    "borderWidth": "",
-                    "borderColor": "",
-                    "borderStyle": "",
-                    "borderPosition": "",
-                    "borderRadius": "",
                     "disabled": false,
                     "type": "image"
                 },
@@ -53,7 +38,6 @@
                             "design": "nav",
                             "icon": "storefront",
                             "iconPosition": "start",
-                            "link": "",
                             "target": "_self",
                             "tag": "button",
                             "align": "left",
@@ -67,7 +51,6 @@
                             "design": "nav",
                             "icon": "percent_discount",
                             "iconPosition": "start",
-                            "link": "",
                             "target": "_self",
                             "tag": "button",
                             "align": "left",
@@ -81,7 +64,6 @@
                             "design": "nav",
                             "icon": "help",
                             "iconPosition": "start",
-                            "link": "",
                             "target": "_self",
                             "tag": "button",
                             "align": "left",
@@ -95,9 +77,7 @@
                     "id": "button",
                     "text": "Partner",
                     "design": "dark",
-                    "icon": "",
                     "iconPosition": "none",
-                    "link": "",
                     "target": "_self",
                     "tag": "button",
                     "align": "left",
@@ -109,15 +89,9 @@
         {
             "id": "b40bd576-00ee-414f-b9a7-8bce726f0908",
             "type": "hero",
-            "hashId": "",
             "sort": 1,
             "style": {
-                "backgroundColor": "#fef0f4",
-                "borderWidth": "",
-                "borderColor": "",
-                "borderStyle": "",
-                "borderPosition": "",
-                "borderRadius": ""
+                "backgroundColor": "#fef0f4"
             },
             "blocks": [
                 {
@@ -126,7 +100,6 @@
                     "type": "inline-text",
                     "elementType": "h1",
                     "textAlign": "left",
-                    "fontWeight": "",
                     "fontSize": "40px",
                     "fontFamily": "var(--font-heading)",
                     "predefinedMargin": "0.5rem"
@@ -136,8 +109,6 @@
                     "value": "<p><span style=\"font-size: 24px;\"><b>Pulvinar vivamus fringilla lacus nec metus bibendum egestas.</b></span></p>",
                     "type": "p",
                     "textAlign": "left",
-                    "fontWeight": "",
-                    "fontSize": "",
                     "fontFamily": "var(--font-body)",
                     "predefinedMargin": "0.5rem"
                 },
@@ -147,7 +118,6 @@
                     "fontSize": "20px",
                     "color": "#ffffff",
                     "backgroundColor": "#2684ff",
-                    "link": "",
                     "align": "left",
                     "type": "icon"
                 },
@@ -157,7 +127,6 @@
                     "fontSize": "20px",
                     "color": "#ffffff",
                     "backgroundColor": "#e8426e",
-                    "link": "",
                     "align": "left",
                     "type": "icon"
                 },
@@ -167,7 +136,6 @@
                     "fontSize": "20px",
                     "color": "#ffffff",
                     "backgroundColor": "#cc9a06",
-                    "link": "",
                     "align": "left",
                     "type": "icon"
                 },
@@ -177,14 +145,7 @@
                     "alt": "app.png",
                     "objectFit": "contain",
                     "align": "left",
-                    "link": "",
                     "target": "_self",
-                    "backgroundColor": "",
-                    "borderWidth": "",
-                    "borderColor": "",
-                    "borderStyle": "",
-                    "borderPosition": "",
-                    "borderRadius": "",
                     "disabled": false,
                     "type": "image"
                 }
@@ -193,16 +154,8 @@
         {
             "id": "8bf96176-6527-43f6-a598-fe405d8e0a8d",
             "type": "home-news",
-            "hashId": "",
             "sort": 2,
-            "style": {
-                "backgroundColor": "",
-                "borderWidth": "",
-                "borderColor": "",
-                "borderStyle": "",
-                "borderPosition": "",
-                "borderRadius": ""
-            },
+            "style": {},
             "blocks": [
                 {
                     "id": "title",
@@ -210,8 +163,6 @@
                     "type": "inline-text",
                     "elementType": "h2",
                     "textAlign": "left",
-                    "fontWeight": "",
-                    "fontSize": "",
                     "fontFamily": "var(--font-heading)",
                     "predefinedMargin": "0"
                 },
@@ -222,14 +173,11 @@
                         {
                             "id": "news-1",
                             "type": "news",
-                            "hashId": "",
                             "sort": 0,
                             "style": {
-                                "backgroundColor": "",
                                 "borderWidth": "1px",
                                 "borderColor": "#F2ADC0",
                                 "borderStyle": "solid",
-                                "borderPosition": "",
                                 "borderRadius": "16px"
                             },
                             "blocks": [
@@ -250,7 +198,6 @@
                                     "type": "inline-text",
                                     "elementType": "h2",
                                     "textAlign": "left",
-                                    "fontWeight": "",
                                     "fontSize": "20px",
                                     "fontFamily": "var(--font-body)",
                                     "predefinedMargin": "0.5rem"
@@ -260,8 +207,6 @@
                                     "value": "<p>Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p>",
                                     "type": "p",
                                     "textAlign": "left",
-                                    "fontWeight": "",
-                                    "fontSize": "",
                                     "fontFamily": "var(--font-body)",
                                     "predefinedMargin": "0.5rem"
                                 }
@@ -270,14 +215,12 @@
                         {
                             "id": "news-2",
                             "type": "news",
-                            "hashId": "",
                             "sort": 1,
                             "style": {
                                 "backgroundColor": "#fef0f4",
                                 "borderWidth": "1px",
                                 "borderColor": "#f2adc0",
                                 "borderStyle": "solid",
-                                "borderPosition": "",
                                 "borderRadius": "16px"
                             },
                             "blocks": [
@@ -298,7 +241,6 @@
                                     "type": "inline-text",
                                     "elementType": "h2",
                                     "textAlign": "left",
-                                    "fontWeight": "",
                                     "fontSize": "20px",
                                     "fontFamily": "var(--font-body)",
                                     "predefinedMargin": "0.5rem"
@@ -308,8 +250,6 @@
                                     "value": "<p><font color=\"#0c430d\"></font>Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.<font color=\"#0c430d\"></font></p>",
                                     "type": "p",
                                     "textAlign": "left",
-                                    "fontWeight": "",
-                                    "fontSize": "",
                                     "fontFamily": "var(--font-body)",
                                     "predefinedMargin": "0.5rem"
                                 }
@@ -322,16 +262,8 @@
         {
             "id": "e9fcf1ae-6cae-42f1-85ff-78072db6d0ff",
             "type": "image",
-            "hashId": "",
             "sort": 3,
-            "style": {
-                "backgroundColor": "",
-                "borderWidth": "",
-                "borderColor": "",
-                "borderStyle": "",
-                "borderPosition": "",
-                "borderRadius": ""
-            },
+            "style": {},
             "blocks": [
                 {
                     "id": "image",
@@ -339,14 +271,8 @@
                     "alt": "hokupay2.jpg",
                     "objectFit": "none",
                     "align": "left",
-                    "link": "",
                     "target": "_self",
                     "backgroundColor": "#f0f0f0",
-                    "borderWidth": "",
-                    "borderColor": "",
-                    "borderStyle": "",
-                    "borderPosition": "",
-                    "borderRadius": "",
                     "disabled": false,
                     "type": "image"
                 }
@@ -355,16 +281,8 @@
         {
             "id": "a0d07c45-bf34-4828-8804-8a5d33cfb0ea",
             "type": "table",
-            "hashId": "",
             "sort": 4,
-            "style": {
-                "backgroundColor": "",
-                "borderWidth": "",
-                "borderColor": "",
-                "borderStyle": "",
-                "borderPosition": "",
-                "borderRadius": ""
-            },
+            "style": {},
             "blocks": [
                 {
                     "id": "title",
@@ -372,8 +290,6 @@
                     "type": "inline-text",
                     "elementType": "h2",
                     "textAlign": "center",
-                    "fontWeight": "",
-                    "fontSize": "",
                     "fontFamily": "var(--font-heading)",
                     "predefinedMargin": "0"
                 },
@@ -382,8 +298,6 @@
                     "value": "<p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. </p><p>Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p>",
                     "type": "p",
                     "textAlign": "left",
-                    "fontWeight": "",
-                    "fontSize": "",
                     "fontFamily": "var(--font-body)",
                     "predefinedMargin": "0.5rem"
                 },
@@ -395,22 +309,16 @@
                             {
                                 "value": "<p>One</p>",
                                 "textAlign": "left",
-                                "fontWeight": "",
-                                "fontSize": "",
                                 "fontFamily": "var(--font-body)"
                             },
                             {
                                 "value": "<p>Two</p>",
                                 "textAlign": "left",
-                                "fontWeight": "",
-                                "fontSize": "",
                                 "fontFamily": "var(--font-body)"
                             },
                             {
                                 "value": "<p>Three</p>",
                                 "textAlign": "left",
-                                "fontWeight": "",
-                                "fontSize": "",
                                 "fontFamily": "var(--font-body)"
                             }
                         ],
@@ -418,22 +326,16 @@
                             {
                                 "value": "<p>apple</p>",
                                 "textAlign": "left",
-                                "fontWeight": "",
-                                "fontSize": "",
                                 "fontFamily": "var(--font-body)"
                             },
                             {
                                 "value": "<p>mango</p>",
                                 "textAlign": "left",
-                                "fontWeight": "",
-                                "fontSize": "",
                                 "fontFamily": "var(--font-body)"
                             },
                             {
                                 "value": "<p>orange</p>",
                                 "textAlign": "left",
-                                "fontWeight": "",
-                                "fontSize": "",
                                 "fontFamily": "var(--font-body)"
                             }
                         ],
@@ -441,22 +343,16 @@
                             {
                                 "value": "<p>banana</p>",
                                 "textAlign": "left",
-                                "fontWeight": "",
-                                "fontSize": "",
                                 "fontFamily": "var(--font-body)"
                             },
                             {
                                 "value": "<p>lime</p>",
                                 "textAlign": "left",
-                                "fontWeight": "",
-                                "fontSize": "",
                                 "fontFamily": "var(--font-body)"
                             },
                             {
                                 "value": "<p>pineapple</p>",
                                 "textAlign": "left",
-                                "fontWeight": "",
-                                "fontSize": "",
                                 "fontFamily": "var(--font-body)"
                             }
                         ]
@@ -468,7 +364,6 @@
                     "borderWidth": "1px",
                     "borderColor": "#FFFFFF",
                     "borderStyle": "solid",
-                    "borderPosition": "",
                     "disabled": false
                 }
             ]
@@ -476,16 +371,8 @@
         {
             "id": "0803c542-54ef-446e-a8af-e11b9b36f008",
             "type": "about",
-            "hashId": "",
             "sort": 5,
-            "style": {
-                "backgroundColor": "",
-                "borderWidth": "",
-                "borderColor": "",
-                "borderStyle": "",
-                "borderPosition": "",
-                "borderRadius": ""
-            },
+            "style": {},
             "blocks": [
                 {
                     "id": "title",
@@ -493,8 +380,6 @@
                     "type": "inline-text",
                     "elementType": "h2",
                     "textAlign": "left",
-                    "fontWeight": "",
-                    "fontSize": "",
                     "fontFamily": "var(--font-heading)",
                     "predefinedMargin": "0"
                 },
@@ -503,8 +388,6 @@
                     "value": "<p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p><p>Lorem ipsum dolor sit amet consectetur adipiscing elit. <mark style=\"--mark-highlight-color: #FFC107;\">Quisque faucibus ex sapien vitae pellentesque sem placerat.</mark> In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p><p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p>",
                     "type": "p",
                     "textAlign": "left",
-                    "fontWeight": "",
-                    "fontSize": "",
                     "fontFamily": "var(--font-body)",
                     "predefinedMargin": "0.5rem"
                 }
@@ -513,16 +396,8 @@
         {
             "id": "1f309b6c-04bd-4c94-8ae6-8fe511b1ed0f",
             "type": "footer",
-            "hashId": "",
             "sort": 6,
-            "style": {
-                "backgroundColor": "",
-                "borderWidth": "",
-                "borderColor": "",
-                "borderStyle": "",
-                "borderPosition": "",
-                "borderRadius": ""
-            },
+            "style": {},
             "blocks": [
                 {
                     "id": "logo",
@@ -530,14 +405,7 @@
                     "alt": "logo-v.png",
                     "objectFit": "contain",
                     "align": "start",
-                    "link": "",
                     "target": "_self",
-                    "backgroundColor": "",
-                    "borderWidth": "",
-                    "borderColor": "",
-                    "borderStyle": "",
-                    "borderPosition": "",
-                    "borderRadius": "",
                     "disabled": false,
                     "type": "image"
                 },
@@ -547,14 +415,7 @@
                     "alt": "kita-city.png",
                     "objectFit": "contain",
                     "align": "start",
-                    "link": "",
                     "target": "_self",
-                    "backgroundColor": "",
-                    "borderWidth": "",
-                    "borderColor": "",
-                    "borderStyle": "",
-                    "borderPosition": "",
-                    "borderRadius": "",
                     "disabled": false,
                     "type": "image"
                 },
@@ -564,14 +425,7 @@
                     "alt": "beyond.png",
                     "objectFit": "contain",
                     "align": "start",
-                    "link": "",
                     "target": "_self",
-                    "backgroundColor": "",
-                    "borderWidth": "",
-                    "borderColor": "",
-                    "borderStyle": "",
-                    "borderPosition": "",
-                    "borderRadius": "",
                     "disabled": false,
                     "type": "image"
                 },
@@ -580,8 +434,6 @@
                     "value": "<p><span style=\"font-size: 14px;\"><font color=\"#d6295a\">copyright@ 2026</font></span></p>",
                     "type": "p",
                     "textAlign": "left",
-                    "fontWeight": "",
-                    "fontSize": "",
                     "fontFamily": "var(--font-body)",
                     "predefinedMargin": "0"
                 }

@@ -36,4 +36,7 @@ editor.addEventListener("image-picker-open", (event) => {
 logDataButton.addEventListener("click", () => {
   void jsonDisplay.open(editor.toJSON());
 });
+jsonDisplay.addEventListener("json-copy-success", () => {
+  void editor.showToast("JSON copied");
+});
 await editor.init(pageOne);

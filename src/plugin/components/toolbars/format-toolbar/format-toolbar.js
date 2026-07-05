@@ -1,8 +1,5 @@
 import { LitElement, html } from "lit";
-import {
-  DEFAULT_BACKGROUND_COLOR,
-  DEFAULT_TEXT_COLOR,
-} from "../../../utils/colors.js";
+import { DEFAULT_BACKGROUND_COLOR, DEFAULT_TEXT_COLOR } from "../../../utils/colors.js";
 import { FEATURES, isFeatureEnabled } from "../../../registries/formatter-registry.js";
 import { formatToolbarStyles } from "./format-toolbar.styles.js";
 
@@ -43,6 +40,7 @@ const FORMATTERS = [
   "format-table-headers",
   "table-header-background-color",
   "table-body-background-color",
+  "table-stripe-background-color",
   "table-border-width",
   "table-border-color",
   "table-border-style",
@@ -114,6 +112,7 @@ const FORMATTER_FEATURES = {
   "format-table-headers": FEATURES.tableHeaders,
   "table-header-background-color": FEATURES.backgroundColor,
   "table-body-background-color": FEATURES.backgroundColor,
+  "table-stripe-background-color": FEATURES.backgroundColor,
   "table-border-width": FEATURES.border,
   "table-border-color": FEATURES.border,
   "table-border-style": FEATURES.border,
@@ -199,6 +198,7 @@ export class FormatToolbar extends LitElement {
         <format-table-headers></format-table-headers>
         <table-header-background-color></table-header-background-color>
         <table-body-background-color></table-body-background-color>
+        <table-stripe-background-color hidden></table-stripe-background-color>
         <div class="group-label">Border</div>
         <div class="format-border-group">
           <table-border-style></table-border-style>
@@ -287,8 +287,10 @@ export class FormatToolbar extends LitElement {
     this.#setApplied("format-disabled", Boolean(format?.disabled));
     this.#setProperty("format-table-headers", "headerRow", Boolean(format?.headerRow));
     this.#setProperty("format-table-headers", "headerColumn", Boolean(format?.headerColumn));
+    this.#setProperty("format-table-headers", "stripedRows", Boolean(format?.stripedRows));
     this.#setValue("table-header-background-color", format?.headerBackgroundColor ?? "");
     this.#setValue("table-body-background-color", format?.bodyBackgroundColor ?? "");
+    this.#setValue("table-stripe-background-color", format?.stripeBackgroundColor ?? "");
     this.#setValue("table-border-width", format?.borderWidth ?? "");
     this.#setValue("table-border-color", format?.borderColor ?? "");
     this.#setValue("table-border-style", format?.borderStyle ?? "");
@@ -320,8 +322,8 @@ export class FormatToolbar extends LitElement {
     this.#setDisabled("format-mark-style", !format || nonTextSelected || !format.highlight);
     this.#setDisabled("format-link-target", nonTextSelected || !format?.link);
     this.#setDisabled("image-background-color", !imageSelected);
-    this.#setDisabled("image-border-width", !imageSelected);
-    this.#setDisabled("image-border-color", !imageSelected);
+    this.#setDisabled("image-border-width", !imageSelected || !format?.borderStyle);
+    this.#setDisabled("image-border-color", !imageSelected || !format?.borderStyle);
     this.#setDisabled("image-border-style", !imageSelected);
     this.#setDisabled("image-border-position", !imageSelected || !hasBorder(format));
     this.#setDisabled("image-border-radius", !imageSelected);
@@ -336,8 +338,9 @@ export class FormatToolbar extends LitElement {
     this.#setDisabled("format-table-headers", !tableSelected);
     this.#setDisabled("table-header-background-color", !tableSelected);
     this.#setDisabled("table-body-background-color", !tableSelected);
-    this.#setDisabled("table-border-width", !tableSelected);
-    this.#setDisabled("table-border-color", !tableSelected);
+    this.#setDisabled("table-stripe-background-color", !tableSelected || !format?.stripedRows);
+    this.#setDisabled("table-border-width", !tableSelected || !format?.borderStyle);
+    this.#setDisabled("table-border-color", !tableSelected || !format?.borderStyle);
     this.#setDisabled("table-border-style", !tableSelected);
     this.#setDisabled("table-border-position", !tableSelected || !hasBorder(format));
 
@@ -355,6 +358,7 @@ export class FormatToolbar extends LitElement {
     }
 
     this.#applyCapabilities(format);
+    this.#setHidden("table-stripe-background-color", !tableSelected || !format?.stripedRows);
   };
 
   #setApplied(selector, applied) {
