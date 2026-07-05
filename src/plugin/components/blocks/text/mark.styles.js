@@ -12,7 +12,7 @@ export const markStyles = css`
     background-image: linear-gradient(var(--mark-highlight-color), var(--mark-highlight-color));
     background-position: bottom;
     background-repeat: no-repeat;
-    background-size: 100% var(--mark-background-size);
+    background-size: var(--mark-background-size);
   }
 
   mark.mark-primary {
