@@ -155,7 +155,7 @@ export const groupBaseStyles = css`
   }
 
   .hash-dialog button[type="submit"]:hover:not(:disabled) {
-    background: var(--brand-700);
+    background: var( var(--ui-editor-primary));
   }
 
   .hash-dialog button:disabled {

@@ -62,9 +62,8 @@ export const groupPickerDialogStyles = css`
   }
 
   .group-option:has(input:checked) {
-    outline: 2px solid var(--brand-600);
+    outline: 2px solid var(--ui-editor-highlight);
     outline-offset: -2px;
-    background: var(--brand-50);
   }
 
   .group-option input {
@@ -76,7 +75,7 @@ export const groupPickerDialogStyles = css`
   }
 
   .group-option:has(input:focus-visible) {
-    outline: 2px solid var(--brand-600);
+    outline: 2px solid var(--ui-editor-highlight);
     outline-offset: 2px;
   }
 
@@ -119,12 +118,12 @@ export const groupPickerDialogStyles = css`
   }
 
   button.add {
-    background: var(--brand-600);
+    background: var(--ui-editor-highlight);
     color: white;
   }
 
   button.add:hover:not(:disabled) {
-    background: var(--brand-700);
+    background: var(--ui-editor-primary);
   }
 
   button:disabled {
