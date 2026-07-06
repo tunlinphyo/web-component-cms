@@ -39,7 +39,7 @@ export const iconBlockStyles = css`
   :host([active]) .input,
   .options button:hover,
   .options button[aria-pressed="true"] {
-    outline: 2px solid var(--highlight);
+    outline: 2px solid var(--ui-editor-highlight);
     outline-offset: 2px;
   }
 

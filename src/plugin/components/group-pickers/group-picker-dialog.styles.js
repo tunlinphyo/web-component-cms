@@ -114,7 +114,7 @@ export const groupPickerDialogStyles = css`
 
   button:not(:disabled):is(:hover, :focus-visible) {
     background: var(--gray-200);
-    outline: 2px solid var(--highlight);
+    outline: 2px solid var(--ui-editor-highlight);
     outline-offset: 0;
   }
 

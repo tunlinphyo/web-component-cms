@@ -82,7 +82,7 @@ export const pickerPopoverControlStyles = css`
 
   .options button:hover,
   .options button[aria-pressed="true"] {
-    background: var(--highlight);
+    background: var(--ui-editor-highlight);
     color: white;
   }
 

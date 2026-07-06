@@ -12,7 +12,7 @@ export class FormatMarkStyle extends PickerPopoverControl {
     PickerPopoverControl.styles,
     markStyles,
     css`
-      mark {
+      .text-mark {
         font-size: 0.75rem;
         line-height: 1;
       }
@@ -28,9 +28,9 @@ export class FormatMarkStyle extends PickerPopoverControl {
   }
 
   #renderLabel(option) {
-    return html`<mark class=${option?.value ?? ""}>
+    return html`<span class=${`text-mark ${option?.value ?? ""}`}>
       ${option?.label ?? this.constructor.fallbackLabel}
-    </mark>`;
+    </span>`;
   }
 }
 

@@ -364,7 +364,7 @@ export class TableBlock extends LitElement {
           block-id=${`cell-${rowIndex}-${columnIndex}`}
           type="p"
           placeholder="Text"
-          .value=${cell.value}
+          .textChildren=${cell.children}
           .textAlign=${cell.textAlign}
           .fontWeight=${cell.fontWeight}
           .fontSize=${cell.fontSize}
@@ -448,8 +448,8 @@ export class TableBlock extends LitElement {
     }
 
     const values = editors.map((editor) => {
-      const { value, textAlign, fontWeight, fontSize, fontFamily } = editor.toJSON();
-      return { value, textAlign, fontWeight, fontSize, fontFamily };
+      const { children, textAlign, fontWeight, fontSize, fontFamily } = editor.toJSON();
+      return { children, textAlign, fontWeight, fontSize, fontFamily };
     });
     let offset = 0;
     return this.cells.map((row) => {

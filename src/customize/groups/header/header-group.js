@@ -2,6 +2,7 @@ import { html } from "lit";
 import { GroupBase } from "@/ui-editor";
 import "./nav-button-group.js";
 import { headerGroupStyles } from "./header-group.style.js";
+import { emptyText } from "../shared/text-defaults.js";
 
 export class HeaderGroup extends GroupBase {
   static styles = [GroupBase.styles, headerGroupStyles];
@@ -12,7 +13,7 @@ export class HeaderGroup extends GroupBase {
         id: "title",
         type: "inline-text",
         elementType: "p",
-        value: "",
+        ...emptyText,
         textAlign: "left",
       },
       {

@@ -8,11 +8,29 @@ import {
 } from "./text-utils.js";
 
 const INLINE_COMMAND_SELECTORS = new Map([
-  ["bold", "strong, b"],
-  ["italic", "em, i"],
-  ["underline", "u"],
+  ["bold", ".text-bold"],
+  ["italic", ".text-italic"],
+  ["underline", ".text-underline"],
 ]);
+const INLINE_COMMAND_CLASSES = new Map([
+  ["bold", "text-bold"],
+  ["italic", "text-italic"],
+  ["underline", "text-underline"],
+]);
+const TEXT_COLOR_CLASS = "text-color";
+const TEXT_MARK_CLASS = "text-mark";
+const INLINE_FORMAT_SELECTOR = [
+  ".text-bold",
+  ".text-italic",
+  ".text-underline",
+  `.${TEXT_COLOR_CLASS}`,
+  `.${TEXT_MARK_CLASS}`,
+].join(", ");
 const LIST_COMMANDS = new Set(["insertOrderedList", "insertUnorderedList"]);
+const LIST_COMMAND_TAGS = new Map([
+  ["insertOrderedList", "ol"],
+  ["insertUnorderedList", "ul"],
+]);
 
 export function applySelectionCommand({
   command,
@@ -30,7 +48,7 @@ export function applySelectionCommand({
   if (command === "bold" && !paragraphMode) {
     toggleBlockBold(editor, onFontWeightChange);
   } else if (INLINE_COMMAND_SELECTORS.has(command)) {
-    toggleInlineCommand(command, value, editor, range, selection);
+    toggleInlineCommand(command, editor, range, selection);
   } else if (command === "linkEdit") {
     if (!prepareLinkSelection(editor, range, selection)) return { range, shouldNotify: false };
   } else if (command === "linkTarget") {
@@ -47,10 +65,12 @@ export function applySelectionCommand({
     applyHighlightBackgroundColor(value, editor, range, selection);
   } else if (command === "markStyle") {
     applyMarkStyle(value, editor, range, selection);
-  } else if (command === "highlight" || command === "link") {
+  } else if (command === "highlight") {
+    applyHighlight(editor, range, selection);
+  } else if (command === "link") {
     applyWrappedSelection(command, value, editor, range, selection);
   } else {
-    executeDocumentCommand(command, value, editor, paragraphMode, selection);
+    executeDocumentCommand(command, editor, paragraphMode, selection);
   }
 
   return {
@@ -75,15 +95,17 @@ export function describeSelectionFormat({
 
   const findSelectedAncestor = (selector) => getSelectedAncestor(editor, range, selector);
   const fontSizeElement = paragraphMode ? findSelectedAncestor("[style*='font-size']") : editor;
-  const highlightElement = findSelectedAncestor("mark");
+  const highlightElement = findSelectedAncestor(`.${TEXT_MARK_CLASS}`);
   const highlightStyles = highlightElement ? getComputedStyle(highlightElement) : null;
 
   return {
-    bold: editor?.style.fontWeight !== "normal" && document.queryCommandState("bold"),
-    italic: document.queryCommandState("italic"),
-    underline: document.queryCommandState("underline"),
-    orderedList: document.queryCommandState("insertOrderedList"),
-    unorderedList: document.queryCommandState("insertUnorderedList"),
+    bold:
+      editor?.style.fontWeight !== "normal" &&
+      Boolean(findSelectedAncestor(INLINE_COMMAND_SELECTORS.get("bold"))),
+    italic: Boolean(findSelectedAncestor(INLINE_COMMAND_SELECTORS.get("italic"))),
+    underline: Boolean(findSelectedAncestor(INLINE_COMMAND_SELECTORS.get("underline"))),
+    orderedList: Boolean(findSelectedAncestor("ol")),
+    unorderedList: Boolean(findSelectedAncestor("ul")),
     align,
     fontSize: fontSizeElement?.style.fontSize ?? "",
     fontSizeApplied: Boolean(fontSizeElement),
@@ -91,28 +113,33 @@ export function describeSelectionFormat({
     type,
     collapsed: range.collapsed,
     highlight: Boolean(highlightElement),
-    markClass: highlightElement?.className ?? "",
+    markClass: getMarkStyleClass(highlightElement),
     backgroundColor:
+      highlightElement?.style.getPropertyValue("--mark-highlight-color").trim() ||
       highlightStyles?.getPropertyValue("--mark-highlight-color").trim() ||
       highlightStyles?.getPropertyValue("--yellow-200").trim() ||
       "",
     link: findSelectedAncestor("a")?.getAttribute("href") ?? "",
     target: findSelectedAncestor("a")?.getAttribute("target") ?? "_self",
-    color: document.queryCommandValue("foreColor"),
-    colorApplied: Boolean(findSelectedAncestor("font[color], [style*='color']")),
+    color: getTextColorValue(findSelectedAncestor(`.${TEXT_COLOR_CLASS}`)),
+    colorApplied: Boolean(findSelectedAncestor(`.${TEXT_COLOR_CLASS}`)),
   };
 }
 
 function applyMarkStyle(value, editor, range, selection) {
-  const mark = getSelectedAncestor(editor, range, "mark");
+  const mark = getSelectedAncestor(editor, range, `.${TEXT_MARK_CLASS}`);
   if (!mark) return;
 
   const className = normalizeMarkClass(value);
-  if (className) mark.className = className;
-  else mark.removeAttribute("class");
+  removeMarkStyleClasses(mark);
+  if (className) mark.classList.add(className);
 
   range.selectNodeContents(mark);
   selectRange(selection, range);
+}
+
+function getMarkStyleClass(element) {
+  return Array.from(element?.classList ?? []).find((className) => className.startsWith("mark-")) ?? "";
 }
 
 export function normalizeMarkClass(value) {
@@ -121,11 +148,37 @@ export function normalizeMarkClass(value) {
 }
 
 function applyHighlightBackgroundColor(value, editor, range, selection) {
-  const highlightElement = getSelectedAncestor(editor, range, "mark");
+  const highlightElement = getSelectedAncestor(editor, range, `.${TEXT_MARK_CLASS}`);
   if (!highlightElement) return;
 
   highlightElement.style.setProperty("--mark-highlight-color", value);
   range.selectNodeContents(highlightElement);
+  selectRange(selection, range);
+}
+
+function applyHighlight(editor, range, selection) {
+  const markElement = getSelectedAncestor(editor, range, `.${TEXT_MARK_CLASS}`);
+
+  if (range.collapsed) {
+    if (markElement) removeMarkAtCaret(markElement, range);
+    selectRange(selection, range);
+    return;
+  }
+
+  const selectionWithinMark = markElement?.contains(range.endContainer);
+  const inlineElement = markElement || getSelectedAncestor(editor, range, INLINE_FORMAT_SELECTOR);
+  const selectionWithinInlineElement = inlineElement?.contains(range.endContainer);
+  const fragment = range.extractContents();
+  removeTextMark(fragment);
+
+  if (selectionWithinMark) {
+    insertWithoutTextMark(markElement, fragment, range);
+  } else if (selectionWithinInlineElement) {
+    insertWithTextMark(inlineElement, fragment, range, editor);
+  } else {
+    wrapFragmentWithTextMark(fragment, range, editor);
+  }
+
   selectRange(selection, range);
 }
 
@@ -172,30 +225,53 @@ function getOutermostSelectedAncestor(editor, range, selector) {
 }
 
 function applyTextColor(value, editor, range, selection) {
-  if (value) {
-    document.execCommand("foreColor", false, value);
-    return;
-  }
+  const colorElement = getSelectedAncestor(editor, range, `.${TEXT_COLOR_CLASS}`);
 
-  if (range.collapsed) {
-    const colorElement = getSelectedAncestor(editor, range, "font[color], [style*='color']");
-    if (colorElement) unwrapTextColorElement(colorElement, range);
+  if (value) {
+    if (range.collapsed && colorElement) {
+      setTextColor(colorElement, value);
+    } else if (!range.collapsed) {
+      const selectionWithinColor = colorElement?.contains(range.endContainer);
+      const inlineElement =
+        colorElement || getSelectedAncestor(editor, range, INLINE_FORMAT_SELECTOR);
+      const selectionWithinInlineElement = inlineElement?.contains(range.endContainer);
+      const fragment = range.extractContents();
+      removeTextColor(fragment);
+
+      if (selectionWithinColor) {
+        insertWithTextColor(inlineElement, fragment, range, value);
+      } else if (selectionWithinInlineElement) {
+        insertWithTextColor(inlineElement, fragment, range, value);
+      } else {
+        wrapFragmentWithTextColor(fragment, range, value);
+      }
+    }
     selectRange(selection, range);
     return;
   }
 
-  const colorElement = getSelectedAncestor(editor, range, "font[color], [style*='color']");
+  if (range.collapsed) {
+    if (colorElement) removeTextColorAtCaret(colorElement, range);
+    selectRange(selection, range);
+    return;
+  }
+
   const selectionWithinColor = colorElement?.contains(range.endContainer);
   const fragment = range.extractContents();
   removeTextColor(fragment);
 
   if (selectionWithinColor) {
-    insertWithoutAncestorTextColor(colorElement, fragment, range);
+    insertWithoutTextColor(colorElement, fragment, range);
   } else {
     insertAndSelectFragment(fragment, range);
   }
 
   selectRange(selection, range);
+}
+
+function getTextColorValue(colorElement) {
+  if (!colorElement) return "";
+  return colorElement.style?.color || getComputedStyle(colorElement).color;
 }
 
 function removeFontSize(fragment) {
@@ -206,11 +282,138 @@ function removeFontSize(fragment) {
 }
 
 function removeTextColor(fragment) {
-  for (const element of fragment.querySelectorAll("font[color], [style*='color']")) {
-    element.removeAttribute("color");
-    element.style?.removeProperty("color");
-    if (!element.getAttribute("style")) element.removeAttribute("style");
-    if (!element.attributes.length) element.replaceWith(...element.childNodes);
+  for (const element of fragment.querySelectorAll(`.${TEXT_COLOR_CLASS}`)) {
+    removeTextColorElement(element);
+  }
+}
+
+function wrapFragmentWithTextColor(fragment, range, value) {
+  const element = document.createElement("span");
+  setTextColor(element, value);
+  element.append(fragment);
+  range.insertNode(element);
+  range.selectNodeContents(element);
+}
+
+function insertWithTextColor(colorElement, fragment, range, value) {
+  const afterRange = document.createRange();
+  afterRange.setStart(range.startContainer, range.startOffset);
+  afterRange.setEnd(colorElement, colorElement.childNodes.length);
+
+  const afterElement = colorElement.cloneNode(false);
+  afterElement.append(afterRange.extractContents());
+
+  const selectedElement = colorElement.cloneNode(false);
+  setTextColor(selectedElement, value);
+  selectedElement.append(fragment);
+
+  const selectedFragment = document.createDocumentFragment();
+  selectedFragment.append(selectedElement);
+  addSelectionMarkers(selectedFragment);
+  colorElement.after(selectedFragment, afterElement);
+  selectBetweenMarkers(range);
+
+  removeEmptyInlineElement(colorElement);
+  removeEmptyInlineElement(afterElement);
+}
+
+function setTextColor(element, value) {
+  element.classList.add(TEXT_COLOR_CLASS);
+  element.style.color = value;
+}
+
+function removeTextMark(fragment) {
+  for (const element of fragment.querySelectorAll(`.${TEXT_MARK_CLASS}`)) {
+    removeTextMarkElement(element);
+  }
+}
+
+function wrapFragmentWithTextMark(fragment, range, editor) {
+  const element = document.createElement("span");
+  setTextMark(element, editor);
+  element.append(fragment);
+  range.insertNode(element);
+  range.selectNodeContents(element);
+}
+
+function insertWithTextMark(inlineElement, fragment, range, editor) {
+  const afterRange = document.createRange();
+  afterRange.setStart(range.startContainer, range.startOffset);
+  afterRange.setEnd(inlineElement, inlineElement.childNodes.length);
+
+  const afterElement = inlineElement.cloneNode(false);
+  afterElement.append(afterRange.extractContents());
+
+  const selectedElement = inlineElement.cloneNode(false);
+  setTextMark(selectedElement, editor);
+  selectedElement.append(fragment);
+
+  const selectedFragment = document.createDocumentFragment();
+  selectedFragment.append(selectedElement);
+  addSelectionMarkers(selectedFragment);
+  inlineElement.after(selectedFragment, afterElement);
+  selectBetweenMarkers(range);
+
+  removeEmptyInlineElement(inlineElement);
+  removeEmptyInlineElement(afterElement);
+}
+
+function insertWithoutTextMark(markElement, fragment, range) {
+  const afterRange = document.createRange();
+  afterRange.setStart(range.startContainer, range.startOffset);
+  afterRange.setEnd(markElement, markElement.childNodes.length);
+
+  const afterElement = markElement.cloneNode(false);
+  afterElement.append(afterRange.extractContents());
+
+  const selectedElement = markElement.cloneNode(false);
+  removeTextMarkElement(selectedElement);
+  selectedElement.append(fragment);
+
+  const selectedFragment = document.createDocumentFragment();
+  if (shouldKeepTextSpan(selectedElement)) {
+    selectedFragment.append(selectedElement);
+  } else {
+    selectedFragment.append(...selectedElement.childNodes);
+  }
+
+  addSelectionMarkers(selectedFragment);
+  markElement.after(selectedFragment, afterElement);
+  selectBetweenMarkers(range);
+
+  removeEmptyInlineElement(markElement);
+  removeEmptyInlineElement(afterElement);
+}
+
+function removeMarkAtCaret(markElement, range) {
+  const marker = document.createComment("caret");
+  range.insertNode(marker);
+  removeTextMarkElement(markElement);
+  cleanupTextSpanElement(markElement);
+  range.setStartAfter(marker);
+  range.collapse(true);
+  marker.remove();
+}
+
+function setTextMark(element, editor) {
+  element.classList.add(TEXT_MARK_CLASS);
+  const color = getComputedStyle(editor).getPropertyValue("--ui-editor-mark").trim();
+  element.style.setProperty(
+    "--mark-highlight-color",
+    color ? "var(--ui-editor-mark)" : "rgb(255, 247, 220)",
+  );
+}
+
+function removeTextMarkElement(element) {
+  element.classList.remove(TEXT_MARK_CLASS);
+  removeMarkStyleClasses(element);
+  element.style?.removeProperty("--mark-highlight-color");
+  cleanupTextSpanElement(element);
+}
+
+function removeMarkStyleClasses(element) {
+  for (const className of Array.from(element.classList)) {
+    if (className.startsWith("mark-")) element.classList.remove(className);
   }
 }
 
@@ -262,7 +465,7 @@ function applyLinkTarget(value, editor, range, selection) {
   selectRange(selection, range);
 }
 
-function insertWithoutAncestorTextColor(colorElement, fragment, range) {
+function insertWithoutTextColor(colorElement, fragment, range) {
   const afterRange = document.createRange();
   afterRange.setStart(range.startContainer, range.startOffset);
   afterRange.setEnd(colorElement, colorElement.childNodes.length);
@@ -271,13 +474,11 @@ function insertWithoutAncestorTextColor(colorElement, fragment, range) {
   afterElement.append(afterRange.extractContents());
 
   const selectedElement = colorElement.cloneNode(false);
-  selectedElement.removeAttribute("color");
-  selectedElement.style?.removeProperty("color");
-  if (!selectedElement.getAttribute("style")) selectedElement.removeAttribute("style");
+  removeTextColorElement(selectedElement);
   selectedElement.append(fragment);
 
   const selectedFragment = document.createDocumentFragment();
-  if (selectedElement.attributes.length || selectedElement.tagName !== "FONT") {
+  if (shouldKeepTextSpan(selectedElement)) {
     selectedFragment.append(selectedElement);
   } else {
     selectedFragment.append(...selectedElement.childNodes);
@@ -291,16 +492,20 @@ function insertWithoutAncestorTextColor(colorElement, fragment, range) {
   if (!afterElement.hasChildNodes()) afterElement.remove();
 }
 
-function unwrapTextColorElement(colorElement, range) {
+function removeTextColorAtCaret(colorElement, range) {
   const marker = document.createComment("caret");
   range.insertNode(marker);
-  colorElement.removeAttribute("color");
-  colorElement.style?.removeProperty("color");
-  if (!colorElement.getAttribute("style")) colorElement.removeAttribute("style");
-  if (!colorElement.attributes.length) colorElement.replaceWith(...colorElement.childNodes);
+  removeTextColorElement(colorElement);
+  cleanupTextSpanElement(colorElement);
   range.setStartAfter(marker);
   range.collapse(true);
   marker.remove();
+}
+
+function removeTextColorElement(element) {
+  element.classList.remove(TEXT_COLOR_CLASS);
+  element.style?.removeProperty("color");
+  cleanupTextSpanElement(element);
 }
 
 function insertAndSelectFragment(fragment, range) {
@@ -341,22 +546,162 @@ function toggleBlockBold(editor, onFontWeightChange) {
   onFontWeightChange(fontWeight);
 }
 
-function toggleInlineCommand(command, value, editor, range, selection) {
+function toggleInlineCommand(command, editor, range, selection) {
+  const className = INLINE_COMMAND_CLASSES.get(command);
+  if (!className) return;
+
   const formatElement =
     range.collapsed && getSelectedAncestor(editor, range, INLINE_COMMAND_SELECTORS.get(command));
 
-  if (!formatElement) {
-    document.execCommand(command, false, value);
+  if (formatElement) {
+    removeInlineClass(formatElement, className, range);
+    selectRange(selection, range);
     return;
   }
 
+  if (!range.collapsed) {
+    toggleInlineRange(command, editor, range, className);
+    selectRange(selection, range);
+  }
+}
+
+function toggleInlineRange(command, editor, range, className) {
+  const selector = INLINE_COMMAND_SELECTORS.get(command);
+  if (!selector) return;
+
+  const formatElement = getSelectedAncestor(editor, range, selector);
+  if (formatElement?.contains(range.endContainer)) {
+    insertWithoutInlineClass(formatElement, range.extractContents(), range, className);
+    return;
+  }
+
+  const inlineElement = getSelectedAncestor(editor, range, INLINE_FORMAT_SELECTOR);
+  if (inlineElement?.contains(range.endContainer)) {
+    insertWithInlineClass(inlineElement, range.extractContents(), range, className);
+    return;
+  }
+
+  const fragment = range.extractContents();
+  removeInlineFormat(fragment, selector);
+
+  const element = document.createElement("span");
+  element.classList.add(className);
+  element.append(fragment);
+  range.insertNode(element);
+  range.selectNodeContents(element);
+}
+
+function removeInlineFormat(fragment, selector) {
+  for (const element of fragment.querySelectorAll(selector)) {
+    removeInlineFormatElement(element);
+  }
+}
+
+function insertWithInlineClass(inlineElement, fragment, range, className) {
+  const afterRange = document.createRange();
+  afterRange.setStart(range.startContainer, range.startOffset);
+  afterRange.setEnd(inlineElement, inlineElement.childNodes.length);
+
+  const afterElement = inlineElement.cloneNode(false);
+  afterElement.append(afterRange.extractContents());
+
+  const selectedElement = inlineElement.cloneNode(false);
+  selectedElement.classList.add(className);
+  removeInlineFormat(fragment, `.${className}`);
+  selectedElement.append(fragment);
+
+  const selectedFragment = document.createDocumentFragment();
+  selectedFragment.append(selectedElement);
+  addSelectionMarkers(selectedFragment);
+  inlineElement.after(selectedFragment, afterElement);
+  selectBetweenMarkers(range);
+
+  removeEmptyInlineElement(inlineElement);
+  removeEmptyInlineElement(afterElement);
+}
+
+function insertWithoutInlineClass(inlineElement, fragment, range, className) {
+  const afterRange = document.createRange();
+  afterRange.setStart(range.startContainer, range.startOffset);
+  afterRange.setEnd(inlineElement, inlineElement.childNodes.length);
+
+  const afterElement = inlineElement.cloneNode(false);
+  afterElement.append(afterRange.extractContents());
+
+  const selectedElement = inlineElement.cloneNode(false);
+  selectedElement.classList.remove(className);
+  removeInlineFormat(fragment, `.${className}`);
+  selectedElement.append(fragment);
+
+  const selectedFragment = document.createDocumentFragment();
+  if (hasInlineFormatClass(selectedElement) || selectedElement.getAttribute("style")) {
+    selectedFragment.append(selectedElement);
+  } else {
+    selectedFragment.append(...selectedElement.childNodes);
+  }
+
+  addSelectionMarkers(selectedFragment);
+  inlineElement.after(selectedFragment, afterElement);
+  selectBetweenMarkers(range);
+
+  removeEmptyInlineElement(inlineElement);
+  removeEmptyInlineElement(afterElement);
+}
+
+function removeInlineClass(formatElement, className, range) {
   const marker = document.createComment("caret");
   range.insertNode(marker);
-  formatElement.replaceWith(...formatElement.childNodes);
+  removeInlineFormatClass(formatElement, className);
+  cleanupInlineFormatElement(formatElement);
   range.setStartBefore(marker);
   range.collapse(true);
   marker.remove();
-  selectRange(selection, range);
+}
+
+function removeInlineFormatElement(element) {
+  for (const className of INLINE_COMMAND_CLASSES.values()) {
+    element.classList.remove(className);
+  }
+  cleanupInlineFormatElement(element);
+}
+
+function removeInlineFormatClass(element, className) {
+  element.classList.remove(className);
+}
+
+function cleanupInlineFormatElement(element) {
+  cleanupTextSpanElement(element);
+}
+
+function hasInlineFormatClass(element) {
+  return Array.from(INLINE_COMMAND_CLASSES.values()).some((className) =>
+    element.classList.contains(className),
+  );
+}
+
+function cleanupTextSpanElement(element) {
+  if (element.getAttribute("style") === "") element.removeAttribute("style");
+  if (element.getAttribute("class") === "") element.removeAttribute("class");
+  if (element.localName === "span" && !shouldKeepTextSpan(element)) {
+    element.replaceWith(...element.childNodes);
+  }
+}
+
+function shouldKeepTextSpan(element) {
+  return (
+    hasTextFormatClass(element) ||
+    Boolean(element.getAttribute("style")) ||
+    Array.from(element.attributes).some((attribute) => attribute.name !== "class")
+  );
+}
+
+function hasTextFormatClass(element) {
+  return (
+    hasInlineFormatClass(element) ||
+    element.classList.contains(TEXT_COLOR_CLASS) ||
+    element.classList.contains(TEXT_MARK_CLASS) ||
+    Array.from(element.classList).some((className) => className.startsWith("mark-"))
+  );
 }
 
 function prepareLinkSelection(editor, range, selection) {
@@ -380,7 +725,7 @@ function prepareLinkSelection(editor, range, selection) {
 }
 
 function applyWrappedSelection(command, value, editor, range, selection) {
-  const selector = command === "highlight" ? "mark" : "a";
+  const selector = "a";
   const formatElement = getSelectedAncestor(editor, range, selector);
   const preview =
     command === "link" ? getSelectedAncestor(editor, range, "[data-link-selection]") : null;
@@ -391,8 +736,8 @@ function applyWrappedSelection(command, value, editor, range, selection) {
     replaceLinkPreview(preview, value, range);
   } else if (formatElement) {
     unwrapFormatElement(formatElement, range);
-  } else if (command === "highlight" || value) {
-    wrapSelection(command, value, editor, range);
+  } else if (value) {
+    wrapSelection(command, value, range);
   }
 
   selectRange(selection, range);
@@ -420,20 +765,18 @@ function unwrapFormatElement(formatElement, range) {
   range.setEndAfter(lastChild);
 }
 
-function wrapSelection(command, value, editor, range) {
-  const element = document.createElement(command === "highlight" ? "mark" : "a");
+function wrapSelection(command, value, range) {
+  const element = document.createElement("a");
   if (command === "link") element.setAttribute("href", value);
-  if (command === "highlight") {
-    const color = getComputedStyle(editor).getPropertyValue("--yellow-200").trim();
-    element.style.setProperty("--mark-highlight-color", color || "rgb(255, 247, 220)");
-  }
   element.append(range.extractContents());
   range.insertNode(element);
   range.selectNodeContents(element);
 }
 
-function executeDocumentCommand(command, value, editor, paragraphMode, selection) {
-  document.execCommand(command, false, value);
+function executeDocumentCommand(command, editor, paragraphMode, selection) {
+  if (!LIST_COMMANDS.has(command)) return;
+
+  toggleListCommand(command, editor, selection);
   if (!LIST_COMMANDS.has(command)) return;
 
   const needsListRepair = Boolean(editor.querySelector("p > ul, p > ol"));
@@ -443,6 +786,85 @@ function executeDocumentCommand(command, value, editor, paragraphMode, selection
   mutatePreservingSelection(editor, selection, () => {
     unwrapListsFromParagraphs(editor);
     if (paragraphMode) wrapParagraphContent(editor);
+  });
+}
+
+function toggleListCommand(command, editor, selection) {
+  const tagName = LIST_COMMAND_TAGS.get(command);
+  if (!tagName) return;
+
+  const range = selection?.rangeCount ? selection.getRangeAt(0) : null;
+  const currentList = getSelectedAncestor(editor, range, "ol, ul");
+
+  mutatePreservingSelection(editor, selection, () => {
+    if (currentList?.localName === tagName) {
+      unwrapList(currentList);
+    } else if (currentList) {
+      replaceListTag(currentList, tagName);
+    } else {
+      wrapSelectionInList(editor, range, tagName);
+    }
+  });
+}
+
+function replaceListTag(list, tagName) {
+  const replacement = document.createElement(tagName);
+  replacement.append(...list.childNodes);
+  list.replaceWith(replacement);
+}
+
+function unwrapList(list) {
+  const paragraphs = Array.from(list.children, (item) => {
+    const paragraph = document.createElement("p");
+    paragraph.append(...item.childNodes);
+    return paragraph;
+  });
+  list.replaceWith(...paragraphs);
+}
+
+function wrapSelectionInList(editor, range, tagName) {
+  const selectedNodes = getSelectedEditorChildren(editor, range);
+  if (!selectedNodes.length) return;
+
+  const list = document.createElement(tagName);
+  selectedNodes[0].before(list);
+
+  for (const node of selectedNodes) {
+    if (node.nodeType === Node.ELEMENT_NODE && node.localName === "li") {
+      list.append(node);
+      continue;
+    }
+
+    if (
+      node.nodeType === Node.ELEMENT_NODE &&
+      (node.localName === "ol" || node.localName === "ul")
+    ) {
+      list.append(...node.childNodes);
+      node.remove();
+      continue;
+    }
+
+    const item = document.createElement("li");
+    if (node.nodeType === Node.ELEMENT_NODE && node.localName === "p") {
+      item.append(...node.childNodes);
+      node.remove();
+    } else {
+      item.append(node);
+    }
+    list.append(item);
+  }
+}
+
+function getSelectedEditorChildren(editor, range) {
+  if (!range) return [];
+
+  return Array.from(editor.childNodes).filter((node) => {
+    if (node.nodeType === Node.COMMENT_NODE) return false;
+    try {
+      return range.intersectsNode(node);
+    } catch {
+      return false;
+    }
   });
 }
 

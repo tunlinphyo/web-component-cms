@@ -138,7 +138,6 @@ export class ImageBlock extends LitElement {
         ${this.src
           ? html`<img
               class="image"
-              part="image"
               src=${this.src}
               alt=${this.alt}
               style=${`object-fit: ${this.objectFit};`}

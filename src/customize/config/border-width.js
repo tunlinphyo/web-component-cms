@@ -1,12 +1,12 @@
 export const borderWidthOptions = [
-  { value: "1px", label: "xs" },
-  { value: "2px", label: "sm" },
-  { value: "4px", label: "base" },
-  { value: "6px", label: "md" },
-  { value: "8px", label: "lg" },
-  { value: "12px", label: "xl" },
-  { value: "24px", label: "xxl" },
-  { value: "48px", label: "xxxl" },
+  { value: "var(--border-width-xs)", label: "xs" },
+  { value: "var(--border-width-sm)", label: "sm" },
+  { value: "var(--border-width-base)", label: "base" },
+  { value: "var(--border-width-md)", label: "md" },
+  { value: "var(--border-width-lg)", label: "lg" },
+  { value: "var(--border-width-xl)", label: "xl" },
+  { value: "var(--border-width-xxl)", label: "xxl" },
+  { value: "var(--border-width-xxxl)", label: "xxxl" },
 ];
 
 export default borderWidthOptions;

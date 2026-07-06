@@ -13,7 +13,7 @@ export class FormatHighlight extends FormatToggle {
         padding: 0 0.5rem;
       }
 
-      mark {
+      .text-mark {
         color: inherit;
         font-size: 0.75rem;
         line-height: 1;
@@ -28,7 +28,7 @@ export class FormatHighlight extends FormatToggle {
       ?disabled=${this.disabled}
       @click=${() => this.apply()}
     >
-      <mark>Mark</mark>
+      <span class="text-mark">Mark</span>
     </button>`;
   }
 }

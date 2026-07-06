@@ -73,13 +73,13 @@ export const formatTextColorPaletteStyles = css`
   }
 
   .color[aria-pressed="true"] {
-    outline: 2px solid #2684ff;
-    outline-offset: 2px;
+    outline: 2px solid var(--ui-editor-highlight);
+    outline-offset: 0;
   }
 
   .spacer {
     width: 32px;
-    height: 32px;
+    height: 26px;
   }
 
   .unset {

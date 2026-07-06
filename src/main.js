@@ -3,7 +3,7 @@ import "./style.css";
 import "@/ui-editor";
 import "./components/json-diaplay.js";
 import "./customize/index.js";
-import pageOne from "./assets/data/page-one.json";
+import pageOne from "./assets/data/page-two.json";
 
 const images = [
   { name: "logo-h.png", url: "/images/logo-h.png" },

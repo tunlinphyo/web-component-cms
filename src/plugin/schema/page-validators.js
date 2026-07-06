@@ -1,4 +1,4 @@
-import { INLINE_TEXT_ELEMENT_TYPES, PAGE_BLOCK_TYPES } from "./page.schema.js";
+import { INLINE_TEXT_ELEMENT_TYPES, PAGE_BLOCK_TYPES, isRichTextType } from "./page.schema.js";
 
 export function assertValidPage(page) {
   const errors = validatePage(page);
@@ -62,6 +62,9 @@ function validateBlock(block, path, errors) {
 
   if (block.type === "inline-text" && !INLINE_TEXT_ELEMENT_TYPES.has(block.elementType)) {
     errors.push(`${path}.elementType must be p, h1, h2, or h3`);
+  }
+  if (isRichTextType(block.type) && !Array.isArray(block.children)) {
+    errors.push(`${path}.children must be an array`);
   }
   if (block.type === "navs") validateNavsBlock(block, path, errors);
 }

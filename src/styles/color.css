@@ -12,10 +12,6 @@
   --brand-800: #73263c;
   --brand-900: #511f2d;
 
-  --brand-dark: #9f2a58;
-  --button-hover: #c93871;
-  --brand-accent: #e1006e;
-
   --white: #ffffff;
   --gray-25: #f7f7f7;
   --gray-50: #f0f0f0;
@@ -30,11 +26,73 @@
   --gray-900: #0d0d0d;
   --black: #000000;
 
-  --primary: var(--brand-500);
-  --highlight: deepskyblue;
-  --mark: #ffc107;
-}
+  --ui-editor-highlight: skyblue;
+  --ui-editor-mark: var(--yellow-500);
+  --ui-editor-link-text-color: var(--brand-600);
 
-:where(html, body) {
-  color: var(--gray-900);
+  --yellow-50: #fff9e6;
+  --yellow-100: #fff6da;
+  --yellow-200: #ffeecb;
+  --yellow-300: #ffe28d;
+  --yellow-400: #ffd54a;
+  --yellow-500: #ffc107;
+  --yellow-600: #e6ae06;
+  --yellow-700: #cc9a06;
+  --yellow-800: #bf9105;
+  --yellow-900: #997404;
+
+  --green-50: #e9f9e9;
+  --green-100: #def5de;
+  --green-200: #baebbb;
+  --green-300: #92e398;
+  --green-400: #59d75f;
+  --green-500: #21bf25;
+  --green-600: #1eac21;
+  --green-700: #1a991e;
+  --green-800: #198f1c;
+  --green-900: #147316;
+
+  --red-50: #f7d6d4;
+  --red-100: #f1b8b7;
+  --red-200: #ea9a93;
+  --red-300: #e3786e;
+  --red-400: #dc564a;
+  --red-500: #d53426;
+  --red-600: #b22b20;
+  --red-700: #8e2319;
+  --red-800: #6b1a13;
+  --red-900: #47110d;
+
+  --orange-50: #feeddd;
+  --orange-100: #fdd0b1;
+  --orange-200: #fcb98b;
+  --orange-300: #fba164;
+  --orange-400: #fa8a3d;
+  --orange-500: #f97216;
+  --orange-600: #d05f12;
+  --orange-700: #a64c0f;
+  --orange-800: #7d390b;
+  --orange-900: #532607;
+
+  --blue-50: #d4e6ff;
+  --blue-100: #b7d6ff;
+  --blue-200: #93c2ff;
+  --blue-300: #6eadff;
+  --blue-400: #4a99ff;
+  --blue-500: #2684ff;
+  --blue-600: #206ed5;
+  --blue-700: #1958aa;
+  --blue-800: #134280;
+  --blue-900: #0d2c55;
+
+  --purple-50: #ecd9fd;
+  --purple-100: #dfcdfb;
+  --purple-200: #d0a0fa;
+  --purple-300: #c080f8;
+  --purple-400: #b061f6;
+  --purple-500: #a041f4;
+  --purple-600: #8536cb;
+  --purple-700: #6b2ba3;
+  --purple-800: #50217a;
+  --purple-900: #351651;
 }

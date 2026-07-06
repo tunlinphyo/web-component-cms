@@ -3,6 +3,7 @@ import "./news-list-group.js";
 import { NewsGroup } from "../news/news-group.js";
 import { GroupBase } from "@/ui-editor";
 import { decoratedTitleStyles, renderDecoratedTitle } from "../shared/decorated-title.js";
+import { emptyText } from "../shared/text-defaults.js";
 import { hostGroupStyles } from "./home-news-group.style.js";
 
 const createDefaultNewsItem = (id) => ({
@@ -24,7 +25,7 @@ export class HomeNewsGroup extends GroupBase {
         id: "title",
         type: "inline-text",
         elementType: "h2",
-        value: "",
+        ...emptyText,
         textAlign: "left",
       },
       {

@@ -1,5 +1,22 @@
 :where(html, body) {
   --header-height: 4rem;
+  --border-radius-none: 0px;
+  --border-radius-xs: 2px;
+  --border-radius-sm: 4px;
+  --border-radius-base: 6px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 16px;
+  --border-radius-xxl: 24px;
+  --border-radius-xxxl: 32px;
+  --border-width-xs: 1px;
+  --border-width-sm: 2px;
+  --border-width-base: 4px;
+  --border-width-md: 6px;
+  --border-width-lg: 8px;
+  --border-width-xl: 12px;
+  --border-width-xxl: 24px;
+  --border-width-xxxl: 48px;
   /* background-color: var(--gray-50); */
 
   font-family:

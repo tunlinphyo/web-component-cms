@@ -1,5 +1,6 @@
 import { html } from "lit";
 import { GroupBase } from "@/ui-editor";
+import { emptyText } from "../shared/text-defaults.js";
 import { hostGroupStyles } from "./news-group.style.js";
 
 export class NewsGroup extends GroupBase {
@@ -21,7 +22,7 @@ export class NewsGroup extends GroupBase {
         textAlign: "left",
         type: "inline-text",
         elementType: "h2",
-        value: "",
+        ...emptyText,
         fontWeight: "normal",
         fontSize: "24px",
       },
@@ -29,7 +30,7 @@ export class NewsGroup extends GroupBase {
         id: "title",
         type: "inline-text",
         elementType: "h2",
-        value: "",
+        ...emptyText,
         textAlign: "left",
         fontFamily: "var(--font-body)",
         fontSize: "20px",
@@ -37,7 +38,7 @@ export class NewsGroup extends GroupBase {
       {
         id: "description",
         type: "p",
-        value: "",
+        ...emptyText,
         textAlign: "left",
       },
     ],

@@ -23,7 +23,7 @@ export const formatToggleStyles = css`
   }
 
   :host([applied]) button {
-    background: var(--highlight);
+    background: var(--ui-editor-highlight);
     color: white;
   }
 `;

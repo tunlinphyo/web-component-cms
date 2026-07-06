@@ -18,8 +18,8 @@ export const formatLinkStyles = css`
   }
 
   input:focus-visible {
-    outline: 1px solid var(--highlight);
-    border-color: var(--highlight);
+    outline: 1px solid var(--ui-editor-highlight);
+    border-color: var(--ui-editor-highlight);
   }
 
   button {
@@ -52,7 +52,7 @@ export const formatLinkStyles = css`
   }
 
   :host([applied]) > button {
-    background: var(--highlight);
+    background: var(--ui-editor-highlight);
     color: white;
   }
 

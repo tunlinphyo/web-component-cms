@@ -12,7 +12,7 @@ class BorderRadiusPicker extends PickerPopoverControl {
     const options = super.options;
     if (!this.value || options.some((option) => option.value === this.value)) return options;
 
-    return [{ value: this.value, label: `Custom (${this.value})` }, ...options];
+    return [{ value: this.value, label: `Default` }, ...options];
   }
 
   dispatchValueChange(value) {

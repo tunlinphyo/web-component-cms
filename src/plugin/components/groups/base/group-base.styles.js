@@ -5,7 +5,6 @@ export const groupBaseStyles = css`
   :host {
     display: block;
     padding: 0;
-    color: var(--brand-900);
     position: relative;
   }
 
@@ -14,7 +13,7 @@ export const groupBaseStyles = css`
   }
 
   :host([active]) [data-group-box] {
-    outline: 2px solid var(--highlight);
+    outline: 2px solid var(--ui-editor-highlight);
     outline-offset: 2px;
   }
 
@@ -73,7 +72,7 @@ export const groupBaseStyles = css`
   }
 
   .button-group button:not(:disabled):is(:hover, :focus-visible) {
-    outline: 2px solid var(--highlight);
+    outline: 2px solid var(--ui-editor-highlight);
     outline-offset: 0;
   }
 
@@ -122,8 +121,8 @@ export const groupBaseStyles = css`
   }
 
   .hash-input:focus-within {
-    outline: 1px solid var(--highlight);
-    border-color: var(--highlight);
+    outline: 1px solid var(--ui-editor-highlight);
+    border-color: var(--ui-editor-highlight);
   }
 
   .hash-dialog menu {
@@ -146,7 +145,7 @@ export const groupBaseStyles = css`
 
   .hash-dialog menu button:not(:disabled):is(:hover, :focus-visible) {
     background: var(--gray-200);
-    outline: 2px solid var(--highlight);
+    outline: 2px solid var(--ui-editor-highlight);
     outline-offset: 0;
   }
 

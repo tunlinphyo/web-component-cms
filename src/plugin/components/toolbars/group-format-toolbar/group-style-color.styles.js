@@ -90,13 +90,13 @@ export const groupStyleColorStyles = css`
   }
 
   .color[aria-pressed="true"] {
-    outline: 2px solid #2684ff;
+    outline: 2px solid var(--ui-editor-highlight);
     outline-offset: 0px;
   }
 
   .spacer {
     width: 32px;
-    height: 32px;
+    height: 26px;
   }
 
   .unset {

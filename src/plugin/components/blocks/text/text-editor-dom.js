@@ -13,10 +13,6 @@ export function getEditorSelection(renderRoot) {
   return renderRoot.getSelection?.() ?? document.getSelection();
 }
 
-export function setDefaultParagraphSeparator() {
-  document.execCommand("defaultParagraphSeparator", false, "p");
-}
-
 export function initializeEditor(
   editor,
   {
@@ -47,7 +43,45 @@ export function initializeEditor(
     fontFamily,
   });
   updateEditorEmptyState(editor, paragraphMode);
-  setDefaultParagraphSeparator();
+}
+
+export function insertEditorLineBreak(selection) {
+  const range = selection?.rangeCount ? selection.getRangeAt(0) : null;
+  if (!range) return false;
+
+  range.deleteContents();
+
+  const lineBreak = document.createElement("br");
+  range.insertNode(lineBreak);
+  range.setStartAfter(lineBreak);
+  range.collapse(true);
+  selectRange(selection, range);
+  return true;
+}
+
+export function insertEditorParagraph(editor, selection) {
+  const range = selection?.rangeCount ? selection.getRangeAt(0) : null;
+  if (!editor || !range || !editor.contains(range.commonAncestorContainer)) return false;
+
+  range.deleteContents();
+
+  const paragraph = getAncestorParagraph(editor, range.startContainer);
+  if (!paragraph) {
+    return insertEditorLineBreak(selection);
+  }
+
+  const afterRange = document.createRange();
+  afterRange.setStart(range.startContainer, range.startOffset);
+  afterRange.setEnd(paragraph, paragraph.childNodes.length);
+
+  const nextParagraph = paragraph.cloneNode(false);
+  nextParagraph.append(afterRange.extractContents());
+  paragraph.after(nextParagraph);
+
+  range.setStart(nextParagraph, 0);
+  range.collapse(true);
+  selectRange(selection, range);
+  return true;
 }
 
 export function captureEditorState(editor, range = null) {
@@ -190,6 +224,17 @@ export function placeCaretInEmptyEditor(editor, selection) {
   range.collapse(true);
   selectRange(selection, range);
   return true;
+}
+
+function getAncestorParagraph(editor, node) {
+  let element = node?.nodeType === Node.ELEMENT_NODE ? node : node?.parentElement;
+
+  while (element && element !== editor) {
+    if (element.localName === "p") return element;
+    element = element.parentElement;
+  }
+
+  return null;
 }
 
 function applyEditorPresentation(

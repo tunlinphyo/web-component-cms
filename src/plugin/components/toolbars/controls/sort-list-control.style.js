@@ -74,7 +74,7 @@ export const sortListControlStyles = css`
   }
 
   li[aria-current="true"] {
-    border-color: var(--highlight);
+    border-color: var(--ui-editor-highlight);
   }
 
   li[draggable="true"] {
@@ -95,7 +95,7 @@ export const sortListControlStyles = css`
   }
 
   button:not(:disabled):is(:hover, :focus-visible) {
-    outline: 2px solid var(--highlight);
+    outline: 2px solid var(--ui-editor-highlight);
     outline-offset: 1px;
   }
 

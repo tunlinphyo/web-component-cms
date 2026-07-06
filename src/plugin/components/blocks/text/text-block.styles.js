@@ -11,8 +11,16 @@ export const textBlockStyles = css`
     margin-block: var(--predefined-margin, 0.5rem);
   }
 
-  b {
+  .text-bold {
     font-weight: 700;
+  }
+
+  .text-italic {
+    font-style: italic;
+  }
+
+  .text-underline {
+    text-decoration: underline;
   }
 
   .editor {
@@ -22,10 +30,14 @@ export const textBlockStyles = css`
     overflow-wrap: break-word;
   }
 
+  .editor a {
+    color: var(--ui-editor-link-text-color);
+  }
+
   :host(:not([disabled])) .editor:focus,
   :host(:not([disabled])[active]) .editor,
   :host(:not([disabled])[has-format-selection]) .editor {
-    outline: 2px solid var(--highlight);
+    outline: 2px solid var(--ui-editor-highlight);
     outline-offset: 2px;
   }
 

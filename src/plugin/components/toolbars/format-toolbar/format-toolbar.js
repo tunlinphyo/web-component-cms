@@ -1,5 +1,5 @@
 import { LitElement, html } from "lit";
-import { DEFAULT_BACKGROUND_COLOR, DEFAULT_TEXT_COLOR } from "../../../utils/colors.js";
+import { DEFAULT_TEXT_COLOR } from "../../../utils/colors.js";
 import { FEATURES, isFeatureEnabled } from "../../../registries/formatter-registry.js";
 import { formatToolbarStyles } from "./format-toolbar.styles.js";
 
@@ -271,10 +271,7 @@ export class FormatToolbar extends LitElement {
     this.#setValue("format-image-link-target", format?.target ?? "_self");
     this.#setValue("format-text-color", toHex(format?.color, DEFAULT_TEXT_COLOR));
     this.#setValue("format-text-color-palette", toHex(format?.color, DEFAULT_TEXT_COLOR));
-    this.#setValue(
-      "format-icon-background-color",
-      toHex(format?.backgroundColor, DEFAULT_BACKGROUND_COLOR),
-    );
+    this.#setValue("format-icon-background-color", format?.backgroundColor ?? "");
     this.#setValue("image-background-color", format?.backgroundColor ?? "");
     this.#setValue("image-border-width", format?.borderWidth ?? "");
     this.#setValue("image-border-color", format?.borderColor ?? "");
@@ -395,6 +392,7 @@ export class FormatToolbar extends LitElement {
 }
 
 function toHex(color, fallback) {
+  if (/^var\(/i.test(color?.trim())) return color.trim();
   if (/^#[\da-f]{6}$/i.test(color)) return color.toLowerCase();
 
   const values = color?.match(/\d+/g);

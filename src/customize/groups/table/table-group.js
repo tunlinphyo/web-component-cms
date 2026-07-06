@@ -1,6 +1,7 @@
 import { html } from "lit";
 import { GroupBase } from "@/ui-editor";
 import { decoratedTitleStyles, renderDecoratedTitle } from "../shared/decorated-title.js";
+import { emptyText } from "../shared/text-defaults.js";
 import { tableGroupStyles } from "./table-group.styles.js";
 
 export class TableGroup extends GroupBase {
@@ -12,14 +13,14 @@ export class TableGroup extends GroupBase {
         id: "title",
         type: "inline-text",
         elementType: "h2",
-        value: "",
+        ...emptyText,
         textAlign: "left",
         fontWeight: "",
       },
       {
         id: "description",
         type: "p",
-        value: "",
+        ...emptyText,
         textAlign: "left",
         fontWeight: "",
       },
@@ -27,9 +28,9 @@ export class TableGroup extends GroupBase {
         id: "table",
         type: "table",
         cells: [
-          ["", "", ""],
-          ["", "", ""],
-          ["", "", ""],
+          [createDefaultCell(), createDefaultCell(), createDefaultCell()],
+          [createDefaultCell(), createDefaultCell(), createDefaultCell()],
+          [createDefaultCell(), createDefaultCell(), createDefaultCell()],
         ],
         headerRow: true,
         headerColumn: false,
@@ -63,3 +64,7 @@ export class TableGroup extends GroupBase {
 }
 
 TableGroup.define("table-group");
+
+function createDefaultCell() {
+  return { ...emptyText };
+}

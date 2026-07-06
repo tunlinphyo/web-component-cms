@@ -1,6 +1,7 @@
 import { html } from "lit";
 import { GroupBase } from "@/ui-editor";
 import { groupStyles } from "./hero-group.style.js";
+import { emptyText } from "../shared/text-defaults.js";
 
 export class HeroGroup extends GroupBase {
   static styles = [GroupBase.styles, groupStyles];
@@ -11,13 +12,13 @@ export class HeroGroup extends GroupBase {
         id: "title",
         type: "inline-text",
         elementType: "h1",
-        value: "",
+        ...emptyText,
         textAlign: "left",
       },
       {
         id: "description",
         type: "p",
-        value: "",
+        ...emptyText,
         textAlign: "left",
       },
       {

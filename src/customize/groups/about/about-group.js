@@ -2,6 +2,7 @@ import { html } from "lit";
 import { GroupBase } from "@/ui-editor";
 import { groupStyles } from "./about-group.style.js";
 import { decoratedTitleStyles, renderDecoratedTitle } from "../shared/decorated-title.js";
+import { emptyText } from "../shared/text-defaults.js";
 
 export class AboutGroup extends GroupBase {
   static styles = [GroupBase.styles, decoratedTitleStyles, groupStyles];
@@ -12,14 +13,14 @@ export class AboutGroup extends GroupBase {
         id: "title",
         type: "inline-text",
         elementType: "h2",
-        value: "",
+        ...emptyText,
         textAlign: "left",
         fontWeight: "",
       },
       {
         id: "description",
         type: "p",
-        value: "",
+        ...emptyText,
         textAlign: "left",
         fontWeight: "",
       },

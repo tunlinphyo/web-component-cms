@@ -25,7 +25,7 @@ export function normalizeCells(cells) {
 
 export function createCell() {
   return {
-    value: "",
+    children: [],
     textAlign: "left",
     fontWeight: "",
     fontSize: "",
@@ -34,11 +34,10 @@ export function createCell() {
 }
 
 export function normalizeCell(cell) {
-  if (typeof cell === "string") return { ...createCell(), value: cell };
   if (!cell || typeof cell !== "object" || Array.isArray(cell)) return createCell();
 
   return {
-    value: typeof cell.value === "string" ? cell.value : "",
+    children: Array.isArray(cell.children) ? cell.children : [],
     textAlign: typeof cell.textAlign === "string" ? cell.textAlign : "left",
     fontWeight: typeof cell.fontWeight === "string" ? cell.fontWeight : "",
     fontSize: typeof cell.fontSize === "string" ? cell.fontSize : "",

@@ -8,25 +8,26 @@ import {
   getEditorSelection,
   initializeEditor,
   placeCaretInEmptyEditor,
-  setDefaultParagraphSeparator,
   updateEditorEmptyState,
   updateEditorPlaceholder,
 } from "./text-editor-dom.js";
 import { applySelectionCommand, describeSelectionFormat } from "./text-formatting.js";
 import {
+  deserializeTextChildren,
   insertPlainText,
   insertPlainTextAsParagraphs,
   isSelectionInside,
+  normalizeBlockContent,
   removeLinkSelectionPreview,
   selectRange,
-  serializeHtml,
+  serializeTextChildren,
 } from "./text-utils.js";
 import { resolveSupportedFeatures } from "./text-capabilities.js";
 
 export class TextBlockBase extends LitElement {
   static properties = {
     blockId: { type: String, attribute: "block-id", reflect: true },
-    value: { type: String, reflect: true },
+    textChildren: { state: true },
     placeholder: { type: String },
     disabled: { type: Boolean, reflect: true },
     predefinedMargin: { type: String, attribute: "predefined-margin", reflect: true },
@@ -43,7 +44,7 @@ export class TextBlockBase extends LitElement {
   constructor() {
     super();
     this.blockId = "";
-    this.value = "";
+    this.textChildren = [];
     this.placeholder = "";
     this.disabled = false;
     this.predefinedMargin = "0.5rem";
@@ -76,7 +77,7 @@ export class TextBlockBase extends LitElement {
     if (changedProperties.has("predefinedMargin")) {
       this.style.setProperty("--predefined-margin", this.predefinedMargin || "0.5rem");
     }
-    const contentChanged = changedProperties.has("value");
+    const contentChanged = changedProperties.has("textChildren");
     const presentationChanged =
       changedProperties.has("textAlign") ||
       changedProperties.has("fontWeight") ||
@@ -117,7 +118,7 @@ export class TextBlockBase extends LitElement {
       if (!editor) return;
 
       initializeEditor(editor, {
-        value: this.value,
+        value: this.getEditorValue(),
         type: this.type,
         placeholder: this.placeholder,
         textAlign: this.textAlign,
@@ -148,11 +149,12 @@ export class TextBlockBase extends LitElement {
 
   serializeBlock(typeData) {
     const editor = this.editorElement;
-    const value = editor && serializeHtml(editor.innerHTML);
 
     return {
       id: this.blockId,
-      value: value ?? serializeHtml(this.value, false),
+      children: editor
+        ? serializeTextChildren(editor, { paragraphMode: this.paragraphMode })
+        : this.textChildren,
       ...typeData,
       textAlign: editor?.style.textAlign || this.textAlign || "left",
       fontWeight: editor?.style.fontWeight || this.fontWeight || "",
@@ -160,6 +162,13 @@ export class TextBlockBase extends LitElement {
       fontFamily: editor?.style.fontFamily || this.fontFamily || "",
       predefinedMargin: this.predefinedMargin,
     };
+  }
+
+  getEditorValue() {
+    return normalizeBlockContent(
+      deserializeTextChildren(this.textChildren, { paragraphMode: this.paragraphMode }),
+      this.paragraphMode ? "p" : "h1",
+    );
   }
 
   captureSelection({ preserve = false } = {}) {
@@ -296,7 +305,6 @@ export class TextBlockBase extends LitElement {
   }
 
   _handleFocus = (event) => {
-    setDefaultParagraphSeparator();
     placeCaretInEmptyEditor(event.currentTarget, this.editorSelection);
   };
 

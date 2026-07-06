@@ -28,7 +28,7 @@ const buttonStyles = css`
   }
 
   button:not(:disabled):focus-visible {
-    outline: 2px solid var(--highlight);
+    outline: 2px solid var(--ui-editor-highlight);
     outline-offset: 2px;
   }
 `;

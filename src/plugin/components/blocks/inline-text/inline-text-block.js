@@ -1,13 +1,12 @@
 import { TextBlockBase } from "../text/text-block-base.js";
 import {
   captureEditorState,
+  insertEditorLineBreak,
   normalizeEditorInput,
   restoreEditorState,
   syncEditorFromProperties,
 } from "../text/text-editor-dom.js";
 import {
-  convertBlockTypeContent,
-  normalizeBlockContent,
   normalizeBlockType,
 } from "../text/text-utils.js";
 import { ENTER_ACTIONS, getEnterAction } from "../text/text-keyboard.js";
@@ -27,15 +26,12 @@ export class InlineTextBlock extends TextBlockBase {
   }
 
   init(options = {}) {
-    const { value = "", type = "p", elementType, fontSize = "" } = options;
+    const { children = [], type = "p", elementType, fontSize = "" } = options;
     const legacyType = normalizeBlockType(type);
 
     this.applyCommonOptions(options);
     this.type = normalizeBlockType(elementType ?? legacyType);
-    this.value =
-      type !== "inline-text" && legacyType === "p"
-        ? convertBlockTypeContent(value, "p", "h1")
-        : normalizeBlockContent(value, "h1");
+    this.textChildren = Array.isArray(children) ? children : [];
     this.fontSize = fontSize;
     this.initializeEditorAfterUpdate();
     return this;
@@ -83,7 +79,7 @@ export class InlineTextBlock extends TextBlockBase {
     });
     if (action === ENTER_ACTIONS.unsupported) return;
 
-    document.execCommand("insertLineBreak");
+    insertEditorLineBreak(this.editorSelection);
     void this.updateComplete.then(() => this.notifySelection());
   }
 
@@ -96,7 +92,7 @@ export class InlineTextBlock extends TextBlockBase {
     if (!editor || this.renderRoot.activeElement === editor) return;
 
     syncEditorFromProperties(editor, {
-      value: preserveContent ? editor.innerHTML : this.value,
+      value: preserveContent ? editor.innerHTML : this.getEditorValue(),
       type: this.type,
       paragraphMode: false,
       textAlign: this.textAlign,

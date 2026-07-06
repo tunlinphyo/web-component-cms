@@ -1,8 +1,8 @@
 import { css } from "lit";
 
 export const markStyles = css`
-  mark {
-    --mark-highlight-color: var(--mark);
+  .text-mark {
+    --mark-highlight-color: var(--ui-editor-mark);
     --mark-background-size: var(--mark-default-background-size, 100%);
 
     padding: var(--mark-default-padding, 0 0.25rem);
@@ -15,14 +15,14 @@ export const markStyles = css`
     background-size: var(--mark-background-size);
   }
 
-  mark.mark-primary {
+  .text-mark.mark-primary {
     --mark-background-size: var(--mark-primary-background-size, 70%);
 
     padding: var(--mark-primary-padding, 0);
     border-radius: var(--mark-primary-border-radius, 0);
   }
 
-  mark.mark-secondary {
+  .text-mark.mark-secondary {
     --mark-background-size: var(--mark-secondary-background-size, 40%);
 
     padding: var(--mark-secondary-padding, 0);

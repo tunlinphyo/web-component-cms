@@ -1,443 +1,190 @@
 {
-    "version": 1,
-    "groups": [
+  "version": 1,
+  "groups": [
+    {
+      "id": "4e3b8fd3-4fda-41dd-9831-c6c706796bf2",
+      "type": "home-news",
+      "sort": 0,
+      "style": {},
+      "blocks": [
         {
-            "id": "e3c337fb-dd4b-4d88-8bc3-4b856e058a86",
-            "type": "header",
-            "sort": 0,
-            "style": {
-                "backgroundColor": "#fef0f4"
+          "id": "title",
+          "children": [
+            {
+              "text": "Breaking",
+              "marks": {
+                "color": "var(--green-1000)"
+              }
             },
-            "blocks": [
-                {
-                    "id": "title",
-                    "value": "<b><span style=\"font-size: 14px;\"><font color=\"#d6295a\">Test website for Testing</font><font color=\"#0c430d\"></font></span></b>",
-                    "type": "inline-text",
-                    "elementType": "p",
-                    "textAlign": "left",
-                    "fontFamily": "var(--font-body)",
-                    "predefinedMargin": "0"
-                },
-                {
-                    "id": "logo",
-                    "src": "/images/logo-h.png",
-                    "alt": "logo-h.png",
-                    "objectFit": "contain",
-                    "align": "left",
-                    "target": "_self",
-                    "disabled": false,
-                    "type": "image"
-                },
-                {
-                    "id": "navs",
-                    "type": "navs",
-                    "children": [
-                        {
-                            "id": "aec1ba51bdc2",
-                            "text": "Stores",
-                            "design": "nav",
-                            "icon": "storefront",
-                            "iconPosition": "start",
-                            "target": "_self",
-                            "tag": "button",
-                            "align": "left",
-                            "disabled": false,
-                            "type": "button",
-                            "sort": 0
-                        },
-                        {
-                            "id": "618ecbc2a368",
-                            "text": "Promotion",
-                            "design": "nav",
-                            "icon": "percent_discount",
-                            "iconPosition": "start",
-                            "target": "_self",
-                            "tag": "button",
-                            "align": "left",
-                            "disabled": false,
-                            "type": "button",
-                            "sort": 1
-                        },
-                        {
-                            "id": "9e8bc318d097",
-                            "text": "QAndA",
-                            "design": "nav",
-                            "icon": "help",
-                            "iconPosition": "start",
-                            "target": "_self",
-                            "tag": "button",
-                            "align": "left",
-                            "disabled": false,
-                            "type": "button",
-                            "sort": 2
-                        }
-                    ]
-                },
-                {
-                    "id": "button",
-                    "text": "Partner",
-                    "design": "dark",
-                    "iconPosition": "none",
-                    "target": "_self",
-                    "tag": "button",
-                    "align": "left",
-                    "disabled": false,
-                    "type": "button"
-                }
-            ]
-        },
-        {
-            "id": "b40bd576-00ee-414f-b9a7-8bce726f0908",
-            "type": "hero",
-            "sort": 1,
-            "style": {
-                "backgroundColor": "#fef0f4"
+            {
+              "text": " "
             },
-            "blocks": [
-                {
-                    "id": "title",
-                    "value": "<font color=\"#d6295a\">Website Description</font>",
-                    "type": "inline-text",
-                    "elementType": "h1",
-                    "textAlign": "left",
-                    "fontSize": "40px",
-                    "fontFamily": "var(--font-heading)",
-                    "predefinedMargin": "0.5rem"
-                },
-                {
-                    "id": "description",
-                    "value": "<p><span style=\"font-size: 24px;\"><b>Pulvinar vivamus fringilla lacus nec metus bibendum egestas.</b></span></p>",
-                    "type": "p",
-                    "textAlign": "left",
-                    "fontFamily": "var(--font-body)",
-                    "predefinedMargin": "0.5rem"
-                },
-                {
-                    "id": "icon-1",
-                    "icon": "calendar_today",
-                    "fontSize": "20px",
-                    "color": "#ffffff",
-                    "backgroundColor": "#2684ff",
-                    "align": "left",
-                    "type": "icon"
-                },
-                {
-                    "id": "icon-2",
-                    "icon": "featured_seasonal_and_gifts",
-                    "fontSize": "20px",
-                    "color": "#ffffff",
-                    "backgroundColor": "#e8426e",
-                    "align": "left",
-                    "type": "icon"
-                },
-                {
-                    "id": "icon-3",
-                    "icon": "storefront",
-                    "fontSize": "20px",
-                    "color": "#ffffff",
-                    "backgroundColor": "#cc9a06",
-                    "align": "left",
-                    "type": "icon"
-                },
-                {
-                    "id": "image",
-                    "src": "/images/app.png",
-                    "alt": "app.png",
-                    "objectFit": "contain",
-                    "align": "left",
-                    "target": "_self",
-                    "disabled": false,
-                    "type": "image"
-                }
-            ]
+            {
+              "text": "News",
+              "marks": {
+                "color": "var(--yellow-1000)"
+              }
+            }
+          ],
+          "type": "inline-text",
+          "elementType": "h2",
+          "textAlign": "left",
+          "fontFamily": "var(--font-heading)",
+          "predefinedMargin": "0"
         },
         {
-            "id": "8bf96176-6527-43f6-a598-fe405d8e0a8d",
-            "type": "home-news",
-            "sort": 2,
-            "style": {},
-            "blocks": [
+          "id": "news",
+          "type": "news",
+          "children": [
+            {
+              "id": "news-1",
+              "type": "news",
+              "sort": 0,
+              "style": {
+                "backgroundColor": "var(--green-50)",
+                "borderWidth": "1px",
+                "borderColor": "var(--green-200)",
+                "borderStyle": "solid",
+                "borderRadius": "16px"
+              },
+              "blocks": [
                 {
-                    "id": "title",
-                    "value": "<font color=\"#d6295a\">News</font>",
-                    "type": "inline-text",
-                    "elementType": "h2",
-                    "textAlign": "left",
-                    "fontFamily": "var(--font-heading)",
-                    "predefinedMargin": "0"
+                  "id": "date",
+                  "children": [
+                    {
+                      "text": "January 24",
+                      "marks": {
+                        "color": "var(--green-900)"
+                      }
+                    }
+                  ],
+                  "type": "inline-text",
+                  "elementType": "h2",
+                  "textAlign": "left",
+                  "fontSize": "24px",
+                  "fontFamily": "var(--font-shiokaze)",
+                  "predefinedMargin": "0.5rem"
                 },
                 {
-                    "id": "news",
-                    "type": "news",
-                    "children": [
+                  "id": "title",
+                  "children": [
+                    {
+                      "text": "Hello World",
+                      "marks": {
+                        "color": "var(--green-900)"
+                      }
+                    }
+                  ],
+                  "type": "inline-text",
+                  "elementType": "h2",
+                  "textAlign": "left",
+                  "fontSize": "20px",
+                  "fontFamily": "var(--font-heading)",
+                  "predefinedMargin": "0.5rem"
+                },
+                {
+                  "id": "description",
+                  "children": [
+                    {
+                      "type": "paragraph",
+                      "children": [
                         {
-                            "id": "news-1",
-                            "type": "news",
-                            "sort": 0,
-                            "style": {
-                                "borderWidth": "1px",
-                                "borderColor": "#F2ADC0",
-                                "borderStyle": "solid",
-                                "borderRadius": "16px"
-                            },
-                            "blocks": [
-                                {
-                                    "id": "date",
-                                    "value": "<font color=\"#d6295a\">January 2 </font>",
-                                    "type": "inline-text",
-                                    "elementType": "h2",
-                                    "textAlign": "left",
-                                    "fontWeight": "normal",
-                                    "fontSize": "24px",
-                                    "fontFamily": "var(--font-shiokaze)",
-                                    "predefinedMargin": "0.5rem"
-                                },
-                                {
-                                    "id": "title",
-                                    "value": "<font color=\"#d6295a\">Google News</font>",
-                                    "type": "inline-text",
-                                    "elementType": "h2",
-                                    "textAlign": "left",
-                                    "fontSize": "20px",
-                                    "fontFamily": "var(--font-body)",
-                                    "predefinedMargin": "0.5rem"
-                                },
-                                {
-                                    "id": "description",
-                                    "value": "<p>Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p>",
-                                    "type": "p",
-                                    "textAlign": "left",
-                                    "fontFamily": "var(--font-body)",
-                                    "predefinedMargin": "0.5rem"
-                                }
-                            ]
+                          "text": "Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl ",
+                          "marks": {
+                            "color": "var(--green-1000)"
+                          }
                         },
                         {
-                            "id": "news-2",
-                            "type": "news",
-                            "sort": 1,
-                            "style": {
-                                "backgroundColor": "#fef0f4",
-                                "borderWidth": "1px",
-                                "borderColor": "#f2adc0",
-                                "borderStyle": "solid",
-                                "borderRadius": "16px"
-                            },
-                            "blocks": [
-                                {
-                                    "id": "date",
-                                    "value": "<font color=\"#d6295a\">March 28</font>",
-                                    "type": "inline-text",
-                                    "elementType": "h2",
-                                    "textAlign": "left",
-                                    "fontWeight": "normal",
-                                    "fontSize": "24px",
-                                    "fontFamily": "var(--font-shiokaze)",
-                                    "predefinedMargin": "0.5rem"
-                                },
-                                {
-                                    "id": "title",
-                                    "value": "<font color=\"#d6295a\">Apple News</font>",
-                                    "type": "inline-text",
-                                    "elementType": "h2",
-                                    "textAlign": "left",
-                                    "fontSize": "20px",
-                                    "fontFamily": "var(--font-body)",
-                                    "predefinedMargin": "0.5rem"
-                                },
-                                {
-                                    "id": "description",
-                                    "value": "<p><font color=\"#0c430d\"></font>Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.<font color=\"#0c430d\"></font></p>",
-                                    "type": "p",
-                                    "textAlign": "left",
-                                    "fontFamily": "var(--font-body)",
-                                    "predefinedMargin": "0.5rem"
-                                }
-                            ]
+                          "text": "malesuada lacinia integer",
+                          "marks": {
+                            "color": "var(--green-1000)",
+                            "link": "https://google.com",
+                            "target": "_blank"
+                          }
+                        },
+                        {
+                          "text": " nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. ",
+                          "marks": {
+                            "color": "var(--green-1000)"
+                          }
                         }
-                    ]
+                      ]
+                    }
+                  ],
+                  "type": "p",
+                  "textAlign": "left",
+                  "fontFamily": "var(--font-body)",
+                  "predefinedMargin": "0.5rem"
                 }
-            ]
-        },
-        {
-            "id": "e9fcf1ae-6cae-42f1-85ff-78072db6d0ff",
-            "type": "image",
-            "sort": 3,
-            "style": {},
-            "blocks": [
+              ]
+            },
+            {
+              "id": "news-2",
+              "type": "news",
+              "sort": 1,
+              "style": {
+                "borderWidth": "1px",
+                "borderColor": "var(--green-200)",
+                "borderStyle": "solid",
+                "borderRadius": "16px"
+              },
+              "blocks": [
                 {
-                    "id": "image",
-                    "src": "/images/hokupay2.jpg",
-                    "alt": "hokupay2.jpg",
-                    "objectFit": "none",
-                    "align": "left",
-                    "target": "_self",
-                    "backgroundColor": "#f0f0f0",
-                    "disabled": false,
-                    "type": "image"
+                  "id": "date",
+                  "children": [
+                    {
+                      "text": "March 31",
+                      "marks": {
+                        "color": "var(--green-900)"
+                      }
+                    }
+                  ],
+                  "type": "inline-text",
+                  "elementType": "h2",
+                  "textAlign": "left",
+                  "fontSize": "24px",
+                  "fontFamily": "var(--font-shiokaze)",
+                  "predefinedMargin": "0.5rem"
+                },
+                {
+                  "id": "title",
+                  "children": [
+                    {
+                      "text": "What up",
+                      "marks": {
+                        "color": "var(--green-900)"
+                      }
+                    }
+                  ],
+                  "type": "inline-text",
+                  "elementType": "h2",
+                  "textAlign": "left",
+                  "fontSize": "20px",
+                  "fontFamily": "var(--font-heading)",
+                  "predefinedMargin": "0.5rem"
+                },
+                {
+                  "id": "description",
+                  "children": [
+                    {
+                      "type": "paragraph",
+                      "children": [
+                        {
+                          "text": "Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis."
+                        }
+                      ]
+                    }
+                  ],
+                  "type": "p",
+                  "textAlign": "left",
+                  "fontFamily": "var(--font-body)",
+                  "predefinedMargin": "0.5rem"
                 }
-            ]
-        },
-        {
-            "id": "a0d07c45-bf34-4828-8804-8a5d33cfb0ea",
-            "type": "table",
-            "sort": 4,
-            "style": {},
-            "blocks": [
-                {
-                    "id": "title",
-                    "value": "<font color=\"#d6295a\">Table</font>",
-                    "type": "inline-text",
-                    "elementType": "h2",
-                    "textAlign": "center",
-                    "fontFamily": "var(--font-heading)",
-                    "predefinedMargin": "0"
-                },
-                {
-                    "id": "description",
-                    "value": "<p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. </p><p>Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p>",
-                    "type": "p",
-                    "textAlign": "left",
-                    "fontFamily": "var(--font-body)",
-                    "predefinedMargin": "0.5rem"
-                },
-                {
-                    "id": "table",
-                    "type": "table",
-                    "cells": [
-                        [
-                            {
-                                "value": "<p>One</p>",
-                                "textAlign": "left",
-                                "fontFamily": "var(--font-body)"
-                            },
-                            {
-                                "value": "<p>Two</p>",
-                                "textAlign": "left",
-                                "fontFamily": "var(--font-body)"
-                            },
-                            {
-                                "value": "<p>Three</p>",
-                                "textAlign": "left",
-                                "fontFamily": "var(--font-body)"
-                            }
-                        ],
-                        [
-                            {
-                                "value": "<p>apple</p>",
-                                "textAlign": "left",
-                                "fontFamily": "var(--font-body)"
-                            },
-                            {
-                                "value": "<p>mango</p>",
-                                "textAlign": "left",
-                                "fontFamily": "var(--font-body)"
-                            },
-                            {
-                                "value": "<p>orange</p>",
-                                "textAlign": "left",
-                                "fontFamily": "var(--font-body)"
-                            }
-                        ],
-                        [
-                            {
-                                "value": "<p>banana</p>",
-                                "textAlign": "left",
-                                "fontFamily": "var(--font-body)"
-                            },
-                            {
-                                "value": "<p>lime</p>",
-                                "textAlign": "left",
-                                "fontFamily": "var(--font-body)"
-                            },
-                            {
-                                "value": "<p>pineapple</p>",
-                                "textAlign": "left",
-                                "fontFamily": "var(--font-body)"
-                            }
-                        ]
-                    ],
-                    "headerRow": true,
-                    "headerColumn": false,
-                    "headerBackgroundColor": "#ec83a1",
-                    "bodyBackgroundColor": "#fef0f4",
-                    "borderWidth": "1px",
-                    "borderColor": "#FFFFFF",
-                    "borderStyle": "solid",
-                    "disabled": false
-                }
-            ]
-        },
-        {
-            "id": "0803c542-54ef-446e-a8af-e11b9b36f008",
-            "type": "about",
-            "sort": 5,
-            "style": {},
-            "blocks": [
-                {
-                    "id": "title",
-                    "value": "<font color=\"#d6295a\">Paragraph</font>",
-                    "type": "inline-text",
-                    "elementType": "h2",
-                    "textAlign": "left",
-                    "fontFamily": "var(--font-heading)",
-                    "predefinedMargin": "0"
-                },
-                {
-                    "id": "description",
-                    "value": "<p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p><p>Lorem ipsum dolor sit amet consectetur adipiscing elit. <mark style=\"--mark-highlight-color: #FFC107;\">Quisque faucibus ex sapien vitae pellentesque sem placerat.</mark> In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p><p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p>",
-                    "type": "p",
-                    "textAlign": "left",
-                    "fontFamily": "var(--font-body)",
-                    "predefinedMargin": "0.5rem"
-                }
-            ]
-        },
-        {
-            "id": "1f309b6c-04bd-4c94-8ae6-8fe511b1ed0f",
-            "type": "footer",
-            "sort": 6,
-            "style": {},
-            "blocks": [
-                {
-                    "id": "logo",
-                    "src": "/images/logo-v.png",
-                    "alt": "logo-v.png",
-                    "objectFit": "contain",
-                    "align": "start",
-                    "target": "_self",
-                    "disabled": false,
-                    "type": "image"
-                },
-                {
-                    "id": "logo2",
-                    "src": "/images/kita-city.png",
-                    "alt": "kita-city.png",
-                    "objectFit": "contain",
-                    "align": "start",
-                    "target": "_self",
-                    "disabled": false,
-                    "type": "image"
-                },
-                {
-                    "id": "logo3",
-                    "src": "/images/beyond.png",
-                    "alt": "beyond.png",
-                    "objectFit": "contain",
-                    "align": "start",
-                    "target": "_self",
-                    "disabled": false,
-                    "type": "image"
-                },
-                {
-                    "id": "copyright",
-                    "value": "<p><span style=\"font-size: 14px;\"><font color=\"#d6295a\">copyright@ 2026</font></span></p>",
-                    "type": "p",
-                    "textAlign": "left",
-                    "fontFamily": "var(--font-body)",
-                    "predefinedMargin": "0"
-                }
-            ]
+              ]
+            }
+          ]
         }
-    ]
+      ]
+    }
+  ]
 }

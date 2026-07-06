@@ -1,12 +1,14 @@
 import { TextBlockBase } from "../text/text-block-base.js";
 import {
+  insertEditorLineBreak,
+  insertEditorParagraph,
   normalizeEditorInput,
   normalizeEditorParagraphs,
   syncEditorFromProperties,
 } from "../text/text-editor-dom.js";
 import { PARAGRAPH_RICH_TEXT_FEATURES } from "./rich-text-capabilities.js";
 import { ENTER_ACTIONS, getEnterAction } from "../text/text-keyboard.js";
-import { getSelectedAncestor, normalizeBlockContent } from "../text/text-utils.js";
+import { getSelectedAncestor } from "../text/text-utils.js";
 
 export class RichTextBlock extends TextBlockBase {
   get paragraphMode() {
@@ -22,11 +24,11 @@ export class RichTextBlock extends TextBlockBase {
   }
 
   init(options = {}) {
-    const { value = "" } = options;
+    const { children = [] } = options;
 
     this.applyCommonOptions(options);
     this.type = "p";
-    this.value = normalizeBlockContent(value, "p");
+    this.textChildren = Array.isArray(children) ? children : [];
     this.fontSize = "";
     this.initializeEditorAfterUpdate();
     return this;
@@ -49,9 +51,11 @@ export class RichTextBlock extends TextBlockBase {
 
     event.preventDefault();
     const action = getEnterAction({ shiftKey: event.shiftKey });
-    document.execCommand(
-      action === ENTER_ACTIONS.paragraph ? "insertParagraph" : "insertLineBreak",
-    );
+    if (action === ENTER_ACTIONS.paragraph) {
+      insertEditorParagraph(event.currentTarget, this.editorSelection);
+    } else {
+      insertEditorLineBreak(this.editorSelection);
+    }
     void this.updateComplete.then(() => {
       if (!this.editorElement) return;
 
@@ -69,7 +73,7 @@ export class RichTextBlock extends TextBlockBase {
     if (!editor || this.renderRoot.activeElement === editor) return;
 
     syncEditorFromProperties(editor, {
-      value: preserveContent ? editor.innerHTML : this.value,
+      value: preserveContent ? editor.innerHTML : this.getEditorValue(),
       type: "p",
       paragraphMode: true,
       textAlign: this.textAlign,

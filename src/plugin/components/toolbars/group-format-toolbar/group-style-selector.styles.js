@@ -114,7 +114,7 @@ export const groupStyleSelectorStyles = css`
   }
 
   .border-style-option[aria-pressed="true"] {
-    outline: 2px solid #2684ff;
+    outline: 2px solid var(--ui-editor-highlight);
     outline-offset: 0;
   }
 
@@ -139,7 +139,7 @@ export const groupStyleSelectorStyles = css`
   }
 
   .border-position-option[aria-pressed="true"] {
-    background: var(--highlight);
+    background: var(--ui-editor-highlight);
     color: var(--white);
   }
 

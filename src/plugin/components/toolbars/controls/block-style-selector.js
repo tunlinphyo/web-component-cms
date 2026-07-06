@@ -15,7 +15,7 @@ export class BlockStyleSelector extends PickerPopoverControl {
       return options;
     }
 
-    return [{ value: this.value, label: `Custom (${this.value})` }, ...options];
+    return [{ value: this.value, label: `Default` }, ...options];
   }
 
   dispatchValueChange(value) {

@@ -22,7 +22,7 @@ test("accepts serialized inline text with a separate element type", () => {
       id: "title",
       type: "inline-text",
       elementType: "h2",
-      value: "Title",
+      children: [{ text: "Title" }],
     }),
   );
 
@@ -34,7 +34,7 @@ test("rejects inline text without a supported element type", () => {
     createPage({
       id: "title",
       type: "inline-text",
-      value: "Title",
+      children: [{ text: "Title" }],
     }),
   );
 

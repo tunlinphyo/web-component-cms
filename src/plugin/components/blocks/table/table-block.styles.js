@@ -6,7 +6,7 @@ export const tableBlockStyles = css`
   }
 
   :host([selected-axis="table"]) {
-    outline: 2px solid var(--highlight);
+    outline: 2px solid var(--ui-editor-highlight);
     outline-offset: 2px;
   }
 
@@ -74,7 +74,7 @@ export const tableBlockStyles = css`
   }
 
   button:not(:disabled):is(:hover, :focus-visible) {
-    outline: 2px solid var(--highlight);
+    outline: 2px solid var(--ui-editor-highlight);
     outline-offset: 0;
   }
 
@@ -91,8 +91,8 @@ export const tableBlockStyles = css`
   }
 
   .selection-popup button:not(:disabled):is(:hover, :focus-visible) {
-    background-color: var(--highlight);
-    border-color: var(--highlight);
+    background-color: var(--ui-editor-highlight);
+    border-color: var(--ui-editor-highlight);
     outline: none;
     color: var(--white);
   }
@@ -122,8 +122,8 @@ export const tableBlockStyles = css`
   }
 
   .table-selector[aria-pressed="true"] {
-    border-color: var(--highlight);
-    background: var(--highlight);
+    border-color: var(--ui-editor-highlight);
+    background: var(--ui-editor-highlight);
     color: white;
   }
 
@@ -169,7 +169,7 @@ export const tableBlockStyles = css`
   th.selected,
   td.selected {
     background: #89dcf8;
-    box-shadow: inset 0 0 0 2px var(--highlight);
+    box-shadow: inset 0 0 0 2px var(--ui-editor-highlight);
   }
 
   .cell-content {
@@ -190,8 +190,8 @@ export const tableBlockStyles = css`
 
   .axis-selector[aria-pressed="true"] {
     anchor-name: --table-axis-trigger;
-    border-color: var(--highlight);
-    background: var(--highlight);
+    border-color: var(--ui-editor-highlight);
+    background: var(--ui-editor-highlight);
     color: white;
   }
 

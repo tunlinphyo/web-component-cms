@@ -55,7 +55,7 @@ export class JsonDisplay extends LitElement {
       }
 
       button:is(:hover, :focus-visible) {
-        outline: 2px solid var(--highlight);
+        outline: 2px solid var(--ui-editor-highlight);
       }
 
       pre {

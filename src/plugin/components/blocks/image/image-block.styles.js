@@ -16,8 +16,8 @@ export const imageBlockStyles = css`
 
   .image {
     display: block;
-    max-height: 100%;
-    max-width: 100%;
+    height: 100%;
+    width: 100%;
   }
 
   .picker {
@@ -43,7 +43,7 @@ export const imageBlockStyles = css`
 
   .picker:focus-visible,
   :host([active]) .picker {
-    outline: 2px solid var(--highlight);
+    outline: 2px solid var(--ui-editor-highlight);
     outline-offset: 2px;
   }
 
@@ -74,7 +74,7 @@ export const imageBlockStyles = css`
   }
 
   button:not(:disabled):is(:hover, :focus-visible) {
-    outline: 2px solid var(--highlight);
+    outline: 2px solid var(--ui-editor-highlight);
     outline-offset: 0;
   }
 

@@ -25,10 +25,14 @@ export class FormatColor extends LitElement {
       ${this.label}
       <input
         type="color"
-        .value=${this.value}
+        .value=${toColorInputValue(this.value)}
         ?disabled=${this.disabled}
         @input=${(event) => this.apply(event)}
       />
     </label>`;
   }
+}
+
+function toColorInputValue(value) {
+  return /^#[\da-f]{6}$/i.test(value) ? value : "#000000";
 }

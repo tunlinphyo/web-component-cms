@@ -1,5 +1,6 @@
 import { html } from "lit";
 import { GroupBase } from "@/ui-editor";
+import { emptyText } from "../shared/text-defaults.js";
 import { footerGroupStyles } from "./footer-group.styles.js";
 
 export class FooterGroup extends GroupBase {
@@ -38,7 +39,7 @@ export class FooterGroup extends GroupBase {
       },
       {
         id: "copyright",
-        value: "",
+        ...emptyText,
         textAlign: "left",
         fontWeight: "",
         fontSize: "",

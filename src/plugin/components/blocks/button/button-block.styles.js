@@ -36,7 +36,7 @@ export const buttonBlockStyles = css`
 
   .button:focus-within,
   :host([active]) .button {
-    outline: 2px solid var(--highlight);
+    outline: 2px solid var(--ui-editor-highlight);
     outline-offset: 2px;
   }
 
@@ -97,7 +97,7 @@ export const buttonBlockStyles = css`
 
   .icon-picker-trigger:hover,
   .icon-picker-trigger:focus-visible {
-    outline: 2px solid var(--highlight);
+    outline: 2px solid var(--ui-editor-highlight);
     outline-offset: 1px;
   }
 

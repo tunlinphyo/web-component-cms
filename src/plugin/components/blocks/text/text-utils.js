@@ -133,6 +133,246 @@ export function serializeHtml(html, trimTrailingBreaks = true) {
   return removeTrailingEmptyParagraphs(serialized);
 }
 
+export function serializeTextChildren(source, { paragraphMode = false } = {}) {
+  const root = typeof source === "string" ? htmlToFragment(source) : source;
+  if (paragraphMode) return serializeParagraphChildren(root);
+
+  const children = [];
+
+  appendTextChildren(root, {}, children);
+  return mergeAdjacentTextChildren(children);
+}
+
+export function deserializeTextChildren(children, { paragraphMode = false } = {}) {
+  if (!Array.isArray(children)) return "";
+  if (paragraphMode) return deserializeParagraphChildren(children);
+
+  const output = document.createElement("div");
+  for (const child of children) {
+    if (!child || typeof child !== "object" || typeof child.text !== "string") continue;
+    output.append(createMarkedTextNodes(child.text, child.marks));
+  }
+
+  return output.innerHTML;
+}
+
+function serializeParagraphChildren(root) {
+  const paragraphs = [];
+  let pendingNodes = [];
+
+  for (const child of root.childNodes) {
+    if (child.nodeType === Node.ELEMENT_NODE && child.localName === "p") {
+      appendPendingParagraph(paragraphs, pendingNodes);
+      paragraphs.push(...createParagraphChildren(child));
+      pendingNodes = [];
+    } else if (child.nodeName === "BR") {
+      appendPendingParagraph(paragraphs, pendingNodes);
+      pendingNodes = [];
+    } else {
+      pendingNodes.push(child);
+    }
+  }
+
+  appendPendingParagraph(paragraphs, pendingNodes);
+  return paragraphs;
+}
+
+function appendPendingParagraph(paragraphs, nodes) {
+  if (!nodes.length) return;
+
+  const fragment = document.createDocumentFragment();
+  fragment.append(...nodes.map((node) => node.cloneNode(true)));
+  paragraphs.push(...createParagraphChildren(fragment));
+}
+
+function createParagraphChildren(source) {
+  return splitParagraphTextChildren(serializeTextChildren(source)).map((children) => ({
+    type: "paragraph",
+    children,
+  }));
+}
+
+function splitParagraphTextChildren(children) {
+  const paragraphs = [[]];
+
+  for (const child of children) {
+    const lines = child.text.split("\n");
+    for (const [index, text] of lines.entries()) {
+      if (index > 0) paragraphs.push([]);
+      if (text) paragraphs.at(-1).push({ ...child, text });
+    }
+  }
+
+  return paragraphs;
+}
+
+function deserializeParagraphChildren(children) {
+  const output = document.createElement("div");
+
+  for (const child of children) {
+    if (!child || typeof child !== "object") continue;
+
+    if (typeof child.text === "string") {
+      const paragraphChildren = createParagraphChildren(
+        createMarkedTextNodes(child.text, child.marks),
+      );
+      for (const paragraphChild of paragraphChildren) {
+        appendParagraphElement(output, paragraphChild.children);
+      }
+      continue;
+    }
+
+    if (!Array.isArray(child.children)) continue;
+    appendParagraphElement(output, child.children);
+  }
+
+  return output.innerHTML;
+}
+
+function appendParagraphElement(output, children) {
+  const paragraph = document.createElement("p");
+  paragraph.innerHTML = deserializeTextChildren(children);
+  output.append(paragraph);
+}
+
+function createMarkedTextNodes(text, marks = {}) {
+  const fragment = document.createDocumentFragment();
+  const textParts = text.split("\n");
+
+  for (const [index, part] of textParts.entries()) {
+    if (index > 0) fragment.append(document.createElement("br"));
+    if (!part) continue;
+
+    fragment.append(createMarkedTextNode(part, marks));
+  }
+
+  return fragment;
+}
+
+function createMarkedTextNode(text, marks = {}) {
+  let node = document.createTextNode(text);
+  const marksElement = createMarksElement(marks);
+
+  if (marksElement) {
+    marksElement.append(node);
+    node = marksElement;
+  }
+
+  if (typeof marks.link === "string" && marks.link) {
+    const link = document.createElement("a");
+    link.setAttribute("href", marks.link);
+    if (typeof marks.target === "string" && marks.target) link.setAttribute("target", marks.target);
+    link.append(node);
+    return link;
+  }
+
+  return node;
+}
+
+function createMarksElement(marks = {}) {
+  const element = document.createElement("span");
+
+  if (marks.bold) element.classList.add("text-bold");
+  if (marks.italic) element.classList.add("text-italic");
+  if (marks.underline) element.classList.add("text-underline");
+  if (typeof marks.color === "string" && marks.color) {
+    element.classList.add("text-color");
+    element.style.color = marks.color;
+  }
+  if (marks.highlight) {
+    element.classList.add("text-mark");
+    if (typeof marks.markStyle === "string" && marks.markStyle) {
+      const markStyle = normalizeTextClass(marks.markStyle);
+      if (markStyle) element.classList.add(markStyle);
+    }
+    if (typeof marks.backgroundColor === "string" && marks.backgroundColor) {
+      element.style.setProperty("--mark-highlight-color", marks.backgroundColor);
+    }
+  }
+
+  return element.attributes.length ? element : null;
+}
+
+function normalizeTextClass(className) {
+  return /^-?[_a-zA-Z]+[_a-zA-Z0-9-]*$/.test(className) ? className : "";
+}
+
+function htmlToFragment(html) {
+  const template = document.createElement("template");
+  template.innerHTML = html ?? "";
+  return template.content;
+}
+
+function appendTextChildren(node, inheritedMarks, children) {
+  for (const child of node.childNodes) {
+    if (child.nodeType === Node.TEXT_NODE) {
+      appendTextChild(children, child.textContent, inheritedMarks);
+    } else if (child.nodeName === "BR") {
+      appendTextChild(children, "\n", inheritedMarks);
+    } else if (child.nodeType === Node.ELEMENT_NODE) {
+      const marks = getElementMarks(child, inheritedMarks);
+      appendTextChildren(child, marks, children);
+      if (child.localName === "p") appendTextChild(children, "\n", inheritedMarks);
+    }
+  }
+}
+
+function getElementMarks(element, inheritedMarks) {
+  const marks = { ...inheritedMarks };
+
+  if (element.classList.contains("text-bold")) marks.bold = true;
+  if (element.classList.contains("text-italic")) marks.italic = true;
+  if (element.classList.contains("text-underline")) marks.underline = true;
+  if (element.classList.contains("text-color")) marks.color = element.style.color;
+  if (element.classList.contains("text-mark")) {
+    marks.highlight = true;
+    const markStyle = Array.from(element.classList).find((className) =>
+      className.startsWith("mark-"),
+    );
+    if (markStyle) marks.markStyle = markStyle;
+    if (element.style.getPropertyValue("--mark-highlight-color")) {
+      marks.backgroundColor = element.style.getPropertyValue("--mark-highlight-color");
+    }
+  }
+  if (element.localName === "a") {
+    marks.link = element.getAttribute("href") ?? "";
+    const target = element.getAttribute("target");
+    if (target) marks.target = target;
+  }
+
+  return marks;
+}
+
+function appendTextChild(children, text, marks) {
+  if (!text) return;
+
+  const child = { text };
+  if (Object.keys(marks).length) child.marks = marks;
+  children.push(child);
+}
+
+function mergeAdjacentTextChildren(children) {
+  const merged = [];
+
+  for (const child of children) {
+    const previous = merged.at(-1);
+    if (previous && marksMatch(previous.marks, child.marks)) {
+      previous.text += child.text;
+    } else {
+      merged.push(child);
+    }
+  }
+
+  const last = merged.at(-1);
+  if (last?.text === "\n") merged.pop();
+  else if (last?.text.endsWith("\n")) last.text = last.text.slice(0, -1);
+  return merged;
+}
+
+function marksMatch(first = null, second = null) {
+  return JSON.stringify(first ?? {}) === JSON.stringify(second ?? {});
+}
+
 const EMPTY_PARAGRAPH_PATTERN = String.raw`<p(?:\s[^>]*)?>\s*</p>`;
 
 function removeEmptyParagraphsAdjacentToLists(html) {
@@ -268,7 +508,12 @@ export function insertPlainText(selection, text) {
 }
 
 export function insertPlainTextAsParagraphs(editor, selection, text) {
-  const normalizedText = text.replace(/<br\s*\/?>/gi, "\n").replace(/\r\n?|\n/g, "\n");
+  const normalizedText = text
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/\r\n?|\n/g, "\n")
+    .split("\n")
+    .filter((line) => line.trim())
+    .join("\n");
   if (!selection?.rangeCount) return false;
 
   const range = selection.getRangeAt(0);
