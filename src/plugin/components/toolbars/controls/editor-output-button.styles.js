@@ -16,8 +16,8 @@ export const editorOutputButtonStyles = css`
   }
 
   button:hover {
-    background-color: var(--brand-600);
-    border-color: var( var(--ui-editor-primary));
+    background-color: var(--ui-editor-primary);
+    border-color: var(var(--ui-editor-primary));
   }
 
   button:focus-visible {

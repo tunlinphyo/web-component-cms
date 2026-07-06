@@ -6,9 +6,7 @@ import {
   restoreEditorState,
   syncEditorFromProperties,
 } from "../text/text-editor-dom.js";
-import {
-  normalizeBlockType,
-} from "../text/text-utils.js";
+import { normalizeBlockType } from "../text/text-utils.js";
 import { ENTER_ACTIONS, getEnterAction } from "../text/text-keyboard.js";
 import { INLINE_TEXT_FEATURES } from "./inline-text-capabilities.js";
 
@@ -79,7 +77,7 @@ export class InlineTextBlock extends TextBlockBase {
     });
     if (action === ENTER_ACTIONS.unsupported) return;
 
-    insertEditorLineBreak(this.editorSelection);
+    insertEditorLineBreak(this.editorSelection, event.currentTarget);
     void this.updateComplete.then(() => this.notifySelection());
   }
 

@@ -81,7 +81,7 @@ export const formatLinkStyles = css`
     border-radius: 0.5rem 0.2rem 0.2rem 0.5rem;
   }
   .btn-remove {
-    color: var(--brand-600);
+    color: var(--ui-editor-primary);
     border-radius: 0.2rem 0.5rem 0.5rem 0.2rem;
   }
 `;

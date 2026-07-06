@@ -58,11 +58,14 @@ const DEFAULT_FEATURES = {
     FEATURES.disabled,
   ],
   icon: [
-    FEATURES.align,
     FEATURES.fontSize,
     FEATURES.color,
     FEATURES.backgroundColor,
+    FEATURES.border,
+    FEATURES.borderRadius,
     FEATURES.link,
+    FEATURES.linkTarget,
+    FEATURES.disabled,
   ],
   table: [FEATURES.tableHeaders, FEATURES.backgroundColor, FEATURES.border],
 };

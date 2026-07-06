@@ -64,8 +64,8 @@ export const borderRadiusControlStyles = css`
   }
 
   .mode input:checked {
-    border-color: var(--brand-600);
-    background: var(--brand-600);
+    border-color: var(--ui-editor-primary);
+    background: var(--ui-editor-primary);
   }
 
   .mode input:checked::before {

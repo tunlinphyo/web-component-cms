@@ -23,6 +23,13 @@ const FORMATTERS = [
   "format-text-color",
   "format-text-color-palette",
   "format-icon-background-color",
+  "format-icon-link",
+  "format-icon-link-target",
+  "icon-border-width",
+  "icon-border-color",
+  "icon-border-style",
+  "icon-border-position",
+  "icon-border-radius",
   "image-background-color",
   "image-border-width",
   "image-border-color",
@@ -75,6 +82,21 @@ const INLINE_FORMATTERS = [
   ["format-text-color-palette", "colorApplied"],
 ];
 
+const ICON_FORMATTERS = [
+  "format-font-size",
+  "format-icon-link",
+  "format-icon-link-target",
+  "format-disabled",
+  "format-text-color",
+  "format-text-color-palette",
+  "format-icon-background-color",
+  "icon-border-width",
+  "icon-border-color",
+  "icon-border-style",
+  "icon-border-position",
+  "icon-border-radius",
+];
+
 const FORMATTER_FEATURES = {
   "element-type-selector": FEATURES.type,
   "format-font-family": FEATURES.fontFamily,
@@ -95,6 +117,13 @@ const FORMATTER_FEATURES = {
   "format-text-color": FEATURES.color,
   "format-text-color-palette": FEATURES.color,
   "format-icon-background-color": FEATURES.backgroundColor,
+  "format-icon-link": FEATURES.link,
+  "format-icon-link-target": FEATURES.linkTarget,
+  "icon-border-width": FEATURES.border,
+  "icon-border-color": FEATURES.border,
+  "icon-border-style": FEATURES.border,
+  "icon-border-position": FEATURES.border,
+  "icon-border-radius": FEATURES.borderRadius,
   "image-background-color": FEATURES.backgroundColor,
   "image-border-width": FEATURES.border,
   "image-border-color": FEATURES.border,
@@ -161,6 +190,28 @@ export class FormatToolbar extends LitElement {
           <format-mark-style></format-mark-style>
           <format-icon-background-color></format-icon-background-color>
         </div>
+      </div>
+
+      <div id="icon" hidden class="tools">
+        <h2>Icon</h2>
+        <div class="format-link-group">
+          <format-icon-link></format-icon-link>
+          <format-disabled></format-disabled>
+          <format-icon-link-target></format-icon-link-target>
+        </div>
+        <format-text-color-palette></format-text-color-palette>
+        <div class="format-font-group">
+          <format-icon-background-color></format-icon-background-color>
+          <format-font-size></format-font-size>
+        </div>
+        <div class="group-label">Border</div>
+        <div class="format-border-group">
+          <icon-border-style></icon-border-style>
+          <icon-border-color></icon-border-color>
+          <icon-border-width></icon-border-width>
+        </div>
+        <icon-border-position></icon-border-position>
+        <icon-border-radius></icon-border-radius>
       </div>
 
       <div id="button" hidden class="tools">
@@ -233,9 +284,8 @@ export class FormatToolbar extends LitElement {
     const nonTextSelected = imageSelected || buttonSelected || iconSelected || tableSelected;
     const backgroundColorSelected = iconSelected || format?.highlight;
 
-    this.renderRoot
-      .querySelector("#text")
-      ?.toggleAttribute("hidden", buttonSelected || imageSelected || tableSelected);
+    this.renderRoot.querySelector("#text")?.toggleAttribute("hidden", nonTextSelected);
+    this.renderRoot.querySelector("#icon")?.toggleAttribute("hidden", !iconSelected);
     this.renderRoot.querySelector("#button")?.toggleAttribute("hidden", !buttonSelected);
     this.renderRoot.querySelector("#image")?.toggleAttribute("hidden", !imageSelected);
     this.renderRoot.querySelector("#table")?.toggleAttribute("hidden", !tableSelected);
@@ -260,6 +310,9 @@ export class FormatToolbar extends LitElement {
     this.#setApplied("format-link", Boolean(format?.link));
     this.#setValue("format-link", format?.link ?? "");
     this.#setValue("format-link-target", format?.target ?? "_self");
+    this.#setApplied("format-icon-link", iconSelected && Boolean(format?.link));
+    this.#setValue("format-icon-link", iconSelected ? (format?.link ?? "") : "");
+    this.#setValue("format-icon-link-target", format?.target ?? "_self");
     this.#setApplied("format-button-link", buttonSelected && Boolean(format?.link));
     this.#setValue("format-button-link", buttonSelected ? (format?.link ?? "") : "");
     this.#setValue(
@@ -272,6 +325,11 @@ export class FormatToolbar extends LitElement {
     this.#setValue("format-text-color", toHex(format?.color, DEFAULT_TEXT_COLOR));
     this.#setValue("format-text-color-palette", toHex(format?.color, DEFAULT_TEXT_COLOR));
     this.#setValue("format-icon-background-color", format?.backgroundColor ?? "");
+    this.#setValue("icon-border-width", format?.borderWidth ?? "");
+    this.#setValue("icon-border-color", format?.borderColor ?? "");
+    this.#setValue("icon-border-style", format?.borderStyle ?? "");
+    this.#setValue("icon-border-position", format?.borderPosition ?? "");
+    this.#setValue("icon-border-radius", format?.borderRadius ?? "");
     this.#setValue("image-background-color", format?.backgroundColor ?? "");
     this.#setValue("image-border-width", format?.borderWidth ?? "");
     this.#setValue("image-border-color", format?.borderColor ?? "");
@@ -316,8 +374,15 @@ export class FormatToolbar extends LitElement {
       !format || nonTextSelected || format.collapsed !== false,
     );
     this.#setDisabled("format-icon-background-color", !backgroundColorSelected);
+    this.#setDisabled("icon-border-width", !iconSelected || !format?.borderStyle);
+    this.#setDisabled("icon-border-color", !iconSelected || !format?.borderStyle);
+    this.#setDisabled("icon-border-style", !iconSelected);
+    this.#setDisabled("icon-border-position", !iconSelected || !hasBorder(format));
+    this.#setDisabled("icon-border-radius", !iconSelected);
     this.#setDisabled("format-mark-style", !format || nonTextSelected || !format.highlight);
     this.#setDisabled("format-link-target", nonTextSelected || !format?.link);
+    this.#setDisabled("format-icon-link", !iconSelected);
+    this.#setDisabled("format-icon-link-target", !iconSelected || !format?.link);
     this.#setDisabled("image-background-color", !imageSelected);
     this.#setDisabled("image-border-width", !imageSelected || !format?.borderStyle);
     this.#setDisabled("image-border-color", !imageSelected || !format?.borderStyle);
@@ -331,7 +396,7 @@ export class FormatToolbar extends LitElement {
     this.#setDisabled("format-button-link-target", !buttonSelected || !format?.link);
     this.#setDisabled("format-image-link", !imageSelected);
     this.#setDisabled("format-image-link-target", !imageSelected || !format?.link);
-    this.#setDisabled("format-disabled", !buttonSelected && !imageSelected);
+    this.#setDisabled("format-disabled", !buttonSelected && !imageSelected && !iconSelected);
     this.#setDisabled("format-table-headers", !tableSelected);
     this.#setDisabled("table-header-background-color", !tableSelected);
     this.#setDisabled("table-body-background-color", !tableSelected);
@@ -343,15 +408,13 @@ export class FormatToolbar extends LitElement {
 
     if (iconSelected) {
       for (const selector of FORMATTERS) this.#setDisabled(selector, true);
-      for (const selector of [
-        "format-font-size",
-        "format-link",
-        "format-text-color",
-        "format-text-color-palette",
-        "format-icon-background-color",
-      ]) {
+      for (const selector of ICON_FORMATTERS) {
         this.#setDisabled(selector, false);
       }
+      this.#setDisabled("icon-border-width", !format?.borderStyle);
+      this.#setDisabled("icon-border-color", !format?.borderStyle);
+      this.#setDisabled("icon-border-position", !hasBorder(format));
+      this.#setDisabled("format-icon-link-target", !format?.link);
     }
 
     this.#applyCapabilities(format);

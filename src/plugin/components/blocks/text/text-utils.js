@@ -1,6 +1,16 @@
 const TEXT_ELEMENT_TYPES = ["h1", "h2", "h3", "p"];
 const PARAGRAPH_CONTENT_TAGS = ["P", "UL", "OL"];
+const LIST_TAGS = ["UL", "OL"];
 const ELEMENT_NODE = 1;
+const LIST_CHILD_TYPES = new Map([
+  ["ol", "ordered-list"],
+  ["ul", "unordered-list"],
+]);
+const LIST_ELEMENT_TYPES = new Map([
+  ["ordered-list", "ol"],
+  ["unordered-list", "ul"],
+]);
+const EDITOR_PADDING_BREAK = "data-editor-padding-break";
 
 export function normalizeBlockType(type) {
   return TEXT_ELEMENT_TYPES.includes(type) ? type : "p";
@@ -33,6 +43,11 @@ export function normalizeParagraphs(value, type) {
     if (node.nodeType === Node.ELEMENT_NODE && PARAGRAPH_CONTENT_TAGS.includes(node.tagName)) {
       paragraph = null;
       output.append(node);
+    } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "DIV") {
+      paragraph = null;
+      const divParagraph = document.createElement("p");
+      divParagraph.append(...node.childNodes);
+      output.append(divParagraph);
     } else if (node.nodeName === "BR") {
       paragraph = null;
     } else {
@@ -41,7 +56,51 @@ export function normalizeParagraphs(value, type) {
     }
   }
 
+  removeEditorEmptyParagraphsAroundLists(output);
   return output.innerHTML;
+}
+
+function removeEditorEmptyParagraphsAroundLists(root) {
+  for (const paragraph of Array.from(root.children)) {
+    if (paragraph.tagName !== "P" || !isEmptyParagraphElement(paragraph)) continue;
+
+    const previous = getPreviousNonEmptyElement(paragraph);
+    const next = getNextNonEmptyElement(paragraph);
+    if (
+      !previous ||
+      !next ||
+      LIST_TAGS.includes(previous.tagName) ||
+      LIST_TAGS.includes(next.tagName)
+    ) {
+      paragraph.remove();
+    }
+  }
+}
+
+function isEmptyParagraphElement(paragraph) {
+  const text = paragraph.textContent.replace(/[\u00a0\u200b-\u200d\ufeff]/g, "").trim();
+  const hasCaretMarker = paragraph.querySelector("[data-editor-caret]");
+  const hasEmbeddedContent = paragraph.querySelector(
+    "audio, canvas, embed, hr, iframe, img, input, object, select, svg, textarea, video",
+  );
+
+  return text === "" && !hasCaretMarker && !hasEmbeddedContent;
+}
+
+function getPreviousNonEmptyElement(element) {
+  let previous = element.previousElementSibling;
+  while (previous?.tagName === "P" && isEmptyParagraphElement(previous)) {
+    previous = previous.previousElementSibling;
+  }
+  return previous;
+}
+
+function getNextNonEmptyElement(element) {
+  let next = element.nextElementSibling;
+  while (next?.tagName === "P" && isEmptyParagraphElement(next)) {
+    next = next.nextElementSibling;
+  }
+  return next;
 }
 
 function normalizeHeadingLines(value) {
@@ -49,6 +108,10 @@ function normalizeHeadingLines(value) {
 
   const template = document.createElement("template");
   template.innerHTML = value.replace(/\r\n?|\n/g, "\n");
+
+  for (const paddingBreak of template.content.querySelectorAll(`[${EDITOR_PADDING_BREAK}]`)) {
+    paddingBreak.remove();
+  }
 
   for (const lineBreak of template.content.querySelectorAll("br")) {
     lineBreak.replaceWith(document.createTextNode("\n"));
@@ -165,6 +228,10 @@ function serializeParagraphChildren(root) {
       appendPendingParagraph(paragraphs, pendingNodes);
       paragraphs.push(...createParagraphChildren(child));
       pendingNodes = [];
+    } else if (child.nodeType === Node.ELEMENT_NODE && LIST_CHILD_TYPES.has(child.localName)) {
+      appendPendingParagraph(paragraphs, pendingNodes);
+      paragraphs.push(createListChild(child));
+      pendingNodes = [];
     } else if (child.nodeName === "BR") {
       appendPendingParagraph(paragraphs, pendingNodes);
       pendingNodes = [];
@@ -174,7 +241,7 @@ function serializeParagraphChildren(root) {
   }
 
   appendPendingParagraph(paragraphs, pendingNodes);
-  return paragraphs;
+  return removeListAdjacentEmptyParagraphs(paragraphs);
 }
 
 function appendPendingParagraph(paragraphs, nodes) {
@@ -190,6 +257,42 @@ function createParagraphChildren(source) {
     type: "paragraph",
     children,
   }));
+}
+
+function createListChild(list) {
+  return {
+    type: LIST_CHILD_TYPES.get(list.localName),
+    children: Array.from(list.children)
+      .filter((item) => item.localName === "li")
+      .map((item) => ({
+        type: "list-item",
+        children: serializeTextChildren(item),
+      })),
+  };
+}
+
+function removeListAdjacentEmptyParagraphs(children) {
+  return children.filter((child, index) => {
+    if (!isEmptyParagraphChild(child)) return true;
+
+    const previous = children[index - 1];
+    const next = children[index + 1];
+    return (
+      index !== 0 && index !== children.length - 1 && !isListChild(previous) && !isListChild(next)
+    );
+  });
+}
+
+function isEmptyParagraphChild(child) {
+  return (
+    child?.type === "paragraph" &&
+    Array.isArray(child.children) &&
+    child.children.every((textChild) => !textChild?.text?.trim())
+  );
+}
+
+function isListChild(child) {
+  return LIST_ELEMENT_TYPES.has(child?.type);
 }
 
 function splitParagraphTextChildren(children) {
@@ -222,11 +325,31 @@ function deserializeParagraphChildren(children) {
       continue;
     }
 
+    if (LIST_ELEMENT_TYPES.has(child.type)) {
+      appendListElement(output, child);
+      continue;
+    }
+
     if (!Array.isArray(child.children)) continue;
     appendParagraphElement(output, child.children);
   }
 
   return output.innerHTML;
+}
+
+function appendListElement(output, child) {
+  const list = document.createElement(LIST_ELEMENT_TYPES.get(child.type));
+
+  const items = Array.isArray(child.children) ? child.children : [];
+  for (const item of items) {
+    if (!item || typeof item !== "object" || !Array.isArray(item.children)) continue;
+
+    const listItem = document.createElement("li");
+    listItem.innerHTML = deserializeTextChildren(item.children);
+    list.append(listItem);
+  }
+
+  output.append(list);
 }
 
 function appendParagraphElement(output, children) {
@@ -279,6 +402,9 @@ function createMarksElement(marks = {}) {
     element.classList.add("text-color");
     element.style.color = marks.color;
   }
+  if (typeof marks.fontSize === "string" && marks.fontSize) {
+    element.style.fontSize = marks.fontSize;
+  }
   if (marks.highlight) {
     element.classList.add("text-mark");
     if (typeof marks.markStyle === "string" && marks.markStyle) {
@@ -307,6 +433,11 @@ function appendTextChildren(node, inheritedMarks, children) {
   for (const child of node.childNodes) {
     if (child.nodeType === Node.TEXT_NODE) {
       appendTextChild(children, child.textContent, inheritedMarks);
+    } else if (
+      child.nodeType === Node.ELEMENT_NODE &&
+      child.getAttribute?.(EDITOR_PADDING_BREAK) != null
+    ) {
+      continue;
     } else if (child.nodeName === "BR") {
       appendTextChild(children, "\n", inheritedMarks);
     } else if (child.nodeType === Node.ELEMENT_NODE) {
@@ -324,6 +455,7 @@ function getElementMarks(element, inheritedMarks) {
   if (element.classList.contains("text-italic")) marks.italic = true;
   if (element.classList.contains("text-underline")) marks.underline = true;
   if (element.classList.contains("text-color")) marks.color = element.style.color;
+  if (element.style.fontSize) marks.fontSize = element.style.fontSize;
   if (element.classList.contains("text-mark")) {
     marks.highlight = true;
     const markStyle = Array.from(element.classList).find((className) =>

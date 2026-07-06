@@ -107,8 +107,11 @@ class ImageBorderColor extends BlockStyleColor {
   }
 }
 
+class IconBorderColor extends ImageBorderColor {}
+
 customElements.define("image-background-color", ImageBackgroundColor);
 customElements.define("image-border-color", ImageBorderColor);
+customElements.define("icon-border-color", IconBorderColor);
 
 function isSelectedColor(current, value) {
   return current?.toLowerCase() === value.toLowerCase();

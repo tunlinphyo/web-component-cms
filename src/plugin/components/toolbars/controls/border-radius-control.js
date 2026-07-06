@@ -135,6 +135,8 @@ class ImageBorderRadius extends BorderRadiusControl {
   }
 }
 
+class IconBorderRadius extends ImageBorderRadius {}
+
 class GroupBorderRadius extends BorderRadiusControl {
   dispatchChange(value) {
     this.dispatchEvent(
@@ -160,4 +162,5 @@ function expandRadius(value) {
 
 customElements.define("border-radius-picker", BorderRadiusPicker);
 customElements.define("image-border-radius", ImageBorderRadius);
+customElements.define("icon-border-radius", IconBorderRadius);
 customElements.define("group-border-radius", GroupBorderRadius);

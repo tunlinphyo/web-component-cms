@@ -8,6 +8,7 @@ import { getCapabilities } from "../../../registries/formatter-registry.js";
 import {
   clampIndex,
   createCell,
+  createCellValue,
   createCells,
   DEFAULT_COLUMNS,
   DEFAULT_ROWS,
@@ -366,12 +367,11 @@ export class TableBlock extends LitElement {
           placeholder="Text"
           .textChildren=${cell.children}
           .textAlign=${cell.textAlign}
-          .fontWeight=${cell.fontWeight}
           .fontSize=${cell.fontSize}
           .fontFamily=${cell.fontFamily}
           ?disabled=${this.disabled}
           predefined-margin="0"
-          features="fontFamily,fontSize,bold,italic,underline,align,link"
+          features="fontFamily,fontSize,color,bold,italic,underline,align,link"
         ></inline-text>
       </div>
     `;
@@ -448,8 +448,7 @@ export class TableBlock extends LitElement {
     }
 
     const values = editors.map((editor) => {
-      const { children, textAlign, fontWeight, fontSize, fontFamily } = editor.toJSON();
-      return { children, textAlign, fontWeight, fontSize, fontFamily };
+      return createCellValue(editor.toJSON());
     });
     let offset = 0;
     return this.cells.map((row) => {

@@ -150,12 +150,12 @@ export const groupBaseStyles = css`
   }
 
   .hash-dialog button[type="submit"] {
-    background: var(--brand-600);
+    background: var(--ui-editor-primary);
     color: white;
   }
 
   .hash-dialog button[type="submit"]:hover:not(:disabled) {
-    background: var( var(--ui-editor-primary));
+    background: var(var(--ui-editor-primary));
   }
 
   .hash-dialog button:disabled {

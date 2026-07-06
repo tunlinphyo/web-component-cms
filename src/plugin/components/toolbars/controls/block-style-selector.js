@@ -52,7 +52,7 @@ export class BlockBorderStyle extends BlockStyleSelector {
   }
 
   #renderStyle(option) {
-    return html`<span class="border-style-preview" style="--border-style: ${option.value}"></span>`
+    return html`<span class="border-style-preview" style="--border-style: ${option.value}"></span>`;
   }
 }
 
@@ -105,9 +105,16 @@ class ImageBorderPosition extends BlockStyleSelector {
   }
 }
 
+class IconBorderWidth extends BlockBorderWidth {}
+class IconBorderStyle extends BlockBorderStyle {}
+class IconBorderPosition extends ImageBorderPosition {}
+
 customElements.define("image-border-width", ImageBorderWidth);
 customElements.define("image-border-style", ImageBorderStyle);
 customElements.define("image-border-position", ImageBorderPosition);
+customElements.define("icon-border-width", IconBorderWidth);
+customElements.define("icon-border-style", IconBorderStyle);
+customElements.define("icon-border-position", IconBorderPosition);
 
 function parseBorderPositions(value) {
   return new Set(

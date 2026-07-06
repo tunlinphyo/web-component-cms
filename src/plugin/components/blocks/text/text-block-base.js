@@ -8,6 +8,7 @@ import {
   getEditorSelection,
   initializeEditor,
   placeCaretInEmptyEditor,
+  setDefaultParagraphSeparator,
   updateEditorEmptyState,
   updateEditorPlaceholder,
 } from "./text-editor-dom.js";
@@ -140,6 +141,7 @@ export class TextBlockBase extends LitElement {
         contenteditable=${this.disabled ? "false" : "true"}
         data-placeholder=${this.placeholder}
         @focus=${this._handleFocus}
+        @beforeinput=${this._handleBeforeInput}
         @keydown=${this._handleKeyDown}
         @paste=${this._handlePaste}
         @input=${this._handleInput}
@@ -230,9 +232,6 @@ export class TextBlockBase extends LitElement {
       paragraphMode: this.paragraphMode,
       range: this.selectedRange,
       selection,
-      onFontWeightChange: (fontWeight) => {
-        this.fontWeight = fontWeight;
-      },
       onFontSizeChange: (fontSize) => {
         this.fontSize = fontSize;
       },
@@ -305,11 +304,16 @@ export class TextBlockBase extends LitElement {
   }
 
   _handleFocus = (event) => {
+    if (this.paragraphMode) setDefaultParagraphSeparator(event.currentTarget);
     placeCaretInEmptyEditor(event.currentTarget, this.editorSelection);
   };
 
   _handleKeyDown = (event) => {
     this.handleEditorKeyDown(event);
+  };
+
+  _handleBeforeInput = (event) => {
+    this.handleEditorBeforeInput?.(event);
   };
 
   _handleInput = (event) => {

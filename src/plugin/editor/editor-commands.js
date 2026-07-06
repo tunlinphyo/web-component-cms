@@ -76,6 +76,18 @@ export function applyFormatCommand(activeBlock, detail, notifyToolbar) {
     return;
   }
 
+  if (detail.command === "iconLink") {
+    if (!activeBlock?.setIconLink?.(detail.value)) return;
+    notifyBlockFormat(activeBlock, notifyToolbar);
+    return;
+  }
+
+  if (detail.command === "iconLinkTarget") {
+    if (!activeBlock?.setIconLinkTarget?.(detail.value)) return;
+    notifyBlockFormat(activeBlock, notifyToolbar);
+    return;
+  }
+
   if (detail.command === "disabled") {
     const disabled = !activeBlock?.getSelectionFormat?.().disabled;
     if (!activeBlock?.setDisabled?.(disabled)) return;

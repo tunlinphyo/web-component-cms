@@ -42,7 +42,7 @@ export const confirmDialogStyles = css`
   }
 
   .confirm {
-    background: var(--brand-600);
+    background: var(--ui-editor-primary);
     color: white;
   }
 `;

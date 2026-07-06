@@ -13,6 +13,8 @@ import "./controls/format-link-target.js";
 import "./controls/format-text-color.js";
 import "./controls/format-text-color-palette.js";
 import "./controls/format-icon-background-color.js";
+import "./controls/format-icon-link.js";
+import "./controls/format-icon-link-target.js";
 import "./controls/element-type-selector.js";
 import "./controls/format-font-family.js";
 import "./controls/format-font-size.js";

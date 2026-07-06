@@ -118,12 +118,12 @@ export const groupPickerDialogStyles = css`
   }
 
   button.add {
-    background: var(--ui-editor-highlight);
+    background: var(--ui-editor-primary);
     color: white;
   }
 
   button.add:hover:not(:disabled) {
-    background: var(--ui-editor-primary);
+    background: color-mix(in srgb, var(--ui-editor-primary), black 10%);
   }
 
   button:disabled {

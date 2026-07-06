@@ -20,12 +20,15 @@ export const iconBlockStyles = css`
     height: 2.75rem;
     padding: 0.625rem;
     border: none;
-    border-radius: 50%;
     background: white;
     color: inherit;
     cursor: pointer;
     place-items: center;
     text-decoration: none;
+  }
+
+  button {
+    border-radius: 50%;
   }
 
   button:disabled,

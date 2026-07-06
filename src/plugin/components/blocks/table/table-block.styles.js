@@ -140,7 +140,7 @@ export const tableBlockStyles = css`
     border: 0 var(--table-border-style) var(--table-border-color);
     vertical-align: top;
     background: var(--table-body-background);
-    color: var(--brand-800);
+    color: inherit;
   }
 
   th {

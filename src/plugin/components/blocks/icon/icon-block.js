@@ -14,7 +14,13 @@ export class IconBlock extends LitElement {
     fontSize: { type: String, attribute: "font-size", reflect: true },
     color: { type: String, reflect: true },
     backgroundColor: { type: String, attribute: "background-color", reflect: true },
+    borderWidth: { type: String, attribute: "border-width", reflect: true },
+    borderColor: { type: String, attribute: "border-color", reflect: true },
+    borderStyle: { type: String, attribute: "border-style", reflect: true },
+    borderPosition: { type: String, attribute: "border-position", reflect: true },
+    borderRadius: { type: String, attribute: "border-radius", reflect: true },
     link: { type: String },
+    target: { type: String, reflect: true },
     align: { type: String, reflect: true },
     disabled: { type: Boolean, reflect: true },
     features: { type: String, reflect: true },
@@ -29,7 +35,13 @@ export class IconBlock extends LitElement {
     this.fontSize = "";
     this.color = "";
     this.backgroundColor = "";
+    this.borderWidth = "";
+    this.borderColor = "";
+    this.borderStyle = "";
+    this.borderPosition = "";
+    this.borderRadius = "";
     this.link = "";
+    this.target = "_self";
     this.align = "left";
     this.disabled = false;
     this.features = undefined;
@@ -42,8 +54,15 @@ export class IconBlock extends LitElement {
       fontSize = "",
       color = "",
       backgroundColor = "",
+      borderWidth = "",
+      borderColor = "",
+      borderStyle = "",
+      borderPosition = "",
+      borderRadius = "",
       link = "",
+      target = "_self",
       align = "left",
+      disabled = false,
     } = options;
 
     this.blockId = id;
@@ -51,8 +70,15 @@ export class IconBlock extends LitElement {
     this.fontSize = fontSize;
     this.color = color;
     this.backgroundColor = backgroundColor;
+    this.borderWidth = borderWidth;
+    this.borderColor = borderColor;
+    this.borderStyle = borderStyle;
+    this.borderPosition = borderPosition;
+    this.borderRadius = borderRadius;
     this.link = link;
+    this.target = target || "_self";
     this.align = align;
+    this.disabled = Boolean(disabled);
     if (Object.hasOwn(options, "features")) {
       this.features = toFeatureAttribute(options.features);
     }
@@ -66,8 +92,15 @@ export class IconBlock extends LitElement {
       fontSize: this.fontSize,
       color: this.color,
       backgroundColor: this.backgroundColor,
+      borderWidth: this.borderWidth,
+      borderColor: this.borderColor,
+      borderStyle: this.borderStyle,
+      borderPosition: this.borderPosition,
+      borderRadius: this.borderRadius,
       link: this.link,
+      target: this.link ? this.target : "_self",
       align: this.align,
+      disabled: this.disabled,
       type: "icon",
     };
   }
@@ -77,9 +110,16 @@ export class IconBlock extends LitElement {
       align: this.align,
       color: this.color,
       backgroundColor: this.backgroundColor,
+      borderWidth: this.borderWidth,
+      borderColor: this.borderColor,
+      borderStyle: this.borderStyle,
+      borderPosition: this.borderPosition,
+      borderRadius: this.borderRadius,
       fontSize: this.fontSize,
       fontSizeApplied: Boolean(this.fontSize),
       link: this.link,
+      target: this.target,
+      disabled: this.disabled,
       type: "icon",
       capabilities: getCapabilities("icon", this.features),
     };
@@ -96,6 +136,50 @@ export class IconBlock extends LitElement {
     return true;
   }
 
+  setBorderRadius(borderRadius) {
+    this.borderRadius = borderRadius;
+    return true;
+  }
+
+  setBlockStyle(property, value) {
+    if (!["borderWidth", "borderColor", "borderStyle", "borderPosition"].includes(property)) {
+      return false;
+    }
+
+    this[property] = value;
+    if (property === "borderColor" && !value) {
+      this.borderWidth = "";
+      this.borderStyle = "";
+    }
+    if (property === "borderStyle" && (!value || value === "none")) {
+      this.borderWidth = "";
+      this.borderColor = "";
+      this.borderPosition = "";
+    }
+    if (property === "borderWidth" && value && !this.borderStyle) this.borderStyle = "solid";
+    if (property === "borderStyle" && value && value !== "none" && !this.borderWidth) {
+      this.borderWidth = "1px";
+    }
+    return true;
+  }
+
+  setIconLink(link) {
+    this.link = link ?? "";
+    if (!this.link) this.target = "_self";
+    return true;
+  }
+
+  setIconLinkTarget(target) {
+    if (!["_self", "_blank"].includes(target)) return false;
+    this.target = target;
+    return true;
+  }
+
+  setDisabled(disabled) {
+    this.disabled = Boolean(disabled);
+    return true;
+  }
+
   render() {
     const icon = toMaterialIconName(this.icon);
 
@@ -103,11 +187,12 @@ export class IconBlock extends LitElement {
       <a
         class="input"
         href=${this.link || ""}
+        target=${this.link ? this.target : "_self"}
         title="Choose icon"
         aria-label="Choose icon"
         ?data-empty=${!icon}
         part="container"
-        style=${`font-size: ${this.fontSize}; color: ${this.color}; background-color: ${this.backgroundColor};`}
+        style=${`font-size: ${this.fontSize}; color: ${this.color}; background-color: ${this.backgroundColor}; border-width: ${toBorderWidthValue(this.borderWidth, this.borderPosition)}; border-color: ${this.borderColor}; border-style: ${this.borderStyle}; border-radius: ${this.borderRadius};`}
         @click=${this.#openPicker}
       >
         ${renderMaterialIcon(icon)}
@@ -148,3 +233,13 @@ export class IconBlock extends LitElement {
 }
 
 customElements.define("icon-block", IconBlock);
+
+function toBorderWidthValue(width, position) {
+  if (!width || !position) return width;
+
+  const selected = new Set(String(position).split(/\s+/).filter(Boolean));
+  const positions = ["top", "right", "bottom", "left"];
+  if (!selected.size || positions.every((side) => selected.has(side))) return width;
+
+  return positions.map((side) => (selected.has(side) ? width : "0")).join(" ");
+}

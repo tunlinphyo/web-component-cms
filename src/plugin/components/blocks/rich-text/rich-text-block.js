@@ -1,14 +1,6 @@
 import { TextBlockBase } from "../text/text-block-base.js";
-import {
-  insertEditorLineBreak,
-  insertEditorParagraph,
-  normalizeEditorInput,
-  normalizeEditorParagraphs,
-  syncEditorFromProperties,
-} from "../text/text-editor-dom.js";
+import { normalizeEditorInput, syncEditorFromProperties } from "../text/text-editor-dom.js";
 import { PARAGRAPH_RICH_TEXT_FEATURES } from "./rich-text-capabilities.js";
-import { ENTER_ACTIONS, getEnterAction } from "../text/text-keyboard.js";
-import { getSelectedAncestor } from "../text/text-utils.js";
 
 export class RichTextBlock extends TextBlockBase {
   get paragraphMode() {
@@ -44,24 +36,6 @@ export class RichTextBlock extends TextBlockBase {
 
   handleEditorKeyDown(event) {
     if (event.key !== "Enter" || event.isComposing) return;
-
-    const range = this.editorSelection?.rangeCount ? this.editorSelection.getRangeAt(0) : null;
-    const isList = Boolean(getSelectedAncestor(event.currentTarget, range, "ul, ol"));
-    if (isList && !event.shiftKey) return;
-
-    event.preventDefault();
-    const action = getEnterAction({ shiftKey: event.shiftKey });
-    if (action === ENTER_ACTIONS.paragraph) {
-      insertEditorParagraph(event.currentTarget, this.editorSelection);
-    } else {
-      insertEditorLineBreak(this.editorSelection);
-    }
-    void this.updateComplete.then(() => {
-      if (!this.editorElement) return;
-
-      normalizeEditorParagraphs(this.editorElement, true);
-      this.notifySelection();
-    });
   }
 
   normalizeEditorInput(editor) {

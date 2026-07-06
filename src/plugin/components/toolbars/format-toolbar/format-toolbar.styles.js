@@ -48,6 +48,14 @@ export const formatToolbarStyles = css`
     align-items: center;
   }
 
+  .format-font-group {
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.2rem;
+    align-items: center;
+  }
+
   .format-highlight-group {
     width: 100%;
     display: grid;

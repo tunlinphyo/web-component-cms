@@ -40,14 +40,11 @@ export function applySelectionCommand({
   paragraphMode = type === "p",
   range,
   selection,
-  onFontWeightChange,
   onFontSizeChange,
 }) {
   selectRange(selection, range);
 
-  if (command === "bold" && !paragraphMode) {
-    toggleBlockBold(editor, onFontWeightChange);
-  } else if (INLINE_COMMAND_SELECTORS.has(command)) {
+  if (INLINE_COMMAND_SELECTORS.has(command)) {
     toggleInlineCommand(command, editor, range, selection);
   } else if (command === "linkEdit") {
     if (!prepareLinkSelection(editor, range, selection)) return { range, shouldNotify: false };
@@ -99,9 +96,7 @@ export function describeSelectionFormat({
   const highlightStyles = highlightElement ? getComputedStyle(highlightElement) : null;
 
   return {
-    bold:
-      editor?.style.fontWeight !== "normal" &&
-      Boolean(findSelectedAncestor(INLINE_COMMAND_SELECTORS.get("bold"))),
+    bold: Boolean(findSelectedAncestor(INLINE_COMMAND_SELECTORS.get("bold"))),
     italic: Boolean(findSelectedAncestor(INLINE_COMMAND_SELECTORS.get("italic"))),
     underline: Boolean(findSelectedAncestor(INLINE_COMMAND_SELECTORS.get("underline"))),
     orderedList: Boolean(findSelectedAncestor("ol")),
@@ -139,7 +134,9 @@ function applyMarkStyle(value, editor, range, selection) {
 }
 
 function getMarkStyleClass(element) {
-  return Array.from(element?.classList ?? []).find((className) => className.startsWith("mark-")) ?? "";
+  return (
+    Array.from(element?.classList ?? []).find((className) => className.startsWith("mark-")) ?? ""
+  );
 }
 
 export function normalizeMarkClass(value) {
@@ -538,12 +535,6 @@ function selectBetweenMarkers(range) {
   range.setEndBefore(endMarker);
   startMarker.remove();
   endMarker.remove();
-}
-
-function toggleBlockBold(editor, onFontWeightChange) {
-  const fontWeight = editor.style.fontWeight === "normal" ? "" : "normal";
-  editor.style.fontWeight = fontWeight;
-  onFontWeightChange(fontWeight);
 }
 
 function toggleInlineCommand(command, editor, range, selection) {

@@ -1,23 +1,23 @@
 @layer ui-editor-defaults {
   button-block[design="primary"]::part(button) {
-    background: var(--brand-500);
+    background: var(--ui-editor-primary);
     color: white;
   }
 
   button-block[design="dark"]::part(button) {
-    background: var(--brand-600);
+    background: color-mix(in srgb, var(--ui-editor-primary), black 20%);
     color: white;
   }
 
   button-block[design="outline"]::part(button) {
-    border-color: var(--brand-500);
+    border-color: var(--ui-editor-primary);
     background: transparent;
-    color: var(--brand-500);
+    color: var(--ui-editor-primary);
   }
 
   button-block[design="soft"]::part(button) {
-    background: var(--brand-50);
-    color: var(--brand-500);
+    background: color-mix(in srgb, var(--ui-editor-primary), white 80%);
+    color: var(--ui-editor-primary);
   }
 
   button-block[disabled]::part(button) {

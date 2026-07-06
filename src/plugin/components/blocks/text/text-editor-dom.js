@@ -29,6 +29,7 @@ export function initializeEditor(
   if (paragraphMode) {
     editor.innerHTML = isEmptyHtml(value) ? "<p></p>" : value;
     updateEditorPlaceholder(editor, placeholder);
+    setDefaultParagraphSeparator(editor);
   } else {
     editor.innerHTML = isEmptyHtml(value) ? "" : value;
     editor.style.removeProperty("--placeholder");
@@ -45,7 +46,9 @@ export function initializeEditor(
   updateEditorEmptyState(editor, paragraphMode);
 }
 
-export function insertEditorLineBreak(selection) {
+const EDITOR_PADDING_BREAK = "data-editor-padding-break";
+
+export function insertEditorLineBreak(selection, editor = null) {
   const range = selection?.rangeCount ? selection.getRangeAt(0) : null;
   if (!range) return false;
 
@@ -53,32 +56,12 @@ export function insertEditorLineBreak(selection) {
 
   const lineBreak = document.createElement("br");
   range.insertNode(lineBreak);
-  range.setStartAfter(lineBreak);
-  range.collapse(true);
-  selectRange(selection, range);
-  return true;
-}
-
-export function insertEditorParagraph(editor, selection) {
-  const range = selection?.rangeCount ? selection.getRangeAt(0) : null;
-  if (!editor || !range || !editor.contains(range.commonAncestorContainer)) return false;
-
-  range.deleteContents();
-
-  const paragraph = getAncestorParagraph(editor, range.startContainer);
-  if (!paragraph) {
-    return insertEditorLineBreak(selection);
+  if (editor && !hasVisibleContentAfter(lineBreak, editor)) {
+    const paddingBreak = document.createElement("br");
+    paddingBreak.setAttribute(EDITOR_PADDING_BREAK, "");
+    lineBreak.after(paddingBreak);
   }
-
-  const afterRange = document.createRange();
-  afterRange.setStart(range.startContainer, range.startOffset);
-  afterRange.setEnd(paragraph, paragraph.childNodes.length);
-
-  const nextParagraph = paragraph.cloneNode(false);
-  nextParagraph.append(afterRange.extractContents());
-  paragraph.after(nextParagraph);
-
-  range.setStart(nextParagraph, 0);
+  range.setStartAfter(lineBreak);
   range.collapse(true);
   selectRange(selection, range);
   return true;
@@ -144,6 +127,14 @@ export function updateEditorEmptyState(editor, paragraphMode) {
   editor.toggleAttribute("data-paragraph-mode", Boolean(paragraphMode));
 }
 
+export function setDefaultParagraphSeparator(editor) {
+  try {
+    editor?.ownerDocument?.execCommand?.("defaultParagraphSeparator", false, "p");
+  } catch {
+    // Legacy browser hint only; normalization still handles generated divs.
+  }
+}
+
 export function normalizeEditorParagraphs(editor, paragraphMode) {
   const normalizedValue = normalizeParagraphs(editor.innerHTML, paragraphMode ? "p" : "h1");
   if (normalizedValue === editor.innerHTML) return false;
@@ -156,7 +147,19 @@ export function normalizeEditorInput(editor, paragraphMode) {
   const html = editor.innerHTML;
   updateEditorEmptyState(editor, paragraphMode);
   if (isEmptyHtml(html)) {
-    if (!paragraphMode) return false;
+    if (!paragraphMode) {
+      editor.replaceChildren();
+      updateEditorEmptyState(editor, paragraphMode);
+
+      const selection = editor.getRootNode().getSelection?.() ?? document.getSelection();
+      if (selection) {
+        const range = document.createRange();
+        range.setStart(editor, 0);
+        range.collapse(true);
+        selectRange(selection, range);
+      }
+      return true;
+    }
 
     const existingParagraph =
       editor.childElementCount === 1 && editor.firstElementChild?.tagName === "P"
@@ -226,17 +229,6 @@ export function placeCaretInEmptyEditor(editor, selection) {
   return true;
 }
 
-function getAncestorParagraph(editor, node) {
-  let element = node?.nodeType === Node.ELEMENT_NODE ? node : node?.parentElement;
-
-  while (element && element !== editor) {
-    if (element.localName === "p") return element;
-    element = element.parentElement;
-  }
-
-  return null;
-}
-
 function applyEditorPresentation(
   editor,
   { type, paragraphMode, textAlign, fontWeight, fontSize, fontFamily },
@@ -246,6 +238,29 @@ function applyEditorPresentation(
   editor.style.fontSize = paragraphMode ? "" : fontSize;
   editor.style.fontFamily =
     fontFamily || (type === "p" ? "var(--font-body)" : "var(--font-heading)");
+}
+
+function hasVisibleContentAfter(node, root) {
+  const nodeFilter = root.ownerDocument.defaultView.NodeFilter;
+  const walker = document.createTreeWalker(root, nodeFilter.SHOW_ELEMENT | nodeFilter.SHOW_TEXT);
+  walker.currentNode = node;
+
+  let current = walker.nextNode();
+  while (current) {
+    if (current.nodeType === Node.TEXT_NODE && current.textContent) return true;
+    if (current.nodeType === Node.ELEMENT_NODE && isVisibleEditorElement(current)) return true;
+    current = walker.nextNode();
+  }
+
+  return false;
+}
+
+function isVisibleEditorElement(element) {
+  if (element.nodeName === "BR" || element.getAttribute(EDITOR_PADDING_BREAK) != null) return false;
+
+  return /^(AUDIO|CANVAS|EMBED|HR|IFRAME|IMG|INPUT|OBJECT|SELECT|SVG|TEXTAREA|VIDEO)$/.test(
+    element.nodeName,
+  );
 }
 
 const CARET_MARKER = "data-text-selection-caret";

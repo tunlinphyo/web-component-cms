@@ -10,5 +10,5 @@ export function getEnterAction({ inlineText = false, shiftKey = false } = {}) {
     return shiftKey ? ENTER_ACTIONS.unsupported : ENTER_ACTIONS.lineBreak;
   }
 
-  return shiftKey ? ENTER_ACTIONS.lineBreak : ENTER_ACTIONS.paragraph;
+  return ENTER_ACTIONS.paragraph;
 }
