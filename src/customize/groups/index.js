@@ -12,5 +12,7 @@ import "./image/image-group.js";
 import "./image/image-layout-design.js";
 import "./paragraph/paragraph-group.js";
 import "./paragraph/paragraph-layout-design.js";
+import "./partner-header/partner-header-group.js";
+import "./partner-header/partner-header-layout-design.js";
 import "./table/table-group.js";
 import "./table/table-layout-design.js";

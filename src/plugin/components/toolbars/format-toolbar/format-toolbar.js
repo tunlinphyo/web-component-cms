@@ -40,10 +40,15 @@ const FORMATTERS = [
   "format-image-link",
   "format-image-link-target",
   "format-disabled",
-  "format-button-design",
   "format-button-icon-placement",
   "format-button-link",
   "format-button-link-target",
+  "button-background-color",
+  "button-border-width",
+  "button-border-color",
+  "button-border-style",
+  "button-border-position",
+  "button-border-radius",
   "format-table-headers",
   "table-header-background-color",
   "table-body-background-color",
@@ -134,10 +139,15 @@ const FORMATTER_FEATURES = {
   "format-image-link": FEATURES.link,
   "format-image-link-target": FEATURES.linkTarget,
   "format-disabled": FEATURES.disabled,
-  "format-button-design": FEATURES.buttonDesign,
   "format-button-icon-placement": FEATURES.icon,
   "format-button-link": FEATURES.link,
   "format-button-link-target": FEATURES.linkTarget,
+  "button-background-color": FEATURES.backgroundColor,
+  "button-border-width": FEATURES.border,
+  "button-border-color": FEATURES.border,
+  "button-border-style": FEATURES.border,
+  "button-border-position": FEATURES.border,
+  "button-border-radius": FEATURES.borderRadius,
   "format-table-headers": FEATURES.tableHeaders,
   "table-header-background-color": FEATURES.backgroundColor,
   "table-body-background-color": FEATURES.backgroundColor,
@@ -216,13 +226,22 @@ export class FormatToolbar extends LitElement {
 
       <div id="button" hidden class="tools">
         <h2>Button</h2>
-        <format-button-design></format-button-design>
         <format-button-icon-placement></format-button-icon-placement>
         <div class="format-link-group">
           <format-button-link></format-button-link>
           <format-disabled></format-disabled>
           <format-button-link-target></format-button-link-target>
         </div>
+        <format-text-color-palette></format-text-color-palette>
+        <button-background-color></button-background-color>
+        <div class="group-label">Border</div>
+        <div class="format-border-group">
+          <button-border-style></button-border-style>
+          <button-border-color></button-border-color>
+          <button-border-width></button-border-width>
+        </div>
+        <button-border-position></button-border-position>
+        <button-border-radius></button-border-radius>
       </div>
 
       <div id="image" hidden class="tools">
@@ -337,8 +356,13 @@ export class FormatToolbar extends LitElement {
     this.#setValue("image-border-position", format?.borderPosition ?? "");
     this.#setValue("image-border-radius", format?.borderRadius ?? "");
     this.#setValue("format-image-object-fit", format?.objectFit ?? "none");
-    this.#setValue("format-button-design", format?.buttonDesign ?? "primary");
     this.#setValue("format-button-icon-placement", format?.buttonIconPlacement ?? "none");
+    this.#setValue("button-background-color", format?.backgroundColor ?? "");
+    this.#setValue("button-border-width", format?.borderWidth ?? "");
+    this.#setValue("button-border-color", format?.borderColor ?? "");
+    this.#setValue("button-border-style", format?.borderStyle ?? "");
+    this.#setValue("button-border-position", format?.borderPosition ?? "");
+    this.#setValue("button-border-radius", format?.borderRadius ?? "");
     this.#setApplied("format-disabled", Boolean(format?.disabled));
     this.#setProperty("format-table-headers", "headerRow", Boolean(format?.headerRow));
     this.#setProperty("format-table-headers", "headerColumn", Boolean(format?.headerColumn));
@@ -371,7 +395,7 @@ export class FormatToolbar extends LitElement {
 
     this.#setDisabled(
       "format-text-color-palette",
-      !format || nonTextSelected || format.collapsed !== false,
+      !format || (buttonSelected ? false : nonTextSelected || format.collapsed !== false),
     );
     this.#setDisabled("format-icon-background-color", !backgroundColorSelected);
     this.#setDisabled("icon-border-width", !iconSelected || !format?.borderStyle);
@@ -390,10 +414,15 @@ export class FormatToolbar extends LitElement {
     this.#setDisabled("image-border-position", !imageSelected || !hasBorder(format));
     this.#setDisabled("image-border-radius", !imageSelected);
     this.#setDisabled("format-image-object-fit", !imageSelected);
-    this.#setDisabled("format-button-design", !buttonSelected);
     this.#setDisabled("format-button-icon-placement", !buttonSelected);
     this.#setDisabled("format-button-link", !buttonSelected);
     this.#setDisabled("format-button-link-target", !buttonSelected || !format?.link);
+    this.#setDisabled("button-background-color", !buttonSelected);
+    this.#setDisabled("button-border-width", !buttonSelected || !format?.borderStyle);
+    this.#setDisabled("button-border-color", !buttonSelected || !format?.borderStyle);
+    this.#setDisabled("button-border-style", !buttonSelected);
+    this.#setDisabled("button-border-position", !buttonSelected || !hasBorder(format));
+    this.#setDisabled("button-border-radius", !buttonSelected);
     this.#setDisabled("format-image-link", !imageSelected);
     this.#setDisabled("format-image-link-target", !imageSelected || !format?.link);
     this.#setDisabled("format-disabled", !buttonSelected && !imageSelected && !iconSelected);

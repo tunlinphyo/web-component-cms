@@ -32,6 +32,7 @@ export const PAGE_BLOCK_TYPES = new Set([
   "image",
   "navs",
   "news",
+  "partner-navs",
   "table",
   "inline-text",
   "p",

@@ -1,14 +1,5 @@
-button-block[design="nav"]::part(button) {
+nav-button-group button-block::part(button) {
   padding-inline: 0.5rem;
-  background: transparent;
-  color: var(--brand-900);
-}
-
-button-block[design="nav"]::part(icon-picker-trigger) {
-  width: 2rem;
-  height: 2rem;
-  background-color: var(--brand-500);
-  color: var(--white);
 }
 
 button-block[disabled]::part(button) {

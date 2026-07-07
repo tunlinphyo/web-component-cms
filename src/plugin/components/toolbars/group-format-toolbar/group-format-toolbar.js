@@ -1,6 +1,7 @@
 import { LitElement, html } from "lit";
 import { GROUP_FEATURES } from "../../groups/base/group-base.js";
 import { groupFormatToolbarStyles } from "./group-format-toolbar.styles.js";
+import "./group-link-controls.js";
 
 const CONTROLS = [
   ["group-background-color", "backgroundColor"],
@@ -19,6 +20,9 @@ const CONTROL_FEATURES = {
   "group-border-style": GROUP_FEATURES.border,
   "group-border-position": GROUP_FEATURES.border,
   "group-border-radius": GROUP_FEATURES.borderRadius,
+  "group-link": GROUP_FEATURES.link,
+  "group-link-target": GROUP_FEATURES.linkTarget,
+  "group-disabled": GROUP_FEATURES.disabled,
   "block-group-filter": GROUP_FEATURES.blockGroup,
 };
 
@@ -40,6 +44,11 @@ export class GroupFormatToolbar extends LitElement {
     return html`
       <editor-history-controls></editor-history-controls>
       <h2>${this.title}</h2>
+      <div class="format-group">
+        <group-link></group-link>
+        <group-disabled></group-disabled>
+        <group-link-target></group-link-target>
+      </div>
       <group-background-color></group-background-color>
       <div class="group-label">Border</div>
       <div class="format-border-group">
@@ -83,6 +92,13 @@ export class GroupFormatToolbar extends LitElement {
     this.#setDisabled("group-border-color", borderDetailsDisabled);
     this.#setDisabled("group-border-width", borderDetailsDisabled);
     this.#setDisabled("group-border-position", !hasBorder(format));
+    this.#setApplied("group-link", Boolean(format?.link));
+    this.#setValue("group-link", format?.link ?? "");
+    this.#setValue("group-link-target", format?.target ?? "_self");
+    this.#setApplied("group-disabled", Boolean(format?.disabled));
+    this.#setDisabled("group-link", !format);
+    this.#setDisabled("group-disabled", !format);
+    this.#setDisabled("group-link-target", !format?.link);
 
     for (const selector of BLOCK_GROUP_CONTROLS) {
       this.#setBlockGroupFormat(selector, format?.blockGroup ?? null);
@@ -101,6 +117,11 @@ export class GroupFormatToolbar extends LitElement {
     if (control) control.disabled = disabled;
   }
 
+  #setApplied(selector, applied) {
+    const control = this.renderRoot.querySelector(selector);
+    if (control) control.applied = applied;
+  }
+
   #setBlockGroupFormat(selector, format) {
     const control = this.renderRoot.querySelector(selector);
     if (control) control.setFormat?.(format);
@@ -108,7 +129,7 @@ export class GroupFormatToolbar extends LitElement {
 
   #applyFeatures = () => {
     for (const [selector, feature] of Object.entries(CONTROL_FEATURES)) {
-      const enabled = this.#currentFormat?.capabilities?.[feature] !== false;
+      const enabled = this.#currentFormat?.capabilities?.[feature] === true;
       if (!enabled) this.#setDisabled(selector, true);
     }
   };

@@ -2,7 +2,6 @@ import { borderPositionOptions } from "./border-position.js";
 import { borderRadiusOptions } from "./border-radius.js";
 import { borderStyleOptions } from "./border-style.js";
 import { borderWidthOptions } from "./border-width.js";
-import { buttonDesignOptions } from "./button-design.js";
 import { buttonIconPlacementOptions } from "./button-icon-placement.js";
 import { colors } from "./colors.js";
 import { elementTypeOptions } from "./element-type.js";
@@ -18,7 +17,6 @@ export const defaultConfigOptions = {
   "border-radius": borderRadiusOptions,
   "border-style": borderStyleOptions,
   "border-width": borderWidthOptions,
-  "button-design": buttonDesignOptions,
   "button-icon-placement": buttonIconPlacementOptions,
   colors,
   "element-type": elementTypeOptions,

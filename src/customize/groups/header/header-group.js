@@ -36,6 +36,7 @@ export class HeaderGroup extends GroupBase {
         id: "button",
         type: "button",
         text: "",
+        backgroundColor: "var(--brand-600)",
       },
     ],
   };
@@ -54,7 +55,6 @@ export class HeaderGroup extends GroupBase {
               max="6"
               prefix="nav"
               placeholder="Nav"
-              default-design="nav"
             >
               <button-block placeholder="Nav 1"></button-block>
               <button-block placeholder="Nav 2"></button-block>
@@ -78,9 +78,13 @@ function createDefaultNav(id, sort) {
     type: "button",
     sort,
     text: "",
-    design: "nav",
+    color: "var(--brand-900)",
+    backgroundColor: "transparent",
     icon: "home",
     iconPosition: "start",
+    iconColor: "var(--white)",
+    iconBackgroundColor: "var(--brand-500)",
+    iconBorderRadius: "999px",
     link: "",
   };
 }

@@ -26,9 +26,10 @@
   --gray-900: #0d0d0d;
   --black: #000000;
 
-  --ui-editor-highlight: skyblue;
+  --ui-editor-highlight: deeppink;
   --ui-editor-mark: var(--yellow-500);
   --ui-editor-link-text-color: var(--brand-600);
+  --ui-editor-primary: deepskyblue;
 
   --yellow-50: #fff9e6;
   --yellow-100: #fff6da;

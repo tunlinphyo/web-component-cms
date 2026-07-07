@@ -23,15 +23,11 @@ export const buttonBlockStyles = css`
     padding: 0 1.5rem;
     border: 2px solid transparent;
     border-radius: 999px;
+    color: white;
     font-size: 14px;
     font: inherit;
     font-weight: 700;
     text-align: center;
-
-    .icon-picker-trigger {
-      width: 2rem;
-      height: 2rem;
-    }
   }
 
   .button:focus-within,
@@ -40,7 +36,7 @@ export const buttonBlockStyles = css`
     outline-offset: 2px;
   }
 
-  :host([icon-position="end"]) .icon-picker-trigger {
+  :host([icon-position="end"]) icon-block {
     order: 1;
   }
 
@@ -71,43 +67,9 @@ export const buttonBlockStyles = css`
     content: attr(data-placeholder);
   }
 
-  button {
-    border: none;
-    background: white;
-    color: inherit;
-    cursor: pointer;
-  }
-
-  .icon-picker-trigger {
-    display: inline-grid;
-    width: 2.25rem;
-    height: 2.25rem;
-    padding: 0.5rem;
-    border-radius: 50%;
-    place-items: center;
-  }
-
-  .icon-picker-trigger {
-    anchor-name: --button-icon-picker-trigger;
-    width: 1em;
-    height: 1em;
-    padding: 0;
-    background: transparent;
-  }
-
-  .icon-picker-trigger:hover,
-  .icon-picker-trigger:focus-visible {
-    outline: 2px solid var(--ui-editor-highlight);
-    outline-offset: 1px;
-  }
-
-  [popover] {
-    position-anchor: --button-icon-picker-trigger;
-    position-area: bottom;
-    margin: 4px;
-    padding: 0.5rem;
-    border: none;
-    border-radius: 0.5rem;
-    box-shadow: rgba(0, 0, 0, 0.16) 0 1px 4px;
+  icon-block {
+    display: inline-block;
+    font-size: 1em;
+    line-height: 1;
   }
 `;

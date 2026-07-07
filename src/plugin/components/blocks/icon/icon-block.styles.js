@@ -20,7 +20,7 @@ export const iconBlockStyles = css`
     height: 2.75rem;
     padding: 0.625rem;
     border: none;
-    background: white;
+    /* background: white; */
     color: inherit;
     cursor: pointer;
     place-items: center;

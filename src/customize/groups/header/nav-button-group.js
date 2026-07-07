@@ -13,15 +13,16 @@ export class NavButtonGroup extends BlockListGroup {
     return this.getAttribute("item-label") || "Nav item";
   }
 
-  get defaultDesign() {
-    return this.getAttribute("default-design") || "nav";
-  }
-
   createBlockData(id) {
     return {
-      ...super.createBlockData(id),
+      id,
+      color: "var(--brand-900)",
+      backgroundColor: "transparent",
       icon: "home",
       iconPosition: "start",
+      iconColor: "var(--white)",
+      iconBackgroundColor: "var(--brand-500)",
+      iconBorderRadius: "999px",
     };
   }
 }

@@ -97,6 +97,8 @@ class ImageBackgroundColor extends BlockStyleColor {
   property = "backgroundColor";
 }
 
+class ButtonBackgroundColor extends ImageBackgroundColor {}
+
 class ImageBorderColor extends BlockStyleColor {
   label = "Border Color";
   property = "borderColor";
@@ -108,10 +110,13 @@ class ImageBorderColor extends BlockStyleColor {
 }
 
 class IconBorderColor extends ImageBorderColor {}
+class ButtonBorderColor extends ImageBorderColor {}
 
 customElements.define("image-background-color", ImageBackgroundColor);
+customElements.define("button-background-color", ButtonBackgroundColor);
 customElements.define("image-border-color", ImageBorderColor);
 customElements.define("icon-border-color", IconBorderColor);
+customElements.define("button-border-color", ButtonBorderColor);
 
 function isSelectedColor(current, value) {
   return current?.toLowerCase() === value.toLowerCase();

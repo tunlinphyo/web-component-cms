@@ -50,7 +50,13 @@ test("serializes inline text marks after a line break as separate children", () 
   };
 
   expect(serializeTextChildren(editor)).toEqual([
-    { text: "Hello\n" },
+    { text: "Hello" },
+    {
+      text: "\n",
+      marks: {
+        br: true,
+      },
+    },
     {
       text: "World",
       marks: {
@@ -72,6 +78,18 @@ test("ignores editor padding breaks in inline text serialization", () => {
   ]);
 
   expect(serializeTextChildren(editor)).toEqual([{ text: "Hello" }]);
+});
+
+test("deserializes inline text line break marks", () => {
+  const value = withFakeDocument(() =>
+    deserializeTextChildren([
+      { text: "Hello" },
+      { text: "\n", marks: { br: true } },
+      { text: "World" },
+    ]),
+  );
+
+  expect(value).toBe("Hello<br>World");
 });
 
 test("serializes rich-text lists as list children without empty list-adjacent paragraphs", () => {
@@ -344,6 +362,8 @@ class FakeElement {
   }
 
   get html() {
+    if (this.tagName === "br") return "<br>";
+
     const attributes = Array.from(this.attributeMap, ([name, value]) => ` ${name}="${value}"`).join(
       "",
     );

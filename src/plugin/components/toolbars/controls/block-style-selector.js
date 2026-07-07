@@ -57,8 +57,10 @@ export class BlockBorderStyle extends BlockStyleSelector {
 }
 
 class ImageBorderWidth extends BlockBorderWidth {}
+class ButtonBorderWidth extends BlockBorderWidth {}
 
 class ImageBorderStyle extends BlockBorderStyle {}
+class ButtonBorderStyle extends BlockBorderStyle {}
 
 class ImageBorderPosition extends BlockStyleSelector {
   static configKey = "border-position";
@@ -108,6 +110,7 @@ class ImageBorderPosition extends BlockStyleSelector {
 class IconBorderWidth extends BlockBorderWidth {}
 class IconBorderStyle extends BlockBorderStyle {}
 class IconBorderPosition extends ImageBorderPosition {}
+class ButtonBorderPosition extends ImageBorderPosition {}
 
 customElements.define("image-border-width", ImageBorderWidth);
 customElements.define("image-border-style", ImageBorderStyle);
@@ -115,6 +118,9 @@ customElements.define("image-border-position", ImageBorderPosition);
 customElements.define("icon-border-width", IconBorderWidth);
 customElements.define("icon-border-style", IconBorderStyle);
 customElements.define("icon-border-position", IconBorderPosition);
+customElements.define("button-border-width", ButtonBorderWidth);
+customElements.define("button-border-style", ButtonBorderStyle);
+customElements.define("button-border-position", ButtonBorderPosition);
 
 function parseBorderPositions(value) {
   return new Set(

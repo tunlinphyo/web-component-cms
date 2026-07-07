@@ -13,10 +13,18 @@ export const GROUP_FEATURES = {
   backgroundColor: FEATURES.backgroundColor,
   border: FEATURES.border,
   borderRadius: FEATURES.borderRadius,
+  link: FEATURES.link,
+  linkTarget: FEATURES.linkTarget,
+  disabled: FEATURES.disabled,
   blockGroup: "blockGroup",
 };
 
-const DEFAULT_GROUP_FEATURES = Object.values(GROUP_FEATURES);
+const DEFAULT_GROUP_FEATURES = [
+  GROUP_FEATURES.backgroundColor,
+  GROUP_FEATURES.border,
+  GROUP_FEATURES.borderRadius,
+  GROUP_FEATURES.blockGroup,
+];
 
 export class GroupBase extends LitElement {
   static define(tagName, definition = {}) {
@@ -424,7 +432,7 @@ function getGroupCapabilities(features) {
   const featureList = parseFeatures(features) ?? DEFAULT_GROUP_FEATURES;
   const capabilities = {};
 
-  for (const feature of DEFAULT_GROUP_FEATURES) capabilities[feature] = false;
+  for (const feature of Object.values(GROUP_FEATURES)) capabilities[feature] = false;
   for (const feature of featureList) capabilities[feature] = true;
 
   return capabilities;

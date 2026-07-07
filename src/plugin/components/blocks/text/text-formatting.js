@@ -485,8 +485,8 @@ function insertWithoutTextColor(colorElement, fragment, range) {
   colorElement.after(selectedFragment, afterElement);
   selectBetweenMarkers(range);
 
-  if (!colorElement.hasChildNodes()) colorElement.remove();
-  if (!afterElement.hasChildNodes()) afterElement.remove();
+  removeEmptyInlineElement(colorElement);
+  removeEmptyInlineElement(afterElement);
 }
 
 function removeTextColorAtCaret(colorElement, range) {

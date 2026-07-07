@@ -40,12 +40,6 @@ export function applyFormatCommand(activeBlock, detail, notifyToolbar) {
     return;
   }
 
-  if (detail.command === "buttonDesign") {
-    if (!activeBlock?.setButtonDesign?.(detail.value)) return;
-    notifyBlockFormat(activeBlock, notifyToolbar);
-    return;
-  }
-
   if (detail.command === "buttonIconPlacement") {
     if (!activeBlock?.setButtonIconPlacement?.(detail.value)) return;
     notifyBlockFormat(activeBlock, notifyToolbar);

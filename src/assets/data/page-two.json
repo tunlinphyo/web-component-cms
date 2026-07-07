@@ -1,4 +1,216 @@
 {
-    "version": 1,
-    "groups": []
+  "version": 1,
+  "groups": [
+    {
+      "id": "da2bde46-ed87-44fa-8d8b-6ccc7bed6468",
+      "type": "partner-header",
+      "sort": 0,
+      "style": {
+        "backgroundColor": "var(--green-50)"
+      },
+      "blocks": [
+        {
+          "id": "title",
+          "children": [
+            {
+              "text": "Hello World",
+              "marks": {
+                "bold": true,
+                "color": "var(--green-700)"
+              }
+            }
+          ],
+          "type": "inline-text",
+          "elementType": "p",
+          "textAlign": "left",
+          "fontSize": "var(--font-size-sm)",
+          "fontFamily": "var(--font-body)",
+          "predefinedMargin": "0"
+        },
+        {
+          "id": "logo",
+          "src": "/images/logo-h.png",
+          "alt": "logo-h.png",
+          "objectFit": "contain",
+          "align": "left",
+          "target": "_self",
+          "disabled": false,
+          "type": "image"
+        },
+        {
+          "id": "navs",
+          "type": "partner-navs",
+          "children": [
+            {
+              "id": "partner-nav-1",
+              "type": "partner-nav-button",
+              "sort": 0,
+              "style": {
+                "borderRadius": "var(--border-radius-xxl)"
+              },
+              "blocks": [
+                {
+                  "id": "icon",
+                  "icon": "favorite",
+                  "fontSize": "1rem",
+                  "color": "var(--white)",
+                  "backgroundColor": "var(--green-600)",
+                  "borderRadius": "999px",
+                  "target": "_self",
+                  "align": "left",
+                  "disabled": false,
+                  "type": "icon"
+                },
+                {
+                  "id": "label",
+                  "children": [
+                    {
+                      "text": "Apple",
+                      "marks": {
+                        "bold": true,
+                        "color": "var(--green-900)"
+                      }
+                    }
+                  ],
+                  "type": "inline-text",
+                  "elementType": "p",
+                  "textAlign": "left",
+                  "fontFamily": "var(--font-body)",
+                  "predefinedMargin": "0.5rem"
+                }
+              ],
+              "target": "_self",
+              "disabled": false
+            },
+            {
+              "id": "partner-nav-2",
+              "type": "partner-nav-button",
+              "sort": 1,
+              "style": {
+                "borderRadius": "var(--border-radius-xxl)"
+              },
+              "blocks": [
+                {
+                  "id": "icon",
+                  "icon": "redeem",
+                  "fontSize": "1rem",
+                  "color": "var(--white)",
+                  "backgroundColor": "var(--green-600)",
+                  "borderRadius": "999px",
+                  "target": "_self",
+                  "align": "left",
+                  "disabled": false,
+                  "type": "icon"
+                },
+                {
+                  "id": "label",
+                  "children": [
+                    {
+                      "text": "Google",
+                      "marks": {
+                        "bold": true,
+                        "color": "var(--green-900)"
+                      }
+                    }
+                  ],
+                  "type": "inline-text",
+                  "elementType": "p",
+                  "textAlign": "left",
+                  "fontFamily": "var(--font-body)",
+                  "predefinedMargin": "0.5rem"
+                }
+              ],
+              "target": "_self",
+              "disabled": false
+            }
+          ]
+        },
+        {
+          "id": "button",
+          "text": "Partner",
+          "iconPosition": "none",
+          "iconTarget": "_self",
+          "iconDisabled": false,
+          "backgroundColor": "var(--green-600)",
+          "target": "_self",
+          "tag": "button",
+          "align": "left",
+          "disabled": false,
+          "type": "button"
+        }
+      ]
+    },
+    {
+      "id": "d527767a-e005-44ec-8e52-2ad95c5975d7",
+      "type": "hero",
+      "sort": 1,
+      "style": {
+        "backgroundColor": "var(--green-50)"
+      },
+      "blocks": [
+        {
+          "id": "title",
+          "children": [
+            {
+              "text": "Hello"
+            },
+            {
+              "text": "\n",
+              "marks": {
+                "br": true
+              }
+            },
+            {
+              "text": "World",
+              "marks": {
+                "color": "var(--green-900)"
+              }
+            }
+          ],
+          "type": "inline-text",
+          "elementType": "h1",
+          "textAlign": "left",
+          "fontFamily": "var(--font-heading)",
+          "predefinedMargin": "0.5rem"
+        },
+        {
+          "id": "description",
+          "children": [],
+          "type": "p",
+          "textAlign": "left",
+          "fontFamily": "var(--font-body)",
+          "predefinedMargin": "0.5rem"
+        },
+        {
+          "id": "icon-1",
+          "target": "_self",
+          "align": "left",
+          "disabled": false,
+          "type": "icon"
+        },
+        {
+          "id": "icon-2",
+          "target": "_self",
+          "align": "left",
+          "disabled": false,
+          "type": "icon"
+        },
+        {
+          "id": "icon-3",
+          "target": "_self",
+          "align": "left",
+          "disabled": false,
+          "type": "icon"
+        },
+        {
+          "id": "image",
+          "objectFit": "none",
+          "align": "left",
+          "target": "_self",
+          "disabled": false,
+          "type": "image"
+        }
+      ]
+    }
+  ]
 }

@@ -41,6 +41,7 @@ export class EditorController {
     this.editor.addEventListener("selection-format-change", this.#selectionFormatChange);
     this.editor.addEventListener("format-command", this.#formatCommand);
     this.editor.addEventListener("element-type-change", this.#elementTypeChange);
+    this.editor.addEventListener("group-format-command", this.#groupFormatCommand);
     this.editor.addEventListener("group-style-change", this.#groupStyleChange);
     this.editor.addEventListener("block-group-command", this.#blockGroupCommand);
     this.editor.addEventListener("block-group-change", this.#blockGroupChange);
@@ -52,12 +53,14 @@ export class EditorController {
     this.editor.addEventListener("input", this.#input);
     this.editor.addEventListener("keydown", this.#keydown);
     this.editor.addEventListener("mousedown", this.#mousedown);
+    this.editor.addEventListener("focusin", this.#focusin);
   }
 
   disconnect() {
     this.editor.removeEventListener("selection-format-change", this.#selectionFormatChange);
     this.editor.removeEventListener("format-command", this.#formatCommand);
     this.editor.removeEventListener("element-type-change", this.#elementTypeChange);
+    this.editor.removeEventListener("group-format-command", this.#groupFormatCommand);
     this.editor.removeEventListener("group-style-change", this.#groupStyleChange);
     this.editor.removeEventListener("block-group-command", this.#blockGroupCommand);
     this.editor.removeEventListener("block-group-change", this.#blockGroupChange);
@@ -69,6 +72,7 @@ export class EditorController {
     this.editor.removeEventListener("input", this.#input);
     this.editor.removeEventListener("keydown", this.#keydown);
     this.editor.removeEventListener("mousedown", this.#mousedown);
+    this.editor.removeEventListener("focusin", this.#focusin);
   }
 
   init(pageData = {}) {
@@ -118,6 +122,28 @@ export class EditorController {
 
   #elementTypeChange = (event) => {
     this.activeBlock?.setType?.(event.detail.type);
+    this.history.capture();
+  };
+
+  #groupFormatCommand = (event) => {
+    if (!this.activeGroup) return;
+
+    if (event.detail.command === "groupLink") {
+      if (!this.activeGroup.setGroupLink?.(event.detail.value)) return;
+    } else if (event.detail.command === "groupLinkTarget") {
+      if (!this.activeGroup.setGroupLinkTarget?.(event.detail.value)) return;
+    } else if (event.detail.command === "groupDisabled") {
+      const disabled = !this.activeGroup.getGroupFormat?.().disabled;
+      if (!this.activeGroup.setGroupDisabled?.(disabled)) return;
+    } else {
+      return;
+    }
+
+    this.#notifyGroupToolbar(
+      this.activeGroup.getGroupFormat(),
+      this.activeBlockGroup,
+      this.activeBlock,
+    );
     this.history.capture();
   };
 
@@ -243,6 +269,17 @@ export class EditorController {
       event.composedPath().some((element) => PRESERVE_SELECTION_CONTROLS.has(element.localName))
     ) {
       event.preventDefault();
+    }
+  };
+
+  #focusin = (event) => {
+    const { group, blockGroup, contentBlock: block } = findSelectionTargets(event);
+    if (group) this.#setActiveGroup(group, blockGroup, block);
+    if (!block) return;
+
+    this.#setActiveBlock(block);
+    if (block.matches(FORMATTABLE_MEDIA_SELECTOR)) {
+      this.#notifyToolbar(block.getSelectionFormat());
     }
   };
 

@@ -60,10 +60,6 @@ export class BlockListGroup extends HTMLElement {
     return this.getAttribute("block-tag") || "button-block";
   }
 
-  get defaultDesign() {
-    return this.getAttribute("default-design") || "";
-  }
-
   get blocks() {
     return [...this.querySelectorAll(`:scope > ${this.blockTag}`)];
   }
@@ -163,7 +159,7 @@ export class BlockListGroup extends HTMLElement {
   }
 
   createBlockData(id) {
-    return this.defaultDesign ? { id, design: this.defaultDesign } : { id };
+    return { id };
   }
 
   cloneBlockData(data, id) {

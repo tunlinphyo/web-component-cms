@@ -137,6 +137,7 @@ export class IconBlock extends LitElement {
 
   setBorderRadius(borderRadius) {
     this.borderRadius = borderRadius;
+    this.#dispatchSelectionFormat();
     return true;
   }
 
@@ -159,23 +160,27 @@ export class IconBlock extends LitElement {
     if (property === "borderStyle" && value && value !== "none" && !this.borderWidth) {
       this.borderWidth = "1px";
     }
+    this.#dispatchSelectionFormat();
     return true;
   }
 
   setIconLink(link) {
     this.link = link ?? "";
     if (!this.link) this.target = "_self";
+    this.#dispatchSelectionFormat();
     return true;
   }
 
   setIconLinkTarget(target) {
     if (!["_self", "_blank"].includes(target)) return false;
     this.target = target;
+    this.#dispatchSelectionFormat();
     return true;
   }
 
   setDisabled(disabled) {
     this.disabled = Boolean(disabled);
+    this.#dispatchSelectionFormat();
     return true;
   }
 

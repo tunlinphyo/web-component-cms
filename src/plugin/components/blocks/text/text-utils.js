@@ -432,20 +432,33 @@ function htmlToFragment(html) {
 function appendTextChildren(node, inheritedMarks, children) {
   for (const child of node.childNodes) {
     if (child.nodeType === Node.TEXT_NODE) {
-      appendTextChild(children, child.textContent, inheritedMarks);
+      appendTextWithLineBreaks(children, child.textContent, inheritedMarks);
     } else if (
       child.nodeType === Node.ELEMENT_NODE &&
       child.getAttribute?.(EDITOR_PADDING_BREAK) != null
     ) {
       continue;
     } else if (child.nodeName === "BR") {
-      appendTextChild(children, "\n", inheritedMarks);
+      appendLineBreakChild(children, inheritedMarks);
     } else if (child.nodeType === Node.ELEMENT_NODE) {
       const marks = getElementMarks(child, inheritedMarks);
       appendTextChildren(child, marks, children);
-      if (child.localName === "p") appendTextChild(children, "\n", inheritedMarks);
+      if (child.localName === "p") appendLineBreakChild(children, inheritedMarks);
     }
   }
+}
+
+function appendTextWithLineBreaks(children, text, marks) {
+  const parts = text.split("\n");
+
+  for (const [index, part] of parts.entries()) {
+    if (index > 0) appendLineBreakChild(children, marks);
+    appendTextChild(children, part, marks);
+  }
+}
+
+function appendLineBreakChild(children, marks) {
+  appendTextChild(children, "\n", { ...marks, br: true });
 }
 
 function getElementMarks(element, inheritedMarks) {
