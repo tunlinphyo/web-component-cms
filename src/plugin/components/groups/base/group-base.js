@@ -116,7 +116,7 @@ export class GroupBase extends LitElement {
             type="button"
             aria-label="Set hash link"
             title="Set hash link"
-            @click=${this.#openHashDialog}
+            @click=${this.#requestHashEdit}
           >
             ${renderMaterialIcon("tag")}
           </button>
@@ -130,29 +130,6 @@ export class GroupBase extends LitElement {
           </button>
         </div>
       </div>
-      <dialog class="hash-dialog" @click=${this.#closeHashDialogFromBackdrop}>
-        <form @submit=${this.#saveHashId}>
-          <h2>Set hash link</h2>
-          <div style="margin-top: -0.5rem">
-            <label for="group-hash-id">Group ID</label>
-            <div class="hash-input">
-              <span aria-hidden="true">#</span>
-              <input
-                id="group-hash-id"
-                name="hashId"
-                type="text"
-                autocomplete="off"
-                placeholder="section-name"
-                .value=${this.hashId}
-              />
-            </div>
-          </div>
-          <menu>
-            <button type="button" @click=${this.#closeHashDialog}>Cancel</button>
-            <button type="submit">Save</button>
-          </menu>
-        </form>
-      </dialog>
     `;
   }
 
@@ -279,6 +256,11 @@ export class GroupBase extends LitElement {
     return true;
   }
 
+  setHashId(value) {
+    this.hashId = normalizeHashId(value);
+    return this.hashId;
+  }
+
   getGroupFormat() {
     return {
       ...this.getGroupStyle(),
@@ -331,34 +313,11 @@ export class GroupBase extends LitElement {
     );
   };
 
-  #openHashDialog = async () => {
-    await this.updateComplete;
-    const dialog = this.renderRoot.querySelector(".hash-dialog");
-    const input = dialog?.querySelector('input[name="hashId"]');
-    if (!dialog || !input) return;
-
-    input.value = this.hashId;
-    dialog.showModal();
-    input.focus();
-    input.select();
-  };
-
-  #closeHashDialog = () => {
-    this.renderRoot.querySelector(".hash-dialog")?.close();
-  };
-
-  #closeHashDialogFromBackdrop = (event) => {
-    if (event.target === event.currentTarget) this.#closeHashDialog();
-  };
-
-  #saveHashId = (event) => {
-    event.preventDefault();
-    this.hashId = normalizeHashId(event.currentTarget.elements.hashId.value);
-    this.#closeHashDialog();
+  #requestHashEdit = () => {
     this.dispatchEvent(
-      new CustomEvent("editor-change", {
+      new CustomEvent("hash-group-request", {
         bubbles: true,
-        composed: true,
+        detail: { group: this },
       }),
     );
   };

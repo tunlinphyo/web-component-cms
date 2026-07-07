@@ -1,5 +1,6 @@
 import { randomUUID } from "../../../utils/ids.js";
 import { getGroupDefinition } from "../../../registries/group-registry.js";
+import "../../dialogs/hash-dialog.js";
 import "./empty-group-picker-button.js";
 
 export class GroupOrder extends HTMLElement {
@@ -16,6 +17,7 @@ export class GroupOrder extends HTMLElement {
     this.addEventListener("move-group-request", this.#moveGroup);
     this.addEventListener("add-group-request", this.#openPicker);
     this.addEventListener("delete-group-request", this.#deleteGroup);
+    this.addEventListener("hash-group-request", this.#editGroupHash);
     this.addEventListener("group-select", this.#addGroup);
 
     this.#ensurePicker();
@@ -24,12 +26,16 @@ export class GroupOrder extends HTMLElement {
     if (!this.querySelector(":scope > confirm-dialog")) {
       this.append(document.createElement("confirm-dialog"));
     }
+    if (!this.querySelector(":scope > hash-dialog")) {
+      this.append(document.createElement("hash-dialog"));
+    }
   }
 
   disconnectedCallback() {
     this.removeEventListener("move-group-request", this.#moveGroup);
     this.removeEventListener("add-group-request", this.#openPicker);
     this.removeEventListener("delete-group-request", this.#deleteGroup);
+    this.removeEventListener("hash-group-request", this.#editGroupHash);
     this.removeEventListener("group-select", this.#addGroup);
   }
 
@@ -136,6 +142,18 @@ export class GroupOrder extends HTMLElement {
 
     event.detail.group.remove();
     this.#updateOrder(this.#getGroups());
+    this.#dispatchChange();
+  };
+
+  #editGroupHash = async (event) => {
+    if (event.detail.group?.parentElement !== this) return;
+
+    const value = await this.querySelector(":scope > hash-dialog")?.open({
+      value: event.detail.group.hashId,
+    });
+    if (value === null || value === undefined) return;
+
+    event.detail.group.setHashId(value);
     this.#dispatchChange();
   };
 

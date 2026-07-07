@@ -144,9 +144,7 @@
       "id": "d527767a-e005-44ec-8e52-2ad95c5975d7",
       "type": "hero",
       "sort": 1,
-      "style": {
-        "backgroundColor": "var(--green-50)"
-      },
+      "style": {},
       "blocks": [
         {
           "id": "title",

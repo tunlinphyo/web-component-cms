@@ -57,7 +57,7 @@ export class GroupPickerDialog extends GroupPickerBase {
           </fieldset>
           <footer>
             <button type="button" @click=${this.close}>Cancel</button>
-            <button class="add" type="submit" ?disabled=${!this.selectedType}>Add</button>
+            <button class="primary" type="submit" ?disabled=${!this.selectedType}>Add</button>
           </footer>
         </form>
       </dialog>

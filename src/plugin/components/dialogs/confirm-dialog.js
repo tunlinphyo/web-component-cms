@@ -27,7 +27,7 @@ export class ConfirmDialog extends LitElement {
         <p>${this.message}</p>
         <menu>
           <button type="button" @click=${this.#cancel}>${this.cancelLabel}</button>
-          <button class="confirm" type="button" @click=${this.#confirm}>
+          <button class="primary" type="button" @click=${this.#confirm}>
             ${this.confirmLabel}
           </button>
         </menu>
