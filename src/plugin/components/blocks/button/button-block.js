@@ -3,7 +3,6 @@ import {
   getMaterialIconNames,
   materialSymbolStyles,
   renderMaterialIcon,
-  toMaterialIconName,
 } from "../../icon-picker/material-icon-picker.js";
 import { buttonBlockStyles } from "./button-block.styles.js";
 import { getCapabilities, toFeatureAttribute } from "../../../registries/formatter-registry.js";
@@ -146,7 +145,7 @@ export class ButtonBlock extends LitElement {
                 popovertarget="button-icon-picker"
                 ?disabled=${this.disabled}
               >
-                ${renderMaterialIcon(toMaterialIconName(this.icon))}
+                ${renderMaterialIcon(this.icon)}
               </button>
             `
           : null}
@@ -162,7 +161,7 @@ export class ButtonBlock extends LitElement {
       </span>
       <div id="button-icon-picker" popover>
         <material-icon-picker
-          .value=${toMaterialIconName(this.icon)}
+          .value=${this.icon}
           @icon-select=${this.#changeIcon}
         ></material-icon-picker>
       </div>

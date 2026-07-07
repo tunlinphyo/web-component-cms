@@ -97,20 +97,6 @@ export function renderMaterialIcon(name) {
   return html`<span class="material-symbol" aria-hidden="true">${name}</span>`;
 }
 
-export function toMaterialIconName(name) {
-  return (
-    {
-      "arrow-left": "arrow_back",
-      "arrow-right": "arrow_forward",
-      "external-link": "open_in_new",
-      gift: "redeem",
-      heart: "favorite",
-      plus: "add",
-      store: "storefront",
-    }[name] ?? name
-  );
-}
-
 export function getMaterialIconNames() {
   return resolveConfigOptions("material-icons");
 }

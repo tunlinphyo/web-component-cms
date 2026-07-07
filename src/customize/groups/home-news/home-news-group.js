@@ -1,6 +1,6 @@
 import { html } from "lit";
 import "./news-list-group.js";
-import { NewsGroup } from "../news/news-group.js";
+import { NewsGroup } from "./news-group.js";
 import { GroupBase } from "@/ui-editor";
 import { decoratedTitleStyles, renderDecoratedTitle } from "../shared/decorated-title.js";
 import { emptyText } from "../shared/text-defaults.js";

@@ -2,7 +2,6 @@ import { LitElement, html } from "lit";
 import {
   materialSymbolStyles,
   renderMaterialIcon,
-  toMaterialIconName,
 } from "../../icon-picker/material-icon-picker.js";
 import { iconBlockStyles } from "./icon-block.styles.js";
 import { getCapabilities, toFeatureAttribute } from "../../../registries/formatter-registry.js";
@@ -31,7 +30,7 @@ export class IconBlock extends LitElement {
   constructor() {
     super();
     this.blockId = "";
-    this.icon = "add";
+    this.icon = "";
     this.fontSize = "";
     this.color = "";
     this.backgroundColor = "";
@@ -50,7 +49,7 @@ export class IconBlock extends LitElement {
   init(options = {}) {
     const {
       id = "",
-      icon = "add",
+      icon = "",
       fontSize = "",
       color = "",
       backgroundColor = "",
@@ -181,7 +180,7 @@ export class IconBlock extends LitElement {
   }
 
   render() {
-    const icon = toMaterialIconName(this.icon);
+    const icon = this.icon;
 
     return html`
       <a

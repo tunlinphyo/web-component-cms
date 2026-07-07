@@ -1,5 +1,5 @@
 import { GroupListBase } from "@/ui-editor";
-import { NewsGroup } from "../news/news-group.js";
+import { NewsGroup } from "./news-group.js";
 
 export class NewsListGroup extends GroupListBase {
   static itemTag = "news-group";

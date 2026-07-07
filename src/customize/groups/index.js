@@ -10,7 +10,6 @@ import "./home-news/home-news-group.js";
 import "./home-news/home-news-layout-design.js";
 import "./image/image-group.js";
 import "./image/image-layout-design.js";
-import "./news/news-group.js";
 import "./paragraph/paragraph-group.js";
 import "./paragraph/paragraph-layout-design.js";
 import "./table/table-group.js";
