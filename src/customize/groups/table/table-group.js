@@ -41,7 +41,7 @@ export class TableGroup extends GroupBase {
         borderWidth: "1px",
         borderColor: "#FFFFFF",
         borderStyle: "solid",
-        borderPosition: "",
+        borderPosition: "horizontal vertical",
         disabled: false,
       },
     ],

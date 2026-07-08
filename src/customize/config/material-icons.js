@@ -60,7 +60,7 @@ export const materialIconNames = [
   "universal_currency",
   "universal_currency_alt",
   "savings",
-  "import_contacts"
+  "import_contacts",
 ];
 
 export default materialIconNames;

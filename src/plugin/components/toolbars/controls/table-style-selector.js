@@ -13,9 +13,9 @@ class TableBorderStyle extends BlockBorderStyle {}
 class TableBorderPosition extends BlockStyleSelector {
   static includeCurrentOption = false;
   static options = [
-    { value: "", position: "both", label: "Horizontal and vertical borders" },
     { value: "horizontal", position: "horizontal", label: "Horizontal borders" },
     { value: "vertical", position: "vertical", label: "Vertical borders" },
+    { value: "border_outer", position: "outer", label: "Outer borders" },
   ];
   static styles = [
     groupStyleSelectorStyles,
@@ -40,12 +40,12 @@ class TableBorderPosition extends BlockStyleSelector {
               type="button"
               title=${label}
               aria-label=${label}
-              aria-pressed=${this.value === value}
+              aria-pressed=${hasBorderPosition(this.value, value)}
               data-position=${position}
               ?disabled=${this.disabled}
               @click=${() => this.#applyValue(value)}
             >
-              ${renderMaterialIcon(position === "both" ? "border_all" : `border_${position}`)}
+              ${renderMaterialIcon(`border_${position}`)}
             </button>
           `,
         )}
@@ -54,10 +54,11 @@ class TableBorderPosition extends BlockStyleSelector {
   }
 
   #applyValue(value) {
-    this.value = value;
+    const nextValue = toggleBorderPosition(this.value, value);
+    this.value = nextValue;
     this.dispatchEvent(
       new CustomEvent("format-command", {
-        detail: { command: "blockStyle", property: this.property, value },
+        detail: { command: "blockStyle", property: this.property, value: nextValue },
         bubbles: true,
         composed: true,
       }),
@@ -68,3 +69,28 @@ class TableBorderPosition extends BlockStyleSelector {
 customElements.define("table-border-width", TableBorderWidth);
 customElements.define("table-border-style", TableBorderStyle);
 customElements.define("table-border-position", TableBorderPosition);
+
+const TABLE_BORDER_POSITIONS = ["horizontal", "vertical", "border_outer"];
+
+function getBorderPositions(value) {
+  return new Set(
+    String(value ?? "")
+      .split(/\s+/)
+      .filter(Boolean),
+  );
+}
+
+function hasBorderPosition(currentValue, value) {
+  return getBorderPositions(currentValue).has(value);
+}
+
+function toggleBorderPosition(currentValue, value) {
+  const positions = getBorderPositions(currentValue);
+  if (positions.has(value)) {
+    positions.delete(value);
+  } else {
+    positions.add(value);
+  }
+
+  return TABLE_BORDER_POSITIONS.filter((position) => positions.has(position)).join(" ");
+}

@@ -1,9 +1,6 @@
 import { LitElement, html } from "lit";
-import {
-  materialSymbolStyles,
-  renderMaterialIcon,
-} from "../../icon-picker/material-icon-picker.js";
 import { iconBlockStyles } from "./icon-block.styles.js";
+import "./icon-picker-popover.js";
 import { getCapabilities, toFeatureAttribute } from "../../../registries/formatter-registry.js";
 
 export class IconBlock extends LitElement {
@@ -25,7 +22,7 @@ export class IconBlock extends LitElement {
     features: { type: String, reflect: true },
   };
 
-  static styles = [materialSymbolStyles, iconBlockStyles];
+  static styles = iconBlockStyles;
 
   constructor() {
     super();
@@ -185,31 +182,21 @@ export class IconBlock extends LitElement {
   }
 
   render() {
-    const icon = this.icon;
-
     return html`
-      <a
-        class="input"
-        href=${this.link || ""}
-        target=${this.link ? this.target : "_self"}
-        title="Choose icon"
-        aria-label="Choose icon"
-        ?data-empty=${!icon}
-        part="container"
-        style=${`font-size: ${this.fontSize}; color: ${this.color}; background-color: ${this.backgroundColor}; border-width: ${toBorderWidthValue(this.borderWidth, this.borderPosition)}; border-color: ${this.borderColor}; border-style: ${this.borderStyle}; border-radius: ${this.borderRadius};`}
-        @click=${this.#openPicker}
-      >
-        ${renderMaterialIcon(icon)}
-      </a>
-      <div id="icon-picker" popover>
-        <material-icon-picker .value=${icon} @icon-select=${this.#change}></material-icon-picker>
-      </div>
+      <icon-picker-popover
+        exportparts="container"
+        .value=${this.icon}
+        .href=${this.link}
+        .target=${this.link ? this.target : "_self"}
+        .controlStyle=${this.#iconStyle}
+        ?disabled=${this.disabled}
+        @icon-change=${this.#change}
+      ></icon-picker-popover>
     `;
   }
 
   #change = (event) => {
     this.icon = event.detail.icon;
-    this.renderRoot.querySelector("[popover]")?.hidePopover();
     this.dispatchEvent(
       new CustomEvent("icon-change", {
         detail: { id: this.blockId, icon: this.icon },
@@ -217,12 +204,6 @@ export class IconBlock extends LitElement {
         composed: true,
       }),
     );
-  };
-
-  #openPicker = (event) => {
-    event.preventDefault();
-    if (this.disabled) return;
-    this.renderRoot.querySelector("[popover]")?.showPopover();
   };
 
   #dispatchSelectionFormat() {
@@ -233,6 +214,10 @@ export class IconBlock extends LitElement {
         composed: true,
       }),
     );
+  }
+
+  get #iconStyle() {
+    return `font-size: ${this.fontSize}; color: ${this.color}; background-color: ${this.backgroundColor}; border-width: ${toBorderWidthValue(this.borderWidth, this.borderPosition)}; border-color: ${this.borderColor}; border-style: ${this.borderStyle}; border-radius: ${this.borderRadius};`;
   }
 }
 

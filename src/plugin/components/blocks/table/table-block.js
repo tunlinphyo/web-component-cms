@@ -64,7 +64,7 @@ export class TableBlock extends LitElement {
     this.borderWidth = "1px";
     this.borderColor = "";
     this.borderStyle = "solid";
-    this.borderPosition = "";
+    this.borderPosition = "horizontal vertical";
     this.disabled = false;
     this.selectedAxis = "";
     this.selectedIndex = -1;
@@ -83,7 +83,7 @@ export class TableBlock extends LitElement {
       borderWidth = "1px",
       borderColor = "",
       borderStyle = "solid",
-      borderPosition = "",
+      borderPosition = "horizontal vertical",
       disabled = false,
     } = options;
 
@@ -98,7 +98,7 @@ export class TableBlock extends LitElement {
     this.borderWidth = String(borderWidth || "");
     this.borderColor = String(borderColor || "");
     this.borderStyle = String(borderStyle || "");
-    this.borderPosition = ["horizontal", "vertical"].includes(borderPosition) ? borderPosition : "";
+    this.borderPosition = normalizeTableBorderPosition(borderPosition);
     this.disabled = Boolean(disabled);
     this.selectedAxis = "";
     this.selectedIndex = -1;
@@ -229,12 +229,11 @@ export class TableBlock extends LitElement {
     ) {
       return false;
     }
-    if (property === "borderPosition" && !["", "horizontal", "vertical"].includes(value)) {
-      return false;
-    }
+    if (property === "borderPosition" && !isValidTableBorderPosition(value)) return false;
+    const nextValue = property === "borderPosition" ? normalizeTableBorderPosition(value) : value;
 
     this.cells = this.#readCells();
-    this[property] = value;
+    this[property] = nextValue;
     if (property === "borderColor" && !value) {
       this.borderWidth = "";
       this.borderStyle = "";
@@ -286,7 +285,7 @@ export class TableBlock extends LitElement {
             `
           : null}
         <table
-          data-border-position=${this.borderPosition || "both"}
+          data-border-position=${this.borderPosition}
           ?data-striped=${this.stripedRows}
           style=${`
             --table-header-background: ${this.headerBackgroundColor};
@@ -469,3 +468,21 @@ export class TableBlock extends LitElement {
 }
 
 customElements.define("table-block", TableBlock);
+
+const TABLE_BORDER_POSITIONS = ["horizontal", "vertical", "border_outer"];
+
+function normalizeTableBorderPosition(value) {
+  const selected = new Set(
+    String(value ?? "")
+      .split(/\s+/)
+      .filter(Boolean),
+  );
+  return TABLE_BORDER_POSITIONS.filter((position) => selected.has(position)).join(" ");
+}
+
+function isValidTableBorderPosition(value) {
+  return String(value ?? "")
+    .split(/\s+/)
+    .filter(Boolean)
+    .every((position) => TABLE_BORDER_POSITIONS.includes(position));
+}

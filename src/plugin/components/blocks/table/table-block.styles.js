@@ -154,16 +154,29 @@ export const tableBlockStyles = css`
     background: var(--table-stripe-background);
   }
 
-  table[data-border-position="both"] :is(th, td) {
-    border-width: var(--table-border-width);
+  table[data-border-position~="horizontal"] tr + tr > :is(th, td),
+  table[data-border-position~="horizontal"] thead + tbody tr:first-child > :is(th, td) {
+    border-block-start-width: var(--table-border-width);
   }
 
-  table[data-border-position="horizontal"] :is(th, td) {
-    border-block-width: var(--table-border-width);
+  table[data-border-position~="vertical"] :is(th, td) + :is(th, td) {
+    border-inline-start-width: var(--table-border-width);
   }
 
-  table[data-border-position="vertical"] :is(th, td) {
-    border-inline-width: var(--table-border-width);
+  table[data-border-position~="border_outer"] > :first-child tr:first-child > :is(th, td) {
+    border-block-start-width: var(--table-border-width);
+  }
+
+  table[data-border-position~="border_outer"] > :last-child tr:last-child > :is(th, td) {
+    border-block-end-width: var(--table-border-width);
+  }
+
+  table[data-border-position~="border_outer"] :is(th, td):first-child {
+    border-inline-start-width: var(--table-border-width);
+  }
+
+  table[data-border-position~="border_outer"] :is(th, td):last-child {
+    border-inline-end-width: var(--table-border-width);
   }
 
   th.selected,
